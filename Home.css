@@ -1,0 +1,17 @@
+﻿/* Page-specific styling */
+
+
+
+.acc-body{
+    cursor:pointer;
+    color:black;
+    font-size:11px;
+}
+
+.acc-body:hover{
+    text-decoration:none;
+    color:black;
+}
+
+select, option { width: 20px; }
+

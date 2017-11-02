@@ -1,1 +1,66 @@
-"Hello World" 
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Word Add-In with Commands Sample</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+    <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  
+
+
+    <!--<script src="Scripts/FabricUI/MessageBanner.js" type="text/javascript"></script>-->
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
+
+    <!-- To enable offline debugging using a local reference to Office.js, use:                        -->
+    <!-- <script src="Scripts/Office/MicrosoftAjax.js" type="text/javascript"></script>  -->
+    <!-- <script src="Scripts/Office/1/office.js" type="text/javascript"></script>  -->
+
+    <link href="Home.css" rel="stylesheet" type="text/css" />
+    <script src="Home.js" type="text/javascript"></script>
+
+    <!-- For the Office UI Fabric, go to http://aka.ms/office-ui-fabric to learn more. -->
+    <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.min.css">
+    <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.components.min.css">
+    <!-- To enable the offline use of Office UI Fabric, use: -->
+    <!-- link rel="stylesheet" href="Content/fabric.min.css" -->
+    <!-- link rel="stylesheet" href="Content/fabric.components.min.css" -->
+</head>
+<body class="container" data-ng-app="myApp" data-ng-controller="myCtrl">
+    <div style="position:absolute; top:0px; left:0px; height:110px; right:0px;overflow:hidden; padding:0 15px 0 15px;">
+        <h6 style="font-weight:bold"> Select Library</h6>
+        <div class="form-group">
+            <select class="form-control input-sm" id="selectLib">
+                <option hidden>select</option>
+                <option ng-repeat="x in UserLibraries" id="{{x.id}}">{{x.title}}</option>
+            </select>
+            <!--<input style="margin-top:5px;" data-ng-model="Search" class="form-control input-sm" placeholder="Search" />-->
+        </div>
+    </div>
+    <!--<div style="position:absolute; top:110px; bottom:40px; left:0px; right:0px; overflow:auto;" id="content-main">
+        <uib-accordion close-others="oneAtATime">
+
+        <div  uib-accordion-group class="panel-default"  ng-repeat="x in LibrariesDocuments|orderBy: 'name' | filter : Search">
+            <uib-accordion-heading>
+                <p data-ng-click="SaveCurrentDoc(x.body,x.name)" class="acc-body">{{x.name}}</p>
+            </uib-accordion-heading>
+            <a data-ng-click="insertText(x.body)" class="acc-body"><p>{{x.body}}</p></a>
+        </div>
+        </uib-accordion>
+
+    </div>-->
+    <!--<input type="button" value="remove token" data-ng-click="RemoveToken()" />-->
+    <div style="position:absolute; bottom:0px; height:35px; left:0px; right:0px; overflow:hidden; padding:0 15px 0 15px;" class="footer" dir="rtl">
+        <button id="btnInsert" type="button" disabled class="btn btn-sm" data-ng-click="insertText(CurrentSelectedText)">Insert</button>
+        <button type="button" data-ng-click="btnRefresh()" class="btn btn-sm">Refersh</button>
+
+    </div>
+
+</body>
+</html>
