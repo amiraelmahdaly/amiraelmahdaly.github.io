@@ -1,4 +1,4 @@
-﻿/// <reference path="F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNetWeb\Home.html" />
+/// <reference path="F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNetWeb\Home.html" />
 /// <reference path="F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNetWeb\Home.html" />
 /// <reference path="/Scripts/FabricUI/MessageBanner.js" />
 
@@ -6,7 +6,7 @@
 (function () {
     "use strict";
 
- 
+
 
     // The initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
@@ -17,8 +17,19 @@
 
 
 
-
     var app = angular.module('myApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+    app.directive('onFinishRender', function ($timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attr) {
+                if (scope.$last === true) {
+                    $timeout(function () {
+                        scope.$emit(attr.onFinishRender);
+                    });
+                }
+            }
+        }
+    });
     app.controller('myCtrl', function ($scope, $http, $compile) {
 
         //initializations
@@ -46,7 +57,7 @@
             // Office.context.ui.displayDialogAsync('https://localhost:44380/Dialog.html', { height: 30, width: 20 });
 
 
-            Office.context.ui.displayDialogAsync('https://amiraelmahdaly.github.io/Dialog/Dialog.html', { height: 35, width: 20 },
+            Office.context.ui.displayDialogAsync('https://localhost:44380/Dialog.html', { height: 35, width: 20 },
                 function (asyncResult) {
                     dialog = asyncResult.value;
                     dialog.addEventHandler(Office.EventType.DialogMessageReceived, processMessage);
@@ -56,6 +67,18 @@
 
         }
 
+        
+        $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
+            $('#accordion').find('.accordion-toggle').click(function () {
+
+                //Expand or collapse this panel
+                $(this).next().slideToggle('fast');
+
+                //Hide the other panels
+                $(".accordion-content").not($(this).next()).slideUp('fast');
+
+            });
+        });
         $scope.SaveCurrentDoc = function (text, name) {
             
             if ($scope.CName == "") $scope.CName = name;
@@ -154,6 +177,7 @@
 
         }
         $scope.GetLibrariesDocuments = function () {
+            //document.getElementById("selectLib").removeChild(document.getElementById("sel"));
             document.getElementById("btnInsert").disabled = true;
             var uri = "https://test-landlord.assistantbroker.com/ajax/language_library_ajax.php?action=get_data_for_onlyoffice_plugin&token=" + $scope.UserToken + "&library_id=" + $scope.LibraryID;
             $http.get(uri,
@@ -166,6 +190,7 @@
                   function (response) {
                       $scope.LibrariesDocuments = response.data.snippets;
                       console.log($scope.LibrariesDocuments);
+                     
                   },
                   function (response) {
                       $scope.LibrariesDocuments = null;
@@ -174,6 +199,23 @@
                );
 
         }
+        $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
+            var acc = document.getElementsByClassName("accordion");
+            var i;
+            console.log(acc.length);
+            for (i = 0; i < acc.length; i++) {
+                acc[i].onclick = function () {
+                    console.log("clicked");
+                    this.classList.toggle("active");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.maxHeight) {
+                        panel.style.maxHeight = null;
+                    } else {
+                        panel.style.maxHeight = panel.scrollHeight + "px";
+                    }
+                }
+            }
+        });
         $scope.RemoveToken = function () {
             localStorage.removeItem("userToken");
             $scope.Initial();
@@ -219,10 +261,17 @@
 
         $("#selectLib").change(function () {
             $scope.LibraryID = $(this).children(":selected").attr("id");
+            if (document.getElementById("selectLib").contains(document.getElementById("sel")))
+            document.getElementById("selectLib").removeChild(document.getElementById("sel"));
+
             $scope.GetLibrariesDocuments();
 
         });
         $scope.btnRefresh = function () {
+
+            if (!document.getElementById("selectLib").contains(document.getElementById("sel")))
+            $('#selectLib').prepend($('<option id="sel">select</option>'));
+
             $scope.CheckUserToken();
         }
 

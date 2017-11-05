@@ -1,17 +1,32 @@
-﻿/* Page-specific styling */
 
-
-
-.acc-body{
-    cursor:pointer;
-    color:black;
-    font-size:11px;
+.accordion-toggle {
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0 18px;
+    font-weight:bold;
 }
-
-.acc-body:hover{
-    text-decoration:none;
+.accordion-toggle a {
     color:black;
 }
+ .accordion-content a{
+     color:black;
+ }
+  .accordion-content {
+      min-height:10px;
+      display: none;}
+  .accordion-content.default {
+      display: block;
+      font-size: 12px;
 
-select, option { width: 20px; }
+  }
+
+  a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+}
+  .accordion-content a p{
+      padding: 0 18px 0 32px;
+      cursor:pointer;
+  }
+
 
