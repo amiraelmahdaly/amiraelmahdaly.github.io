@@ -73,10 +73,10 @@
 
                 //Expand or collapse this panel
                 $(this).next().slideToggle('fast');
-
+                $(this).children().toggleClass("active");
                 //Hide the other panels
                 $(".accordion-content").not($(this).next()).slideUp('fast');
-
+                $(".accordion-toggle").not($(this)).children().removeClass("active");
             });
         });
         $scope.SaveCurrentDoc = function (text, name) {
@@ -199,23 +199,6 @@
                );
 
         }
-        $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
-            var acc = document.getElementsByClassName("accordion");
-            var i;
-            console.log(acc.length);
-            for (i = 0; i < acc.length; i++) {
-                acc[i].onclick = function () {
-                    console.log("clicked");
-                    this.classList.toggle("active");
-                    var panel = this.nextElementSibling;
-                    if (panel.style.maxHeight) {
-                        panel.style.maxHeight = null;
-                    } else {
-                        panel.style.maxHeight = panel.scrollHeight + "px";
-                    }
-                }
-            }
-        });
         $scope.RemoveToken = function () {
             localStorage.removeItem("userToken");
             $scope.Initial();
