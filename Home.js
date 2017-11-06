@@ -57,7 +57,7 @@
             // Office.context.ui.displayDialogAsync('https://localhost:44380/Dialog.html', { height: 30, width: 20 });
 
 
-            Office.context.ui.displayDialogAsync('https://localhost:44380/Dialog.html', { height: 35, width: 20 },
+            Office.context.ui.displayDialogAsync('https://amiraelmahdaly.github.io/Dialog/Dialog.html', { height: 35, width: 20 },
                 function (asyncResult) {
                     dialog = asyncResult.value;
                     dialog.addEventHandler(Office.EventType.DialogMessageReceived, processMessage);
