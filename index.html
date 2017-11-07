@@ -48,7 +48,7 @@
        <div id="accordion">
            <h4 class="accordion-toggle" ng-repeat-start="x in LibrariesDocuments|orderBy: 'name' | filter : Search" on-finish-render="ngRepeatFinished"><a data-ng-click="SaveCurrentDoc(x.body,x.name)" href="">{{x.name}}</a></h4>
            <div class="accordion-content" ng-repeat-end>
-               <a >
+               <a data-ng-click ="insertText(x.body)">
                    <p>{{x.body}}</p>
                </a>
            </div>
@@ -57,7 +57,7 @@
        </div>
     <!--<input type="button" value="remove token" data-ng-click="RemoveToken()" />-->
     <div style="position:absolute; bottom:0px; height:35px; left:0px; right:0px; overflow:hidden; padding:0 15px 0 15px;" class="footer" dir="rtl">
-        <button id="btnInsert" type="button" disabled class="btn btn-sm" >Insert</button>
+        <button id="btnInsert" type="button" data-ng-click="insertText($scope.CurrentSelectedText)" disabled class="btn btn-sm" >Insert</button>
         <button type="button" data-ng-click="btnRefresh()" class="btn btn-sm">Refersh</button>
 
     </div>
