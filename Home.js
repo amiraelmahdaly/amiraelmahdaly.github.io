@@ -101,7 +101,7 @@
 
 
         }
-        $scope. insertText = function(text) {
+       /* $scope. insertText = function(text) {
             Word.run(function (context) {
 
                
@@ -123,7 +123,35 @@
                     console.log('Debug info: ' + JSON.stringify(error.debugInfo));
                 }
             });
+        }*/
+  $scope. insertText = function(text) {
+            Word.run(function (context) {
+
+                // Create a proxy object for the document.
+                var thisDocument = context.document;
+
+                // Queue a command to get the current selection.
+                // Create a proxy range object for the selection.
+                var range = thisDocument.getSelection();
+
+                // Queue a command to replace the selected text.
+                range.insertText(text, Word.InsertLocation.replace);
+
+                // Synchronize the document state by executing the queued commands,
+                // and return a promise to indicate task completion.
+                return context.sync().then(function () {
+                    console.log('Added a quote from Ralph Waldo Emerson.');
+                });
+            })
+            .catch(function (error) {
+                console.log('Error: ' + JSON.stringify(error));
+                if (error instanceof OfficeExtension.Error) {
+                    console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+                }
+            });
         }
+
+
         function processMessage(arg) {
             dialog.close();
             $scope.Initial();
