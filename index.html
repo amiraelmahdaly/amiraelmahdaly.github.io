@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8" />
@@ -38,17 +38,18 @@
         <div class="form-group">
             <select     class="form-control input-sm" id="selectLib">
                 <option id="sel">select</option>
-                <option ng-repeat="x in UserLibraries|orderBy: 'title'" id="{{x.id}}">{{x.title}}</option>
+                <option  ng-repeat="x in UserLibraries|orderBy: 'title'" id="{{x.id}}">{{x.title}}</option>
             </select>
             <input style="margin-top:5px;" data-ng-model="Search" class="form-control input-sm" placeholder="Search" />
         </div>
     </div>
    <div style="position:absolute; top:110px; bottom:40px; left:0px; right:0px; overflow:auto;" id="content-main">
 
+
        <div id="accordion">
-           <h4 class="accordion-toggle" ng-repeat-start="x in LibrariesDocuments|orderBy: 'name' | filter : Search" on-finish-render="ngRepeatFinished"><a data-ng-click="SaveCurrentDoc(x.body,x.name)" href="">{{x.name}}</a></h4>
+           <h4 class="accordion-toggle" ng-repeat-start="x in LibrariesDocuments | filter :{'name':  Search}|orderBy: 'name'" on-finish-render="ngRepeatFinished"><a data-ng-click="SaveCurrentDoc(x.body,x.name)" href="">{{x.name}}</a></h4>
            <div class="accordion-content" ng-repeat-end>
-               <a data-ng-click ="insertText(x.body)">
+               <a data-ng-click="insertText(x.body)">
                    <p>{{x.body}}</p>
                </a>
            </div>
@@ -57,7 +58,7 @@
        </div>
     <!--<input type="button" value="remove token" data-ng-click="RemoveToken()" />-->
     <div style="position:absolute; bottom:0px; height:35px; left:0px; right:0px; overflow:hidden; padding:0 15px 0 15px;" class="footer" dir="rtl">
-        <button id="btnInsert" type="button" data-ng-click="insertText(CurrentSelectedText)" disabled class="btn btn-sm" >Insert</button>
+        <button id="btnInsert" type="button" disabled class="btn btn-sm" data-ng-click="insertText(CurrentSelectedText)">Insert</button>
         <button type="button" data-ng-click="btnRefresh()" class="btn btn-sm">Refersh</button>
 
     </div>

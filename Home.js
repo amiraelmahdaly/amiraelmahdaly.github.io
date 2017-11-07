@@ -1,4 +1,4 @@
-/// <reference path="F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNetWeb\Home.html" />
+﻿/// <reference path="F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNetWeb\Home.html" />
 /// <reference path="F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNetWeb\Home.html" />
 /// <reference path="/Scripts/FabricUI/MessageBanner.js" />
 
@@ -39,7 +39,8 @@
         $scope.CurrentSelectedText = "";
         $scope.CName = "";
         $scope.UserToken = "";
-        $scope.LibraryID = "";
+       
+        $scope.LibraryID = -1200;
         $scope.oneAtATime = true;
         $scope.status = {
             isCustomHeaderOpen: false,
@@ -69,6 +70,8 @@
 
         
         $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
+            
+
             $('#accordion').find('.accordion-toggle').click(function () {
 
                 //Expand or collapse this panel
@@ -77,6 +80,8 @@
                 //Hide the other panels
                 $(".accordion-content").not($(this).next()).slideUp('fast');
                 $(".accordion-toggle").not($(this)).children().removeClass("active");
+
+
             });
         });
         $scope.SaveCurrentDoc = function (text, name) {
@@ -101,30 +106,8 @@
 
 
         }
-       /* $scope. insertText = function(text) {
-            Word.run(function (context) {
 
-               
-                // Create a proxy object for the document body.
-                var body = context.document.body;
-
-                // Queue a command to insert text at the end of the document body.
-                body.insertText(text, Word.InsertLocation.end);
-
-                // Synchronize the document state by executing the queued commands,
-                // and return a promise to indicate task completion.
-                return context.sync().then(function () {
-                    console.log('Added a quote from a Chinese proverb.');
-                });
-            })
-            .catch(function (error) {
-                console.log('Error: ' + JSON.stringify(error));
-                if (error instanceof OfficeExtension.Error) {
-                    console.log('Debug info: ' + JSON.stringify(error.debugInfo));
-                }
-            });
-        }*/
-  $scope. insertText = function(text) {
+        $scope. insertText = function(text) {
             Word.run(function (context) {
 
                 // Create a proxy object for the document.
@@ -152,6 +135,31 @@
         }
 
 
+
+
+        //$scope. insertText = function(text) {
+        //    Word.run(function (context) {
+
+               
+        //        // Create a proxy object for the document body.
+        //        var body = context.document.body;
+                
+        //        // Queue a command to insert text at the end of the document body.
+        //        body.insertText(text,Word.InsertLocation.replace);
+
+        //        // Synchronize the document state by executing the queued commands,
+        //        // and return a promise to indicate task completion.
+        //        return context.sync().then(function () {
+        //            console.log('Added a quote from a Chinese proverb.');
+        //        });
+        //    })
+        //    .catch(function (error) {
+        //        console.log('Error: ' + JSON.stringify(error));
+        //        if (error instanceof OfficeExtension.Error) {
+        //            console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+        //        }
+        //    });
+        //}
         function processMessage(arg) {
             dialog.close();
             $scope.Initial();
@@ -167,6 +175,7 @@
             $scope.UserLibraries = [];
             
             $scope.LibrariesDocuments = [];
+            //localStorage.setItem("userToken", "687926");
             if (localStorage.getItem("userToken") == null || localStorage.getItem("userToken").trim() == "")
                 ShowTokenDialog();
             else {
@@ -176,6 +185,15 @@
                 //$scope.GetUserLibraries();
             }
 
+        }
+
+        $scope.LibraryExists = function() {
+         
+            for (var i = 0; i < $scope.UserLibraries.length; i++) 
+                if($scope.UserLibraries[i].id == $scope.LibraryID) return true;
+            return false;
+            
+        
         }
         $scope.GetUserLibraries = function () {
 
@@ -193,8 +211,7 @@
                      
 
                       $scope.UserLibraries = response.data.data;
-           
-                    
+                
 
                       console.log($scope.UserLibraries);
                   },
@@ -216,8 +233,24 @@
               .then
             (
                   function (response) {
+
+
+                      if (document.getElementById("selectLib").contains(document.getElementById("nullopt")))
+                          document.getElementById("selectLib").removeChild(document.getElementById("nullopt"));
                       $scope.LibrariesDocuments = response.data.snippets;
-                      console.log($scope.LibrariesDocuments);
+                    
+
+                      if ($scope.LibraryID != -1200 && $scope.LibraryExists())
+                          $("#selectLib option[id='" + $scope.LibraryID + "']").attr("selected", "selected");
+                      else
+                      {
+                          if (!document.getElementById("selectLib").contains(document.getElementById("sel")))
+                              $('#selectLib').prepend($('<option id="sel">select</option>'));
+                      }
+
+
+                      
+                    //  console.log($scope.LibrariesDocuments);
                      
                   },
                   function (response) {
@@ -255,8 +288,9 @@
                           $scope.GetUserLibraries();
                           //if(optionID != null)
                           //document.getElementById(optionID).selected = true;
-
-                          $scope.LibraryID = -1200;
+                          
+                          
+                         
                          $scope.GetLibrariesDocuments();
                          
 
@@ -272,6 +306,7 @@
 
         $("#selectLib").change(function () {
             $scope.LibraryID = $(this).children(":selected").attr("id");
+
             if (document.getElementById("selectLib").contains(document.getElementById("sel")))
             document.getElementById("selectLib").removeChild(document.getElementById("sel"));
 
@@ -280,8 +315,10 @@
         });
         $scope.btnRefresh = function () {
 
-            if (!document.getElementById("selectLib").contains(document.getElementById("sel")))
-            $('#selectLib').prepend($('<option id="sel">select</option>'));
+            if (!document.getElementById("selectLib").contains(document.getElementById("nullopt")))
+                $('#selectLib').prepend($('<option id="nullopt"></option>'));
+
+
 
             $scope.CheckUserToken();
         }
