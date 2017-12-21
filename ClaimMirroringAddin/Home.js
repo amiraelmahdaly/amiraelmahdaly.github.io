@@ -199,9 +199,9 @@
                 })
             }).catch(function (error) {
                 console.log(error);
-                LogError(error);
+                LogError(JSON.stringify(error.debugInfo));
 
-                showNotification("error", error);
+                showNotification("error", JSON.stringify(error.debugInfo));
 
                 if (error instanceof OfficeExtension.Error) {
                     console.log("Debug info: " + JSON.stringify(error.debugInfo));
