@@ -124,7 +124,7 @@ fabric.MessageBanner.prototype = (function () {
             _errorBanner.className += " hide";
             setTimeout(function () {
                 _errorBanner.className = "ms-MessageBanner is-hidden";
-            }, 500);
+            },5000);
         }
     };
 
