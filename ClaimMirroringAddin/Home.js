@@ -17,6 +17,13 @@
         var messageBanner = new fabric.MessageBanner(element);
         messageBanner.hideBanner();
         showNotification("Hello", "Welcome");
+
+
+
+        function LogError(error)
+        {
+            $("#errors").text(error);
+        }
         function AddPreamble() {
             Word.run(function (context) {
                 var pars = context.document.getSelection().paragraphs;
@@ -31,6 +38,7 @@
             }).catch(function (error) {
                 console.log(error);
                 showNotification("error", error);
+                LogError(error);
                 if (error instanceof OfficeExtension.Error) {
                     console.log("Debug info: " + JSON.stringify(error.debugInfo));
                 }
@@ -59,6 +67,8 @@
                 })
             }).catch(function (error) {
                 showNotification("error", error);
+                LogError(error);
+
 
                 console.log(error);
                 if (error instanceof OfficeExtension.Error) {
@@ -189,6 +199,8 @@
                 })
             }).catch(function (error) {
                 console.log(error);
+                LogError(error);
+
                 showNotification("error", error);
 
                 if (error instanceof OfficeExtension.Error) {
