@@ -13,7 +13,10 @@
 
 
     $(document).ready(function () {
-
+        var element = document.querySelector('.ms-MessageBanner');
+        var messageBanner = new fabric.MessageBanner(element);
+        messageBanner.hideBanner();
+        showNotification("Hello", "Welcome");
         function AddPreamble() {
             Word.run(function (context) {
                 var pars = context.document.getSelection().paragraphs;
@@ -27,6 +30,7 @@
                 })
             }).catch(function (error) {
                 console.log(error);
+                showNotification("error", error);
                 if (error instanceof OfficeExtension.Error) {
                     console.log("Debug info: " + JSON.stringify(error.debugInfo));
                 }
@@ -54,6 +58,8 @@
                     return context.sync();
                 })
             }).catch(function (error) {
+                showNotification("error", error);
+
                 console.log(error);
                 if (error instanceof OfficeExtension.Error) {
                     console.log("Debug info: " + JSON.stringify(error.debugInfo));
@@ -82,6 +88,12 @@
               
             }
 
+        }
+        function showNotification(header, content) {
+            $("#notificationHeader").text(header);
+            $("#notificationBody").text(content);
+            messageBanner.showBanner();
+            messageBanner.toggleExpansion();
         }
         var Claim = {
             "Preamble": { "Style": "", "LineSpacing": "" },
@@ -177,6 +189,8 @@
                 })
             }).catch(function (error) {
                 console.log(error);
+                showNotification("error", error);
+
                 if (error instanceof OfficeExtension.Error) {
                     console.log("Debug info: " + JSON.stringify(error.debugInfo));
                 }
@@ -196,10 +210,8 @@
             }, 1250);
         }
 
-        // Initialize the FabricUI notification mechanism and hide it
-        //var element = document.querySelector('.ms-MessageBanner');
-        //messageBanner = new fabric.MessageBanner(element);
-        //messageBanner.hideBanner();
+        
+    
 
     });
 
@@ -207,11 +219,6 @@
   
 
   
-    // Helper function for displaying notifications
-    //function showNotification(header, content) {
-    //    $("#notificationHeader").text(header);
-    //    $("#notificationBody").text(content);
-    //    messageBanner.showBanner();
-    //    messageBanner.toggleExpansion();
-    //}
+     //Helper function for displaying notifications
+  
 })();
