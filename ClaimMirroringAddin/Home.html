@@ -33,7 +33,7 @@
     <div class="radioCon">
         <h4 class="text-center">Configuration</h4>
         <div class="btnContainer">
-            <div class="text-center"><button class="button" id="btnPreamble"></button></div>
+            <div class="text-center"><button class="button" onclick="AddPreamble()" id="btnPreamble"></button></div>
             <div class="text-center"><button class="button" id="btnStep"></button></div>
         </div>
         </div>
@@ -42,17 +42,17 @@
             <div class="inputs">
                 <label class="control control--radio">
                     Device
-                    <input type="radio" name="radio" />
+                    <input id="rdDevice" type="radio" name="radio" />
                     <div class="control__indicator"></div>
                 </label>
                 <label class="control control--radio">
                     Apparatus
-                    <input type="radio" name="radio" />
+                    <input id="rdAppartus" type="radio" name="radio" />
                     <div class="control__indicator"></div>
                 </label>
                 <label class="control control--radio">
                     CRM
-                    <input type="radio" name="radio" />
+                    <input id="rdCRM" type="radio" name="radio" />
                     <div class="control__indicator"></div>
                 </label>
             </div>
