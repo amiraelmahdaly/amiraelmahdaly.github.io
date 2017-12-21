@@ -136,7 +136,7 @@
             Word.run(function (context) {
                 if ($("#rdDevice").is(":checked")) {
                     var preamble = context.document.body.insertParagraph(DevicePreamble, Word.InsertLocation.end);
-                    preamble.style = Claim.Preamble.Style;
+                   preamble.style = Claim.Preamble.Style;
                     preamble.lineSpacing = Claim.Preamble.LineSpacing;
                     var step = "";
                     var text = "";
@@ -145,7 +145,7 @@
                         if (Claim.Steps[i].IsStart)
                            text = ProcessStep("Device",text);
                         step = context.document.body.insertParagraph(text, Word.InsertLocation.end);
-                        step.style = Claim.Steps[i].Style;
+                       // step.style = Claim.Steps[i].Style;
                         step.lineSpacing = Claim.Steps[i].LineSpacing;
                         step.leftIndent = Claim.Steps[i].LeftIndent;
                         step.firstLineIndent = Claim.Steps[i].FirstLineIndent;
@@ -164,7 +164,7 @@
                         if (Claim.Steps[i].IsStart)
                             text = ProcessStep("Apparatus", text);
                         step = context.document.body.insertParagraph(text, Word.InsertLocation.end);
-                        step.style = Claim.Steps[i].Style;
+                       // step.style = Claim.Steps[i].Style;
                         step.lineSpacing = Claim.Steps[i].LineSpacing;
                         step.leftIndent = Claim.Steps[i].LeftIndent;
                         step.firstLineIndent = Claim.Steps[i].FirstLineIndent;
@@ -184,7 +184,7 @@
                        if (Claim.Steps[i].IsStart)
                            text = ProcessStep("CRM", text);
                        step = context.document.body.insertParagraph(text, Word.InsertLocation.end);
-                       step.style = Claim.Steps[i].Style;
+                     //  step.style = Claim.Steps[i].Style;
                        step.lineSpacing = Claim.Steps[i].LineSpacing;
                        step.leftIndent = Claim.Steps[i].LeftIndent;
                        step.firstLineIndent = Claim.Steps[i].FirstLineIndent;
