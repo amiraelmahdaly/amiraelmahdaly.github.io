@@ -136,7 +136,7 @@
             Word.run(function (context) {
                 if ($("#rdDevice").is(":checked")) {
                     var preamble = context.document.body.insertParagraph(DevicePreamble, Word.InsertLocation.end);
-                   preamble.style = Claim.Preamble.Style;
+                  // preamble.style = Claim.Preamble.Style;
                     preamble.lineSpacing = Claim.Preamble.LineSpacing;
                     var step = "";
                     var text = "";
@@ -155,7 +155,7 @@
 
                else if ($("#rdAppartus").is(":checked")) {
                     var preamble = context.document.body.insertParagraph(ApparatusPreamble, Word.InsertLocation.end);
-                    preamble.style = Claim.Preamble.Style;
+                    //preamble.style = Claim.Preamble.Style;
                     preamble.lineSpacing = Claim.Preamble.LineSpacing;
                     var step = "";
                     var text = "";
@@ -175,7 +175,7 @@
              
                else if ($("#rdCRM").is(":checked")) {
                    var preamble = context.document.body.insertParagraph(CRMPreamble, Word.InsertLocation.end);
-                   preamble.style = Claim.Preamble.Style;
+                  // preamble.style = Claim.Preamble.Style;
                    preamble.lineSpacing = Claim.Preamble.LineSpacing;
                    var step = "";
                    var text = "";
