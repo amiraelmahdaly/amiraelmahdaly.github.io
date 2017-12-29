@@ -16,12 +16,12 @@
             setTimeout(function () {
                 $("#" + id).removeClass("onclic");
                 $("#" + id).addClass("validate", callback(id));
-            }, 2250);
+            }, 1000);
         }
         function callback(id) {
             setTimeout(function () {
                 $("#" + id).removeClass("validate");
-            }, 1250);
+            }, 500);
         }
 
     });
