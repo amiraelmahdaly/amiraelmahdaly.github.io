@@ -12,11 +12,18 @@
 
     $(document).ready(function () {
 
+
+        $(".button").click(function (event) {
+            $(this).addClass("onclic", validate(event.target.id));
+           
+        });
+
+
         function validate(id) {
             setTimeout(function () {
                 $("#" + id).removeClass("onclic");
                 $("#" + id).addClass("validate", callback(id));
-            }, 1000);
+            }, 500);
         }
         function callback(id) {
             setTimeout(function () {
