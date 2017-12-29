@@ -17,7 +17,7 @@
   <Description DefaultValue="Claim Mirroring" />
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-  <IconUrl DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin/Images/Button32x32.png" />
+  <IconUrl DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin-phase1/Images/Button32x32.png" />
 
   <!-- Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list. -->
   <AppDomains>
@@ -32,7 +32,7 @@
     <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin/Home.html" />
+    <SourceLocation DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin-phase1/Home.html" />
   </DefaultSettings>
   <!-- End TaskPane Mode integration.  -->
 
@@ -112,13 +112,13 @@
     <!-- You can use resources across hosts and form factors. -->
     <Resources>
       <bt:Images>
-        <bt:Image id="Contoso.tpicon_16x16" DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin/Images/Button16x16.png" />
-        <bt:Image id="Contoso.tpicon_32x32" DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin/Images/Button32x32.png" />
-        <bt:Image id="Contoso.tpicon_80x80" DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin/Images/Button80x80.png" />
+        <bt:Image id="Contoso.tpicon_16x16" DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin-phase1/Images/Button16x16.png" />
+        <bt:Image id="Contoso.tpicon_32x32" DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin-phase1/Images/Button32x32.png" />
+        <bt:Image id="Contoso.tpicon_80x80" DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin-phase1/Images/Button80x80.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Contoso.DesktopFunctionFile.Url" DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin/Functions/FunctionFile.html" />
-        <bt:Url id="Contoso.Taskpane.Url" DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin/Home.html" />
+        <bt:Url id="Contoso.DesktopFunctionFile.Url" DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin-phase1/Functions/FunctionFile.html" />
+        <bt:Url id="Contoso.Taskpane.Url" DefaultValue="https://amiraelmahdaly.github.io/ClaimMirroringAddin-phase1/Home.html" />
         <bt:Url id="Contoso.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->
