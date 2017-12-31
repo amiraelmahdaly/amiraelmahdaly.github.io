@@ -101,9 +101,9 @@
             showClaimParts();
         });
         function showClaimParts() {
-            $("#claimParts").append("preamble: " + Claim.Preamble.text);
+            $("#claimParts").append("<div>preamble: " + Claim.Preamble.text + "</div><hr />");
             for(var i = 0; i < Claim.Steps,length; i++)
-                $("#claimParts").append("Step"+ i+1 +": " + Claim.Steps[i].Text);
+                $("#claimParts").append("<div>Step" + i + 1 + ": " + Claim.Steps[i].Text + "</div><hr />");
         }
         function validate(id) {
             setTimeout(function () {
