@@ -18,7 +18,7 @@
                 var pars = context.document.getSelection().paragraphs;
                 pars.load();
                 return context.sync().then(function () {
-
+                    Claim.Preamble.text = pars.items[0].text;
                     Claim.Preamble.Style = pars.items[0].style;
                     Claim.Preamble.LineSpacing = pars.items[0].lineSpacing;
 
@@ -83,7 +83,7 @@
 
         }
         var Claim = {
-            "Preamble": { "Style": "", "LineSpacing": "" },
+            "Preamble": {"text": "", "Style": "", "LineSpacing": "" },
             "Steps": []
         };
 
@@ -97,8 +97,14 @@
             if (event.target.id == "btnPreamble") AddPreamble();
             else if (event.target.id == "btnStep") AddStep();
         });
-
-
+        $("#showClaim").click(function () {
+            showClaimParts();
+        });
+        function showClaimParts() {
+            $("#claimParts").append("preamble: " + Claim.Preamble.text);
+            for(var i = 0; i < Claim.Steps,length; i++)
+                $("#claimParts").append("Step"+ i+1 +": " + Claim.Steps[i].Text);
+        }
         function validate(id) {
             setTimeout(function () {
                 $("#" + id).removeClass("onclic");
