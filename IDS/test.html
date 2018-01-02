@@ -25,7 +25,7 @@
 
             
             $scope.authenticate = function (userName, password) {
-                console.log(window.btoa(userName + ":" + password));
+                //console.log(window.btoa(userName + ":" + password));
                 var url = " https://sg.idsdatanet.com/d2_omv_global_staging/webservice/depotwebservice.html";
                 $http.get(url,
                     {
