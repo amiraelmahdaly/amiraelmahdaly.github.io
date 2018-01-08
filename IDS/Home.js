@@ -36,6 +36,14 @@
             }
         }
     });
+    app.directive('attrs', function() {
+        return {
+            link: function(scope, element, attrs) {
+                var attrs = angular.copy(scope.$eval(attrs.attrs));
+                element.attr(attrs).html(attrs.html);
+            }
+        };
+    });
     app.filter('customArray', function ($filter) {
         return function (list, arrayFilter, element) {
             if (arrayFilter) {
@@ -71,6 +79,9 @@
             $(".active").not($(this)).next().slideUp("fast");
             $(".active").not($(this)).removeClass("active");
             var id = $(this).attr('id').replace(".", "\\.");
+         // showNotification("html" ,$("#" + id).parent().html());
+           // console.log("hi");
+            
             if ($("#"+id).hasClass("active"))
                 $(this).next().children().children('div:first').show();
           
@@ -100,7 +111,7 @@
                 function (asyncResult) {
                     TokenDialog = asyncResult.value;
                     TokenDialog.addEventHandler(Office.EventType.DialogMessageReceived, processtokenDialogMessage);
-                    TokenDialog.addEventHandler(Office.EventType.DialogEventReceived, TokenDialogClosed);
+                   // TokenDialog.addEventHandler(Office.EventType.DialogEventReceived, TokenDialogClosed);
                 }
             );
         }
