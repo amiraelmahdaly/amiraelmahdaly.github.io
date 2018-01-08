@@ -59,7 +59,7 @@
         var USerCredentials = { UserName: "", Password: "" };
         var TokenDialog;
 
-        var DeploymentHost = "https://amiraelmahdaly.github.io/IDS/";
+        var DeploymentHost = "https://realdocs.pronetcre.com/";
         //var DeploymentHost = "https://localhost:44300/";
         var URI = "https://sg.idsdatanet.com/d2_omv_global_staging/webservice/depotwebservice.html";
 
@@ -67,6 +67,12 @@
 
         function SlideToggle() {
             $(this).next().slideToggle("fast");
+            $(this).toggleClass("active");
+            $(".active").not($(this)).next().slideUp("fast");
+            $(".active").not($(this)).removeClass("active");
+            var id = $(this).attr('id').replace(".", "\\.");
+            if ($("#"+id).hasClass("active"))
+                $(this).next().children().children('div:first').show();
           
         }
         $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
@@ -77,17 +83,7 @@
               
                 $(".wellboreCon").hide();
                 setTimeout(SlideToggle.bind(this), 0);
-
-                $(this).toggleClass("active");
-                $(".active").not($(this)).next().slideUp("fast");
-                $(".active").not($(this)).removeClass("active");
                 var id = $(this).attr('id');
-                var element = document.getElementById(id);
-                if ((element.classList.contains("active")))
-                $(this).next().children().children('div:first').show();
-                
-
-
                 $scope.GetWellbores(id);
 
                 //$scope.GetWellbores(id);
@@ -160,8 +156,8 @@
         }
         $scope.GetWellbores = function (id) {
             //if (!$('#accordion').child('h3').hasClass('ui-state-active')) return;
-            var element = document.getElementById(id);
-            if (!(element.classList.contains("active"))) return;
+            var ideditted = id.replace(".", "\\.");
+            if ($("#" + ideditted).hasClass("active")) return;
       
             $scope.UIDWell = id;
            // $("#" + $scope.UIDWell).next("div").first().text("");
