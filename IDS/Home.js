@@ -107,7 +107,7 @@
        })
         function ShowTokenDialog() {
 
-            Office.context.ui.displayDialogAsync(TokenDialogUrl, { height: 27, width: 22 },
+            Office.context.ui.displayDialogAsync(TokenDialogUrl, { height: 27, width: 22,displayInIframe: true },
                 function (asyncResult) {
                     TokenDialog = asyncResult.value;
                     TokenDialog.addEventHandler(Office.EventType.DialogMessageReceived, processtokenDialogMessage);
