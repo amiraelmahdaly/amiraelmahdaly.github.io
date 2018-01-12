@@ -56,7 +56,7 @@
             margin: 0;
             padding: 0;
             position: absolute;
-            top: 40%;
+            top: 45%;
             left: 45%;
             -webkit-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
@@ -93,6 +93,52 @@
                 }
 
                 .loading li:nth-child(3n) {
+                    left: 30px;
+                    -webkit-animation-delay: 0.4s;
+                    animation-delay: 0.4s;
+                }
+ .loading2 {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            top: 20%;
+            left: 45%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            font-size: 0;
+        }
+
+            .loading2 li {
+                height: 0;
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 0;
+                margin: 0;
+                height: 20px;
+                width: 20px;
+                border: 3px solid #2b8ccd;
+                border-radius: 100%;
+                -webkit-transform: transformZ(0);
+                transform: transformZ(0);
+                -webkit-animation: LOADING 2s infinite;
+                animation: LOADING 2s infinite;
+            }
+
+                .loading2 li:nth-child(1n) {
+                    left: -30px;
+                    -webkit-animation-delay: 0s;
+                    animation-delay: 0s;
+                }
+
+                .loading2 li:nth-child(2n) {
+                    left: 0;
+                    -webkit-animation-delay: 0.2s;
+                    animation-delay: 0.2s;
+                }
+
+                .loading2 li:nth-child(3n) {
                     left: 30px;
                     -webkit-animation-delay: 0.4s;
                     animation-delay: 0.4s;
@@ -201,5 +247,5 @@
 
 
         .wellboreCon{
-            padding-top:15px;
+            margin: 10px 35px 10px 20px;
         }

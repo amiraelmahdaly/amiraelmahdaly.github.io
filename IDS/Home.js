@@ -68,7 +68,7 @@
         var TokenDialog;
 
         var DeploymentHost = "https://amiraelmahdaly.github.io/IDS/";
-        //var DeploymentHost = "https://localhost:44300/";
+       // var DeploymentHost = "https://localhost:44300/";
         var URI = "https://sg.idsdatanet.com/d2_omv_global_staging/webservice/depotwebservice.html";
 
         var TokenDialogUrl = DeploymentHost + "TokenDialog.html";
@@ -78,11 +78,9 @@
             $(this).toggleClass("active");
             $(".active").not($(this)).next().slideUp("fast");
             $(".active").not($(this)).removeClass("active");
-            var id = $(this).attr('id').replace(".", "\\.");
+            var id = $(this).attr('data-uidWell').replace(".", "\\.");
          // showNotification("html" ,$("#" + id).parent().html());
-           // console.log("hi");
-            
-            if ($("#"+id).hasClass("active"))
+            if ($("[data-uidwell=" + id + "]").hasClass("active"))
                 $(this).next().children().children('div:first').show();
           
         }
@@ -94,10 +92,9 @@
               
                 $(".wellboreCon").hide();
                 setTimeout(SlideToggle.bind(this), 0);
-                var id = $(this).attr('id');
+                var id = $(this).attr('data-uidWell');
                 $scope.GetWellbores(id);
 
-                //$scope.GetWellbores(id);
 
 
             });

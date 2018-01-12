@@ -58,16 +58,16 @@
         </div>-->
 
         <div id="accordion">
-            <h3 class="accordion-toggle" ng-repeat-start="well in Wells" id="{{well['@attributes'].uid}}" on-finish-render="ngRepeatFinished">
+            <h3 class="accordion-toggle" ng-repeat-start="well in Wells" data-uidWell="{{well['@attributes'].uid}}" on-finish-render="ngRepeatFinished">
 
                 <span style="font-weight:bold;">Well:</span> {{well.name["#text"]}}
 
             </h3>
             <div class="accordion-content text-center" ng-repeat-end>
-                <div style="height:100px; width:100%; position:relative;">
+                <div style="height:50px; width:100%; position:relative;">
                     <div class="grid-row grid-row2">
                         <div class="col">
-                            <ul class="loading">
+                            <ul class="loading2">
                                 <li></li>
                                 <li></li>
                                 <li></li>
@@ -75,14 +75,10 @@
                         </div>
                     </div>
                     <div class="wellboreCon">
-                        <p attrs="{{Wellbores['@attributes'].uid}}">
-
-                            <span ng-if="Wellbores.name['#text'] != null" style="font-weight:bold;">Wellbore:</span> {{Wellbores.name["#text"]}}
-                        </p>
-                        <div ng-if="Wellbores.name['#text'] != null" class="btn-group">
-                            <button class="btn btn-sm btn-primary" id="btnInsertBHA">Insert BHA</button>
-                            <button class="btn btn-sm btn-primary" id="btnInsertSurvey">Insert Survey</button>
-                        </div>
+                        <a class="btn btn-default btn-block"  href="wellbore.html?wellID={{well['@attributes'].uid}}&wellTitle={{well.name['#text']}}&WellboreID={{Wellbores['@attributes'].uid}}&wellboreTitle={{Wellbores.name['#text']}}"  data-uidWellbore="{{Wellbores['@attributes'].uid}}">
+                            <!--<span ng-if="Wellbores.name['#text'] != null" style="font-weight:bold;">Wellbore:</span>--> {{Wellbores.name["#text"]}}
+                        </a>
+                       
                     </div>
                 </div>
             </div>
