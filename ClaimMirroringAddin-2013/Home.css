@@ -1,0 +1,175 @@
+﻿body{
+    padding-top:10px !important;
+    background-color: RGB(241,241,241)  !important;
+}
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+
+
+.button {
+  outline: none;
+  height: 40px;
+  text-align: center;
+  width: 130px;
+  border-radius: 40px;
+  background: #fff;
+  border: 2px solid RGB(42,87,154);
+  color: RGB(42,87,154);
+  letter-spacing: 1px;
+  text-shadow: 0;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+.button:hover {
+  color: white;
+  background: RGB(42,87,154);
+}
+.button:active {
+  letter-spacing: 2px;
+}
+#btnPreamble:after {
+  content: "Add Preamble";
+}
+#btnStep:after {
+  content: "Add Step";
+}
+#btnGenerate:after {
+  content: "Generate";
+}
+.onclic {
+  width: 40px;
+  border-color: #bbbbbb;
+  border-width: 3px;
+  font-size: 0;
+  border-left-color: RGB(42,87,154);
+  -webkit-animation: rotating 2s 0.25s linear infinite;
+          animation: rotating 2s 0.25s linear infinite;
+}
+.onclic:after {
+  content: "" !important;
+}
+.onclic:hover {
+  color: RGB(42,87,154);
+  background: white;
+}
+
+.validate {
+  font-size: 13px;
+  color: white;
+  background: RGB(42,87,154);
+}
+.validate:after {
+  font-family:'FontAwesome' !important;
+    content:"\f00c" !important;
+}
+
+@-webkit-keyframes rotating {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes rotating {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+.btnContainer div{
+    height:40px;
+}
+
+.radioCon{
+      margin:10px 0;
+      border: 1px solid RGB(42,87,154);
+      border-radius: 5px;
+      background: #fff;
+}
+
+.radioCon h4{
+          border-bottom: 1px solid RGB(42,87,154);
+          padding-bottom:7px;
+          color:white;
+          background-color:RGB(42,87,154);
+          margin-top:0 !important;
+          padding-top:10px !important;
+}
+
+.radioCon div{
+    margin-bottom:10px;
+}
+
+.inputs{
+    margin-left:10px;
+}
+
+
+.control {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.control input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+.control__indicator {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background: #e6e6e6;
+}
+.control--radio .control__indicator {
+  border-radius: 50%;
+}
+.control:hover input ~ .control__indicator,
+.control input:focus ~ .control__indicator {
+  background: #ccc;
+}
+.control input:checked ~ .control__indicator {
+  background: RGB(42,87,154);
+}
+.control:hover input:not([disabled]):checked ~ .control__indicator,
+.control input:checked:focus ~ .control__indicator {
+  background: RGB(42,87,154);
+}
+
+.control__indicator:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+.control input:checked ~ .control__indicator:after {
+  display: block;
+}
+
+
+.control--radio .control__indicator:after {
+  left: 5px;
+  top: 5px;
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background: #fff;
+}
