@@ -20,7 +20,7 @@
                 function (asyncResult) {
                     var error = asyncResult.error;
                     if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-                        write(error.name + ": " + error.message);
+                       // write(error.name + ": " + error.message);
                     }
                     else {
                         // Get selected data.
@@ -30,7 +30,7 @@
 
                         });
 
-                        write('Selected data is ' + asyncResult.value);
+                        //write('Selected data is ' + asyncResult.value);
                     }
                 });
         }
