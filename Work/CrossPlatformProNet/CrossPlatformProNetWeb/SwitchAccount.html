@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Switch Account</title>
+    <meta charset="utf-8" />
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/Office.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body class="container" data-ng-app="myApp" data-ng-controller="myCtrl">
+    <br />
+    <h4 class="text-center">Current Active Account</h4>
+    <div class="text-center" ng-repeat="account in UserAccounts" ng-show="UserAccounts.length <= 1">{{account.account_title}}</div>
+    <select class="form-control" ng-show="UserAccounts.length > 1">
+        <option ng-repeat="account in UserAccounts" id="{{account.account_id}}" on-finish-render="ngRepeatFinished">{{account.account_title}}</option>
+    </select> <br />
+    <button style="float:right;" data-ng-click="Switch()" class="btn btn-default">Ok</button>
+
+    <script>
+
+        (function () {
+    "use strict";
+
+
+    Office.initialize = function (reason) {
+
+    };
+
+
+    var app = angular.module('myApp', []);
+    app.directive('onFinishRender', function ($timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attr) {
+                if (scope.$last === true) {
+                    $timeout(function () {
+                        scope.$emit(attr.onFinishRender);
+
+                    });
+                }
+            }
+        }
+    });
+    app.controller('myCtrl', function ($scope, $http, $compile) {
+        $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
+            $("select option[id='" + localStorage.getItem("accountID") + "']").attr("selected", "selected");
+        });
+        $scope.UserAccounts = [];
+
+        $scope.Switch = function() {
+            // localStorage.removeItem("userToken");
+            localStorage.setItem("accountID", $("select").children(":selected").attr("id"));
+            localStorage.setItem("accountName", $("select").children(":selected").text());
+            Office.context.ui.messageParent(true);
+
+        }
+
+        $scope.GetUserAccounts = function () {
+
+
+            var uri = localStorage.getItem("hostName") + "/ajax/language_library_ajax.php?action=get_user_libraries_by_account&token=" + localStorage.getItem("userToken");
+            return $http.get(uri).then(function (response) {
+                return response.data;
+            });
+
+
+
+
+        }
+
+        angular.element(document).ready(function () {
+            $scope.Initial();
+
+
+        });
+        $scope.Initial = function () {
+
+            var userAccounts = $scope.GetUserAccounts();
+            userAccounts.then(function (response) {
+
+   
+                        $scope.UserAccounts = response.data;
+                        
+                    
+                
+
+            });
+
+        }
+
+    });
+
+})();
+        
+
+
+
+
+
+
+    </script>
+
+</body>
+</html>

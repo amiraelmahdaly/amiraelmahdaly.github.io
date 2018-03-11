@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <GeneratedFeatureId>f41f29ee-0d62-4323-9b5c-ab484c9770fa</GeneratedFeatureId>
+    <GeneratedPackageId>b56fdebd-da5e-4e55-a1a1-980a118996e3</GeneratedPackageId>
+    <GeneratedModuleId>{5dc70132-b18f-4d8e-9e65-db3d1e1e7a51}</GeneratedModuleId>
+    <GeneratedListId>{78d2c276-098d-457e-9fef-891a5edace13}</GeneratedListId>
+    <GeneratedProductId>{40c0fe45-d6e7-415f-8e56-3d28bc141a0e}</GeneratedProductId>
+    <GeneratedAppVersion>1.0.0.0</GeneratedAppVersion>
+    <GeneratedClientSecret>6CjZRv0VreCGHDwKMNfUQk05/+ax5H/5HfQP1mxq9zQ=</GeneratedClientSecret>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartAction>Project</StartAction>
+    <StartProgram>C:\Program Files\Microsoft Office\Office15\POWERPNT.EXE</StartProgram>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <StartAction>Project</StartAction>
+    <StartProgram>
+    </StartProgram>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,2 @@
+bin\Debug\app.publish\OfficeAppManifests\CrossPlatformProNetManifest.xml
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\app.publish\CrossPlatformProNet.app

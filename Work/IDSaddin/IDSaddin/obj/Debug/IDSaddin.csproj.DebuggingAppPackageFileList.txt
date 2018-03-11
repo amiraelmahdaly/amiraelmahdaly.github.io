@@ -1,0 +1,2 @@
+bin\Debug\OfficeAppManifests\IDSaddinManifest.xml
+C:\Users\ahmed\Desktop\Amira\IDSaddin\IDSaddin\bin\Debug\IDSaddin.debugapp

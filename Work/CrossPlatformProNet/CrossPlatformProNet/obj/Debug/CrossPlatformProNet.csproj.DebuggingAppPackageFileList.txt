@@ -1,0 +1,2 @@
+bin\Debug\OfficeAppManifests\CrossPlatformProNetManifest.xml
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\CrossPlatformProNet.debugapp

@@ -1,0 +1,78 @@
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\csc.exe
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.dll
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CSharp.Core.targets
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.VisualBasic.Core.targets
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\System.Collections.Immutable.dll
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\System.Reflection.Metadata.dll
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\vbc.exe
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe.config
+F:\Upwork\Microsoft Add-in\CrossPlatformProNet\CrossPlatformProNet\obj\Debug\CrossPlatformProNet.csprojResolveAssemblyReference.cache
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\csc.exe
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\System.Collections.Immutable.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\System.Reflection.Metadata.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\vbc.exe
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe.config
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\obj\Debug\CrossPlatformProNet.csprojResolveAssemblyReference.cache
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\csc.exe
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\System.Collections.Immutable.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\System.Reflection.Metadata.dll
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\vbc.exe
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe.config
+C:\Users\ahmed\Desktop\Amira\CrossPlatformProNet - Copy\CrossPlatformProNet\obj\Debug\CrossPlatformProNet.csprojResolveAssemblyReference.cache
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\csc.exe
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\System.Collections.Immutable.dll
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\System.Reflection.Metadata.dll
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\vbc.exe
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe.config
+C:\Users\Amira\Desktop\Amira\CrossPlatformProNet\CrossPlatformProNet\obj\Debug\CrossPlatformProNet.csprojResolveAssemblyReference.cache
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\csc.exe
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.dll
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CSharp.Core.targets
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\System.Collections.Immutable.dll
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\System.Reflection.Metadata.dll
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\vbc.exe
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe.config
+D:\Amira\CrossPlatformProNet\CrossPlatformProNet\obj\Debug\CrossPlatformProNet.csprojResolveAssemblyReference.cache
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\csc.exe
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.dll
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.CSharp.Core.targets
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\Microsoft.VisualBasic.Core.targets
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\System.Collections.Immutable.dll
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\System.Reflection.Metadata.dll
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\vbc.exe
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\bin\Debug\roslyn\VBCSCompiler.exe.config
+E:\Amira\CrossPlatformProNet\CrossPlatformProNet\obj\Debug\CrossPlatformProNet.csprojResolveAssemblyReference.cache

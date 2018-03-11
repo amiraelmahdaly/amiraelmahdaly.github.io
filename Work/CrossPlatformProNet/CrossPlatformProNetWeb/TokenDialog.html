@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>User Authentication</title>
+    <meta charset="utf-8" />
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/Office.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="icon" href="Images/ProNet_logo.png">
+</head>
+<body class="container" data-ng-app="myApp" data-ng-controller="myCtrl">
+
+    <input placeholder="Token" class="form-control form-control-sm" data-ng-model="UserToken" id="txtUserToken" />
+
+    <p id="result" style="color:red;font-size:12px;"></p>
+    <div dir="rtl">
+        <button class="btn btn-sm" data-ng-click="CheckToken()" id="btnGetToken">Enter</button>
+        <a dir="ltr" onclick="ShowWhereIsMyToken()" href="#ImgToken" data-toggle="collapse">Where is my token?</a>
+    </div>
+
+    <div id="ImgToken" class="collapse" style="margin-top:10px;">
+        <p class="text-center">If you do not have an account click <a target="_blank" href="https://pronetcre.com/demo/">here.</a></p>
+        <p class="text-center">If you do have an account but do not have a token click <a target="_blank" href="https://pronetcre.com/wp-content/uploads/2018/01/realdocs_user_guide.pdf">here.</a></p>
+    </div>
+    <script>
+        Office.initialize = function () { };
+        function takeToken() {
+            localStorage.setItem("userToken", document.getElementById("token").value);
+
+            Office.context.ui.messageParent(true);
+
+            // document.getElementById("result").innerText = localStorage.getItem("userToken");
+
+        }
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function ($scope, $http, $compile) {
+
+            //initializations
+            $scope.UserToken = "";
+            $scope.remaining = 5;
+            $scope.CheckUserToken = function () {
+                var uri = "https://auth.pronetcre.com/authentication/ajax/manage_tokens.php?action=get_token_hostname&token=" + $scope.UserToken;
+                return $http.get(uri).then(function (response) {
+                    return response;
+                });
+
+
+            }
+            $scope.CheckToken = function () {
+                document.getElementById("btnGetToken").disabled = true;
+                var checkToken = $scope.CheckUserToken();
+                checkToken.then(function (response) {
+                    document.getElementById("btnGetToken").disabled = false;
+                    if (response.data.result == false || $scope.UserToken.trim() == "") {
+                        document.getElementById("result").innerText = "Invalid Token Entered, you have " + $scope.remaining-- + " left";
+                        if ($scope.remaining == -1) 
+                            document.getElementById("btnGetToken").disabled = true;
+                    }
+                    else {
+                        localStorage.setItem("userToken", $scope.UserToken);
+                        //https://landlord.pronetcre.com
+                        //response.data.hostname;
+                        localStorage.setItem("hostName", response.data.hostname);
+                       // localStorage.setItem("hostName", "https://test-landlord.assistantbroker.com");
+
+
+                        var getlibs = $scope.GetUserLibraries();
+                        getlibs.then(function (response) {
+                            localStorage.setItem("accountID", response.data[0].account_id);
+                            localStorage.setItem("accountName", response.data[0].account_title);
+
+                            Office.context.ui.messageParent(true);
+                        });
+                    }
+                });
+
+
+
+            }
+            $scope.GetUserLibraries = function () {
+                var uri = localStorage.getItem("hostName") + "/ajax/language_library_ajax.php?action=get_user_libraries_by_account&token=" + localStorage.getItem("userToken");
+                return $http.get(uri).then(function (response) {
+                    return response.data;
+                });
+            }
+
+
+        });
+    </script>
+</body>
+</html>

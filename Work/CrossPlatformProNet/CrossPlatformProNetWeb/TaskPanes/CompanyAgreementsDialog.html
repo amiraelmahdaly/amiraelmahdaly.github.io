@@ -1,0 +1,278 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+    <title>Open Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+    <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<script src="Scripts/FabricUI/MessageBanner.js" type="text/javascript"></script>-->
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
+    <!-- To enable offline debugging using a local reference to Office.js, use:                        -->
+    <!-- <script src="Scripts/Office/MicrosoftAjax.js" type="text/javascript"></script>  -->
+    <!-- <script src="Scripts/Office/1/office.js" type="text/javascript"></script>  -->
+
+    <style>
+        .bloc select {
+            padding: 10px;
+            width: 100%;
+        }
+
+            .bloc select option:hover {
+                background-color: dodgerblue;
+                color: white;
+            }
+
+        .sp {
+            width: 32px;
+            height: 32px;
+            clear: both;
+            margin: 235px;
+        }
+
+        .sp-3balls, .sp-3balls:before, .sp-3balls:after {
+            border-radius: 50%;
+            background-color: #000;
+            width: 18px;
+            height: 18px;
+            transform-origin: center center;
+            display: inline-block;
+        }
+
+        .sp-3balls {
+            position: absolute;
+            background-color: black;
+            opacity: 1;
+            -webkit-animation: spScaleAlpha 1s infinite linear;
+            animation: spScaleAlpha 1s infinite linear;
+        }
+
+            .sp-3balls:before, .sp-3balls:after {
+                content: '';
+                position: relative;
+                opacity: 0.25;
+            }
+
+            .sp-3balls:before {
+                left: 30px;
+                top: 0px;
+                -webkit-animation: spScaleAlphaBefore 1s infinite linear;
+                animation: spScaleAlphaBefore 1s infinite linear;
+            }
+
+            .sp-3balls:after {
+                left: -30px;
+                top: -23px;
+                -webkit-animation: spScaleAlphaAfter 1s infinite linear;
+                animation: spScaleAlphaAfter 1s infinite linear;
+            }
+
+        @-webkit-keyframes spScaleAlpha {
+            0% {
+                opacity: 1;
+            }
+
+            33% {
+                opacity: 0.25;
+            }
+
+            66% {
+                opacity: 0.25;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes spScaleAlpha {
+            0% {
+                opacity: 1;
+            }
+
+            33% {
+                opacity: 0.25;
+            }
+
+            66% {
+                opacity: 0.25;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes spScaleAlphaBefore {
+            0% {
+                opacity: 0.25;
+            }
+
+            33% {
+                opacity: 1;
+            }
+
+            66% {
+                opacity: 0.25;
+            }
+        }
+
+        @keyframes spScaleAlphaBefore {
+            0% {
+                opacity: 0.25;
+            }
+
+            33% {
+                opacity: 1;
+            }
+
+            66% {
+                opacity: 0.25;
+            }
+        }
+
+        @-webkit-keyframes spScaleAlphaAfter {
+            33% {
+                opacity: 0.25;
+            }
+
+            66% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.25;
+            }
+        }
+
+        @keyframes spScaleAlphaAfter {
+            33% {
+                opacity: 0.25;
+            }
+
+            66% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.25;
+            }
+        }
+    </style>
+</head>
+<body class="container" data-ng-app="myApp" data-ng-controller="myCtrl">
+    <div style="position:absolute; top:0px; bottom:40px; left:15px; right:15px; overflow:auto;">
+
+        <div class="bloc">
+            <div id="spinner" class="sp sp-3balls"></div>
+            <select data-ng-dblclick="Open()" size="28">
+                <optgroup label="{{CompanyAgreements.account_title}}">
+                    <option ng-repeat="agreement in CompanyAgreements.user_agreements" value="{{agreement.libraries}}" id="{{agreement.id}}">{{agreement.title}}</option>
+                </optgroup>
+            </select>
+        </div>
+    </div>
+    <div style="position:absolute; bottom:0px; height:35px; left:0px; right:0px; overflow:hidden; padding:0 15px 0 15px;" class="footer" dir="rtl">
+        <button id="btnCancel" type="button" data-ng-click="Cancel()" class="btn btn-sm">Cancel</button>
+        <button type="button" id="btnOpen" data-ng-click="Open()" disabled class="btn btn-sm">Open</button>
+
+    </div>
+    <script>
+
+
+
+
+        Office.initialize = function (reason) {
+
+        };
+
+
+
+        var app = angular.module('myApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+        app.controller('myCtrl', function ($scope, $http, $compile) {
+
+            $scope.CompanyAgreements =null;
+            $scope.docID = null;
+            $scope.librariesIDs = [];
+
+            $("select").change(function () {
+                document.getElementById("btnOpen").disabled = false;
+
+            });
+
+
+            $scope.Cancel = function () {
+                Office.context.ui.messageParent(true);
+            }
+            $scope.GetCompanyAgreements = function () {
+
+
+                var uri = localStorage.getItem("hostName") + "/ajax/language_library_ajax.php?action=get_company_agreements_by_account&token=" + localStorage.getItem("userToken");
+                return $http.get(uri).then(function (response) {
+                    return response.data;
+                });
+
+            }
+        
+            $scope.Open = function () {
+
+                // insert doc
+                $scope.docID = $("option:selected").attr("id");
+                var getEncodedAgr = $scope.GetEncodedAgreementDocument($scope.docID);
+                getEncodedAgr.then(function (response) {
+                    $scope.librariesIDs = $("option:selected").attr("value");
+                    Office.context.ui.messageParent(JSON.stringify({ data: response.data, LibraryIDs: $scope.librariesIDs }));
+
+
+
+                });
+
+
+            }
+
+
+            $scope.GetEncodedAgreementDocument = function (id) {
+                var uri = localStorage.getItem("hostName")  + "/ajax/language_library_ajax.php?action=get_encoded_proposal_data&token=" + localStorage.getItem("userToken") + "&agreement_id=" + id + "&account_id=" + localStorage.getItem("accountID")
+                ;
+                return $http.get(uri).then(function (response) {
+                    return response.data;
+                });
+
+            }
+            angular.element(document).ready(function () {
+                $scope.Initial();
+
+
+            });
+            $scope.Initial = function () {
+                //here
+                $("#spinner").show();
+                var getAgreements = $scope.GetCompanyAgreements();
+                getAgreements.then(function (response) {
+                    for (var i = 0; i < response.data.length; i++) {
+                        if (response.data[i].account_id == localStorage.getItem("accountID")) {
+                            $scope.CompanyAgreements = response.data[i];
+                           
+                            break;
+                        }
+                    }
+                    //here
+                    $("#spinner").hide();
+
+
+                });
+
+            }
+
+        });
+
+
+
+    </script>
+</body>
+</html>
