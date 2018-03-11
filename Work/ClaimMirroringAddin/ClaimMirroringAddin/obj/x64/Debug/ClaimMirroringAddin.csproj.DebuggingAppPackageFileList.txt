@@ -1,2 +1,0 @@
-bin\x64\Debug\OfficeAppManifests\ClaimMirroringAddinManifest.xml
-C:\Users\ahmed\Desktop\Amira\ClaimMirroringAddin\ClaimMirroringAddin\bin\x64\Debug\ClaimMirroringAddin.debugapp

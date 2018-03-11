@@ -1,7 +1,0 @@
-False
-f41f29ee-0d62-4323-9b5c-ab484c9770fab56fdebd-da5e-4e55-a1a1-980a118996e3
-{5dc70132-b18f-4d8e-9e65-db3d1e1e7a51}{78d2c276-098d-457e-9fef-891a5edace13}
-{40c0fe45-d6e7-415f-8e56-3d28bc141a0e}
-1.0.0.0
-ClaimMirroringAddin
-_layouts/15/
