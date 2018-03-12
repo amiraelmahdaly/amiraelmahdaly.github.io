@@ -1,20 +1,38 @@
-﻿/* Page-specific styling */
+﻿
+    .banner {
+      width:
+      display: table;
+      margin: 0 auto;
+    }
 
-html {
-    position: relative;
-    min-height: 100%;
-}
-body {
-    margin: 0 0 40px; /* bottom = footer height */
-}
-.footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 40px;
-    width: 100%;
-}
+    #content-header {
+        background: #3a3a3c;
+        color: #fff;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 110px; /* Fixed header height */
+        overflow: hidden; /* Disable scrollbars for header */
+    }
 
-.padding {
-    padding: 15px;
-}
+    #content-main {
+        background: #fff;
+        position: fixed;
+        top: 90px; /* Same value as #content-header's height */
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: auto; /* Enable scrollbars within main content section */
+    }
+
+    .padding {
+        padding: 15px;
+    }
+
+    .companyCon{
+        background-color:lavender;
+        font-size:18px;
+        border: 1px solid black;
+        margin:5px 10px auto 10px;
+    }

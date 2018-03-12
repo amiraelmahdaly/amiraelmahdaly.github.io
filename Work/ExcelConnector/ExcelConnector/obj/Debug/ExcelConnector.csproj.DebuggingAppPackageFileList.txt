@@ -1,2 +1,2 @@
 bin\Debug\OfficeAppManifests\ExcelConnectorManifest.xml
-E:\Amira\ExcelConnector\ExcelConnector\bin\Debug\ExcelConnector.debugapp
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\ExcelConnector.debugapp

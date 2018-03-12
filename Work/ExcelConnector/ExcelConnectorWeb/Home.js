@@ -3,7 +3,7 @@
 (function () {
     "use strict";
     var messageBanner;
-   
+
 
     // The initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
@@ -14,7 +14,7 @@
             messageBanner.hideBanner();
 
             // Add a click event handler for the highlight button.
-            
+
         });
     }
 
@@ -57,18 +57,18 @@
         $scope.Projects = [];
         $scope.TimeKeepingEntries = [];
         $scope.Absences = [];
-
+   
         // the default Page Size (page_size query Param)
         var defaultPageSize = 200;
         var BaseURI = "https://rc.rhumbix.com/public_api/v2/";
 
         $scope.Initial = function () {
 
-           GetProjects();
-           GetTimeKeepingEntriesAndExport("2018-03-03", "2018-03-05", "1","JoB");
-           GetAbsencesAndExport("2018-03-03", "2018-03-05");
-          
-
+            GetProjects();
+            GetTimeKeepingEntriesAndExport("2018-03-03", "2018-03-05", "1", "JoB");
+            GetAbsencesAndExport("2018-03-03", "2018-03-05");
+      
+           
         }
 
         // to be used 
@@ -88,11 +88,11 @@
         });
 
 
-  
+
         // Services
 
         // Push Entries Recursively into dataOBJ and export it using exportFN Method
-        function GetAndExportService (URI,dataOBJ,job_number,exportFN,sheetName,tableName) {
+        function GetAndExportService(URI, dataOBJ, job_number, exportFN, sheetName, tableName) {
             $http.get(URI,
                 {
                     headers: { "x-api-key": "nTkrUJUcCp47VeIKJWNmG52ByfQ8Hbk26iUwFwVZ" }
@@ -102,9 +102,9 @@
                         dataOBJ.push(response.data.results[i]);
                     }
                     if (response.data.next != null)
-                      GetAndExportService(response.data.next,dataOBJ, job_number,exportFN);
+                        GetAndExportService(response.data.next, dataOBJ, job_number, exportFN);
                     else
-                        if (exportFN!=null) exportFN(sheetName, job_number, tableName, dataOBJ);
+                        if (exportFN != null) exportFN(sheetName, job_number, tableName, dataOBJ);
                 }).catch(function (e) {
                     errorHandler(e);
                 });
@@ -116,12 +116,12 @@
 
             GetAndExportService(BaseURI + "projects/?page_size=" + defaultPageSize, $scope.Projects, "", null, "", "");
         }
-        function GetTimeKeepingEntriesAndExport(start_date,end_date,job_number) {
+        function GetTimeKeepingEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
 
             GetAndExportService(BaseURI + "timekeeping_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.TimeKeepingEntries, job_number, ExportEntries, "Time Entries", "TimeEntriesTable");
         }
-        function GetAbsencesAndExport(start_date,end_date){
+        function GetAbsencesAndExport(start_date, end_date) {
             // Initialization before calling the service
 
             GetAndExportService(BaseURI + "absences/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize, $scope.Absences, "", ExportEntries, "Absences", "AbsencesTable");
@@ -129,12 +129,12 @@
 
         // Exporting
         // Generic Entries Export.
-        function ExportEntries(sheetName,job_number,tableName,Entries) {
+        function ExportEntries(sheetName, job_number, tableName, Entries) {
             Excel.run(function (context) {
                 // WorkSheet Naming with/without Job Number
                 var WorkSheetName = (job_number != "") ? job_number + "-" + sheetName : sheetName;
                 // adding worksheet
-                var sheet =context.workbook.worksheets.add(WorkSheetName);
+                var sheet = context.workbook.worksheets.add(WorkSheetName);
                 // Get Entry Property Names to be the Table Columns
                 var Columns = Object.getOwnPropertyNames(Entries[0]);
                 // Dynamically Assign Columns (A1:X1), get X
@@ -179,13 +179,29 @@
             messageBanner.showBanner();
             messageBanner.toggleExpansion();
         }
-     
-     
 
+        //amira
+
+        $(function () {
+            $("#datepicker1").datepicker({
+                minDate: "-30d",
+                maxDate: "0d",
+                dateFormat: "yy-mm-dd"
+        });
+    });
+        $(function () {
+            $("#datepicker2").datepicker({
+                minDate: "0d",
+                maxDate: "0d",
+                defaultDate: "0d",
+                dateFormat: "yy-mm-dd"
+
+            });
+        });
     });
 
 
-  
+
 
 
 })();

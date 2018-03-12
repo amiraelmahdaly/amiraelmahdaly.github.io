@@ -11,3 +11,16 @@ E:\Amira\ExcelConnector\ExcelConnector\bin\Debug\roslyn\vbc.exe
 E:\Amira\ExcelConnector\ExcelConnector\bin\Debug\roslyn\VBCSCompiler.exe
 E:\Amira\ExcelConnector\ExcelConnector\bin\Debug\roslyn\VBCSCompiler.exe.config
 E:\Amira\ExcelConnector\ExcelConnector\obj\Debug\ExcelConnector.csprojResolveAssemblyReference.cache
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\csc.exe
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\Microsoft.CodeAnalysis.dll
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\Microsoft.CSharp.Core.targets
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\System.Collections.Immutable.dll
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\System.Reflection.Metadata.dll
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\vbc.exe
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\VBCSCompiler.exe
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\roslyn\VBCSCompiler.exe.config
+D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\obj\Debug\ExcelConnector.csprojResolveAssemblyReference.cache

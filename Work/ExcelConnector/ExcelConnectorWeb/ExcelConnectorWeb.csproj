@@ -67,6 +67,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\banner-sm.png" />
+    <Content Include="Images\banner.png" />
+    <Content Include="Images\check.png" />
+    <Content Include="Images\icon.png" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -127,7 +131,9 @@
     <Content Include="Images\Button32x32.png" />
     <Content Include="Images\Button80x80.png" />
     <Content Include="Images\Close.png" />
+    <Content Include="Scripts\date.js" />
     <Content Include="Scripts\FabricUI\MessageBanner.js" />
+    <Content Include="Scripts\FabricUI\PickaDate.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
