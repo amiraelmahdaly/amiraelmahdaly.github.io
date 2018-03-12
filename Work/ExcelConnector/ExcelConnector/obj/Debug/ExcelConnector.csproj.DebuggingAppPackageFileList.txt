@@ -1,2 +1,0 @@
-bin\Debug\OfficeAppManifests\ExcelConnectorManifest.xml
-D:\Work\amiraelmahdaly.github.io\Work\ExcelConnector\ExcelConnector\bin\Debug\ExcelConnector.debugapp
