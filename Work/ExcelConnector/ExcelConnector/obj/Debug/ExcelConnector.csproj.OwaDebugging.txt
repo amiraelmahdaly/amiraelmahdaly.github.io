@@ -1,7 +1,0 @@
-False
-b2e3c032-0596-4388-a8f4-64ef9743e5d089a4ee9c-ba6d-4b7a-92ff-19093c0f3045
-{d2e76485-dc10-4b54-ba8d-2f7fa7ee5f9b}{59978228-bd25-4cbe-a2d3-730cbf2c804a}
-{5305bca8-a0ff-4fed-82f7-053f74aa0177}
-1.0.0.0
-ExcelConnector
-_layouts/15/
