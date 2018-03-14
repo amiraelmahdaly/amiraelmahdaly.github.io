@@ -47,6 +47,8 @@
         
         <div class="companyCon text-center"><span>Company Name</span>-<span>URL</span></div>
         <div class="padding  text-center">
+            <input id="txtApiKey" placeholder="Enter Api Key" class="form-control" /><br />
+            <button id="btnValidate" class="btn btn-default">Get Projects</button><br /><br />
             <select class="form-control" id="selProjects">
                 <option id="optUnselected" value="" selected disabled>Select Project</option>
                 <option ng-repeat="project in Projects" id="{{project.job_number}}">{{project.name}}</option>

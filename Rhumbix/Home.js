@@ -128,7 +128,8 @@
         function GetAndExportService(URI, dataOBJ, job_number, exportFN, sheetName, tableName) {
             $http.get(URI,
                 {
-                    headers: { "x-api-key": "nTkrUJUcCp47VeIKJWNmG52ByfQ8Hbk26iUwFwVZ" }
+                    headers: { "x-api-key": $("#txtApiKey").val() }
+                    //"nTkrUJUcCp47VeIKJWNmG52ByfQ8Hbk26iUwFwVZ"
                 })
                 .then(function (response) {
                     for (var i = 0; i < response.data.results.length; i++) {
@@ -250,6 +251,10 @@
                 dateFormat: "yy-mm-dd"
 
             });
+            $("#datepicker2").datepicker("setDate", "0d");
+        });
+        $("#btnValidate").click(function () {
+            GetProjects();
         });
     });
 
