@@ -64,7 +64,7 @@
 
         $scope.Initial = function () {
 
-            GetProjects();
+           // GetProjects();
            
       
            
