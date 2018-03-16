@@ -155,7 +155,8 @@
                     if (response.data.next != null)
                         GetAndExportService(response.data.next, dataOBJ, job_number, exportFN);
                     else
-                        if (exportFN != null) exportFN(sheetName, job_number, tableName, dataOBJ);
+                        if (exportFN != null)
+                            exportFN(sheetName, job_number, tableName, dataOBJ);
                 }).catch(function (e) {
                     errorHandler(e);
                 });
@@ -201,8 +202,9 @@
                     return context.sync();
                 }
 
-                var chars = { '/': '', '\\': '', '<': '','>':'','&':'','\'':'','"':'' };
-               job_number = job_number.replace(/[/\\&<>'"]/g, function (m) { return chars[m] });
+                var SheetNameEscapeChars = { '/': '', '\\': '', '<': '', '>': '', '&': '', '\'': '', '"': '' };
+                var JsonObjectsReplaceChars = {'{':'','}':'','"':'' };
+                job_number = job_number.replace(/[/\\&<>'"]/g, function (m) { return SheetNameEscapeChars[m] });
 
 
 
@@ -218,10 +220,22 @@
                 // Adding Columns to the table
                 EntriesTable.getHeaderRowRange().values = [Columns];
                 // Getting All Entries Rows
-                var rows = Entries.map(function (item) {
+                var rows = Entries.map(
+                    function (item) {
                     var it = [];
                     for (var i = 0; i < Columns.length; i++) {
-                        it.push($.isArray( item[Columns[i]]) ? item[Columns[i]].toString():item[Columns[i]]);
+                        switch(item[Columns[i]].constructor){
+                            case [].constructor:
+                                it.push(item[Columns[i]].toString());
+                                break;
+                            case {}.constructor:
+                                it.push(JSON.stringify(item[Columns[i]]).replace(/[{"}]/g, function (m) { return JsonObjectsReplaceChars[m] }));
+                                break;
+                            default:
+                                it.push(item[Columns[i]]);
+                                break;
+                        }
+                       // it.push( $.isArray(item[Columns[i]]) || item[Columns[i]]).constructor === {}.constructor ? item[Columns[i]].toString() : item[Columns[i]]);
                     }
                     return it;
                 });
