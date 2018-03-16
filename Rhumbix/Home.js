@@ -55,8 +55,10 @@
 
         // Data Objects
         $scope.Projects = [];
+        $scope.ShiftExtras = [];
         $scope.TimeKeepingEntries = [];
         $scope.Absences = [];
+        $scope.Notes = [];
    
         // the default Page Size (page_size query Param)
         var defaultPageSize = 200;
@@ -64,7 +66,7 @@
 
         $scope.Initial = function () {
 
-           // GetProjects();
+          //  GetProjects();
            
       
            
@@ -108,10 +110,25 @@
                         GetTimeKeepingEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
                     break;
 
+                case "optNotes":
+                    if ($('#selProjects').find(":selected").attr("id") == "optUnselected")
+                        showNotification("Please Choose a project First");
+                    else
+                        GetNotesEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
+                    break;
+
+                case "optShiftExtras":
+                    if ($('#selProjects').find(":selected").attr("id") == "optUnselected")
+                        showNotification("Please Choose a project First");
+                    else
+                        GetShiftExtrasEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
+                    break;
                 default:
                     showNotification("Please choose Entry Type!")
                     break;
 
+
+              
 
 
 
@@ -161,6 +178,19 @@
             GetAndExportService(BaseURI + "absences/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize, $scope.Absences, "", ExportEntries, "Absences", "AbsencesTable");
         }
 
+        function GetNotesEntriesAndExport(start_date, end_date, job_number) {
+            // Initialization before calling the service
+            $scope.Notes = [];
+            GetAndExportService(BaseURI + "notes/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.Notes, job_number, ExportEntries, "Notes Entries", "NotesEntriesTable");
+        }
+      
+        function GetShiftExtrasEntriesAndExport(start_date, end_date, job_number) {
+            // Initialization before calling the service
+            $scope.ShiftExtras = [];
+            GetAndExportService(BaseURI + "shift_extra_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.ShiftExtras, job_number, ExportEntries, "Shift Extras", "ShiftExtrasTable");
+        }
+      
+       
         // Exporting
         // Generic Entries Export.
         function ExportEntries(sheetName, job_number, tableName, Entries) {
@@ -170,6 +200,12 @@
                     showNotification("No Entries available")
                     return context.sync();
                 }
+
+                var chars = { '/': '', '\\': '', '<': '','>':'','&':'','\'':'','"':'' };
+               job_number = job_number.replace(/[/\\&<>'"]/g, function (m) { return chars[m] });
+
+
+
                 // WorkSheet Naming with/without Job Number
                 var WorkSheetName = (job_number != "") ? job_number + "-" + sheetName : sheetName;
                 // adding worksheet
@@ -185,7 +221,7 @@
                 var rows = Entries.map(function (item) {
                     var it = [];
                     for (var i = 0; i < Columns.length; i++) {
-                        it.push(item[Columns[i]]);
+                        it.push($.isArray( item[Columns[i]]) ? item[Columns[i]].toString():item[Columns[i]]);
                     }
                     return it;
                 });
@@ -213,7 +249,6 @@
             switch (error.code) {
                 case "ItemAlreadyExists":
                     showNotification("Sheet name already exists");
-                   
                     break;
                 default:
                     showNotification("Error", error);
@@ -258,7 +293,7 @@
         });
     });
 
-
+ 
 
 
 
