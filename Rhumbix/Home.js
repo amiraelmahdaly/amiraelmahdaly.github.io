@@ -164,7 +164,7 @@
         // Helpers & Wrappers To Call the Generic Service Method 
         function GetProjects() {
             // Initialization before calling the service
-
+            $scope.Projects = [];
             GetAndExportService(BaseURI + "projects/?page_size=" + defaultPageSize, $scope.Projects, "", null, "", "");
         }
         function GetTimeKeepingEntriesAndExport(start_date, end_date, job_number) {
