@@ -190,7 +190,10 @@
             $scope.ShiftExtras = [];
             GetAndExportService(BaseURI + "shift_extra_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.ShiftExtras, job_number, ExportEntries, "Shift Extras", "ShiftExtrasTable");
         }
-      
+        function toType  (obj) {
+            return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+        }
+
        
         // Exporting
         // Generic Entries Export.
@@ -224,11 +227,11 @@
                     function (item) {
                     var it = [];
                     for (var i = 0; i < Columns.length; i++) {
-                        switch(item[Columns[i]].constructor){
-                            case [].constructor:
+                        switch(toType( item[Columns[i]])){
+                            case "array":
                                 it.push(item[Columns[i]].toString());
                                 break;
-                            case {}.constructor:
+                            case "object":
                                 it.push(JSON.stringify(item[Columns[i]]).replace(/[{"}]/g, function (m) { return JsonObjectsReplaceChars[m] }));
                                 break;
                             default:
