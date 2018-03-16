@@ -59,17 +59,13 @@
         $scope.TimeKeepingEntries = [];
         $scope.Absences = [];
         $scope.Notes = [];
-   
+
         // the default Page Size (page_size query Param)
         var defaultPageSize = 200;
         var BaseURI = "https://rc.rhumbix.com/public_api/v2/";
 
         $scope.Initial = function () {
-
-          //  GetProjects();
-           
-      
-           
+            //  GetProjects();
         }
 
         // to be used 
@@ -92,51 +88,48 @@
         //Event Handlers
 
         $("#btnRetrieve").click(function () {
-            
 
-            if ($("#datepicker1").val() == "" || $("#datepicker2").val() == "")
-            {
+
+            if ($("#datepicker1").val().trim() == "" || $("#datepicker2").val().trim() == "") {
                 showNotification("Please choose dates!");
                 return;
             }
-            switch ($('#SelEntries').find(":selected").attr("id")) {
-                case "optAbsences":
-                    GetAbsencesAndExport($("#datepicker1").val(), $("#datepicker2").val());
-                    break;
-                case "otpTimeEntries":
-                    if ($('#selProjects').find(":selected").attr("id") == "optUnselected")
-                        showNotification("Please Choose a project First");
-                    else
-                        GetTimeKeepingEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
-                    break;
 
-                case "optNotes":
-                    if ($('#selProjects').find(":selected").attr("id") == "optUnselected")
-                        showNotification("Please Choose a project First");
-                    else
-                        GetNotesEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
-                    break;
+            if ($('#SelEntries').find(":selected").attr("id") == "optAbsences")
+                GetAbsencesAndExport($("#datepicker1").val(), $("#datepicker2").val());
+            else
+                if ($('#selProjects').find(":selected").attr("id") == "optUnselected")
+                    showNotification("Please Choose a project First");
+                else
+                    switch ($('#SelEntries').find(":selected").attr("id")) {
+                        case "otpTimeEntries":
+                            GetTimeKeepingEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
+                            break;
 
-                case "optShiftExtras":
-                    if ($('#selProjects').find(":selected").attr("id") == "optUnselected")
-                        showNotification("Please Choose a project First");
-                    else
-                        GetShiftExtrasEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
-                    break;
-                default:
-                    showNotification("Please choose Entry Type!")
-                    break;
+                        case "optNotes":
+                            GetNotesEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
+                            break;
 
+                        case "optShiftExtras":
+                            GetShiftExtrasEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
+                            break;
 
-              
+                        default:
+                            showNotification("Please choose Entry Type!")
+                            break;
 
 
 
-            }
+
+
+
+                    }
+     
 
         });
-
-
+        $("#btnValidate").click(function () {
+            GetProjects();
+        });
 
 
         // Services
@@ -178,35 +171,32 @@
             $scope.Absences = [];
             GetAndExportService(BaseURI + "absences/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize, $scope.Absences, "", ExportEntries, "Absences", "AbsencesTable");
         }
-
         function GetNotesEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
             $scope.Notes = [];
             GetAndExportService(BaseURI + "notes/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.Notes, job_number, ExportEntries, "Notes Entries", "NotesEntriesTable");
         }
-      
         function GetShiftExtrasEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
             $scope.ShiftExtras = [];
             GetAndExportService(BaseURI + "shift_extra_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.ShiftExtras, job_number, ExportEntries, "Shift Extras", "ShiftExtrasTable");
         }
-        function toType  (obj) {
+        function toType(obj) {
             return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
         }
 
-       
+
         // Exporting
         // Generic Entries Export.
         function ExportEntries(sheetName, job_number, tableName, Entries) {
             Excel.run(function (context) {
-                if (Entries.length == 0)
-                {
+                if (Entries.length == 0) {
                     showNotification("No Entries available")
                     return context.sync();
                 }
 
                 var SheetNameEscapeChars = { '/': '', '\\': '', '<': '', '>': '', '&': '', '\'': '', '"': '' };
-                var JsonObjectsReplaceChars = {'{':'','}':'','"':'' };
+                var JsonObjectsReplaceChars = { '{': '', '}': '', '"': '' };
                 job_number = job_number.replace(/[/\\&<>'"]/g, function (m) { return SheetNameEscapeChars[m] });
 
 
@@ -219,29 +209,28 @@
                 var Columns = Object.getOwnPropertyNames(Entries[0]);
                 // Dynamically Assign Columns (A1:X1), get X
                 var EntriesTable = sheet.tables.add("A1:" + String.fromCharCode(65 + Columns.length - 1) + "1", true /*hasHeaders*/);
-                EntriesTable.name = tableName;
+               // EntriesTable.name = tableName;
                 // Adding Columns to the table
                 EntriesTable.getHeaderRowRange().values = [Columns];
                 // Getting All Entries Rows
                 var rows = Entries.map(
                     function (item) {
-                    var it = [];
-                    for (var i = 0; i < Columns.length; i++) {
-                        switch(toType( item[Columns[i]])){
-                            case "array":
-                                it.push(item[Columns[i]].toString());
-                                break;
-                            case "object":
-                                it.push(JSON.stringify(item[Columns[i]]).replace(/[{"}]/g, function (m) { return JsonObjectsReplaceChars[m] }));
-                                break;
-                            default:
-                                it.push(item[Columns[i]]);
-                                break;
+                        var it = [];
+                        for (var i = 0; i < Columns.length; i++) {
+                            switch (toType(item[Columns[i]])) {
+                                case "array":
+                                    it.push(item[Columns[i]].toString());
+                                    break;
+                                case "object":
+                                    it.push(JSON.stringify(item[Columns[i]]).replace(/[{"}]/g, function (m) { return JsonObjectsReplaceChars[m] }));
+                                    break;
+                                default:
+                                    it.push(item[Columns[i]]);
+                                    break;
+                            }
                         }
-                       // it.push( $.isArray(item[Columns[i]]) || item[Columns[i]]).constructor === {}.constructor ? item[Columns[i]].toString() : item[Columns[i]]);
-                    }
-                    return it;
-                });
+                        return it;
+                    });
                 // Adding Rows to the table
                 EntriesTable.rows.add(null, rows);
                 if (Office.context.requirements.isSetSupported("ExcelApi", 1.2)) {
@@ -253,8 +242,12 @@
                 sheet.activate();
                 return context.sync();
             }).catch(errorHandler);
+          
         }
 
+
+        // Error Handling Region
+        // Hiding Error Message
         function hideErrorMessage() {
             setTimeout(function () {
                 messageBanner.hideBanner();
@@ -271,7 +264,7 @@
                     showNotification("Error", error);
                     break;
             }
-        
+
             console.log("Error: " + error);
             if (error instanceof OfficeExtension.Error) {
                 console.log("Debug info: " + JSON.stringify(error.debugInfo));
@@ -286,15 +279,15 @@
             hideErrorMessage();
         }
 
-    
+
         // Initialize Dt Pickers
         $(function () {
             $("#datepicker1").datepicker({
                 minDate: "-30d",
                 maxDate: "0d",
                 dateFormat: "yy-mm-dd"
+            });
         });
-    });
         $(function () {
             $("#datepicker2").datepicker({
                 minDate: "0d",
@@ -305,12 +298,11 @@
             });
             $("#datepicker2").datepicker("setDate", "0d");
         });
-        $("#btnValidate").click(function () {
-            GetProjects();
-        });
+
+      
     });
 
- 
+
 
 
 
