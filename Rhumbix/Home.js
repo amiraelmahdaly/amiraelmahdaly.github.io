@@ -135,7 +135,7 @@
         // Services
 
         // Push Entries Recursively into dataOBJ and export it using exportFN Method
-        function GetAndExportService(URI, dataOBJ, job_number, exportFN, sheetName, tableName) {
+        function GetAndExportService(URI, dataOBJ, job_number, exportFN, sheetName, tableName , groupBy) {
             $http.get(URI,
                 {
                     headers: { "x-api-key": $("#txtApiKey").val() }
@@ -148,8 +148,18 @@
                     if (response.data.next != null)
                         GetAndExportService(response.data.next, dataOBJ, job_number, exportFN);
                     else
-                        if (exportFN != null)
-                            exportFN(sheetName, job_number, tableName, dataOBJ);
+                        if (exportFN != null) {
+                            if (groupBy == null)
+                                exportFN(sheetName, job_number, tableName, dataOBJ);
+                            else {
+                                var newDataObj = GroupBy(dataOBJ, groupBy);
+                                for (var key in newDataObj) {
+                                    exportFN(sheetName+"-"+key, "", tableName, newDataObj[key]);
+                                }
+                            }
+
+                        }
+                        
                 }).catch(function (e) {
                     errorHandler(e);
                 });
@@ -159,32 +169,40 @@
         function GetProjects() {
             // Initialization before calling the service
             $scope.Projects = [];
-            GetAndExportService(BaseURI + "projects/?page_size=" + defaultPageSize, $scope.Projects, "", null, "", "");
+            GetAndExportService(BaseURI + "projects/?page_size=" + defaultPageSize, $scope.Projects, "", null, "", "",null);
         }
         function GetTimeKeepingEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
             $scope.TimeKeepingEntries = [];
-            GetAndExportService(BaseURI + "timekeeping_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.TimeKeepingEntries, job_number, ExportEntries, "Time Entries", "TimeEntriesTable");
+            GetAndExportService(BaseURI + "timekeeping_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.TimeKeepingEntries, job_number, ExportEntries, "Time Entries", "TimeEntriesTable",null);
         }
         function GetAbsencesAndExport(start_date, end_date) {
             // Initialization before calling the service
             $scope.Absences = [];
-            GetAndExportService(BaseURI + "absences/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize, $scope.Absences, "", ExportEntries, "Absences", "AbsencesTable");
+            GetAndExportService(BaseURI + "absences/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize, $scope.Absences, "", ExportEntries, "Absences", "AbsencesTable",null);
         }
         function GetNotesEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
             $scope.Notes = [];
-            GetAndExportService(BaseURI + "notes/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.Notes, job_number, ExportEntries, "Notes Entries", "NotesEntriesTable");
+            GetAndExportService(BaseURI + "notes/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.Notes, job_number, ExportEntries, "Notes Entries", "NotesEntriesTable",null);
         }
         function GetShiftExtrasEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
             $scope.ShiftExtras = [];
-            GetAndExportService(BaseURI + "shift_extra_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.ShiftExtras, job_number, ExportEntries, "Shift Extras", "ShiftExtrasTable");
+            GetAndExportService(BaseURI + "shift_extra_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.ShiftExtras, job_number, ExportEntries, "Shift Extras", "ShiftExtrasTable","entry_name");
         }
         function toType(obj) {
             return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
         }
 
+        // group 
+        function GroupBy(arr, property) {
+            return arr.reduce(function (memo, x) {
+                if (!memo[x[property]]) { memo[x[property]] = []; }
+                memo[x[property]].push(x);
+                return memo;
+            }, {});
+        }
 
         // Exporting
         // Generic Entries Export.
@@ -203,29 +221,41 @@
 
                 // WorkSheet Naming with/without Job Number
                 var WorkSheetName = (job_number != "") ? job_number + "-" + sheetName : sheetName;
+              
                 // adding worksheet
                 var sheet = context.workbook.worksheets.add(WorkSheetName);
                 // Get Entry Property Names to be the Table Columns
-                var Columns = Object.getOwnPropertyNames(Entries[0]);
+                var oldColumns = Object.getOwnPropertyNames(Entries[0]);
+                //editing headers to contain second level keys
+                var Columns = oldColumns;
+                for (var i = 0; i < oldColumns.length; i++) {
+                    if (toType(Entries[0][oldColumns[i]]) == "object")
+                        Columns = oldColumns.slice(0, i).concat(Object.getOwnPropertyNames(Entries[0][oldColumns[i]])).concat(oldColumns.slice(i + 1));
+
+                }
+
+
                 // Dynamically Assign Columns (A1:X1), get X
                 var EntriesTable = sheet.tables.add("A1:" + String.fromCharCode(65 + Columns.length - 1) + "1", true /*hasHeaders*/);
-               // EntriesTable.name = tableName;
+                // EntriesTable.name = tableName;
                 // Adding Columns to the table
                 EntriesTable.getHeaderRowRange().values = [Columns];
                 // Getting All Entries Rows
                 var rows = Entries.map(
                     function (item) {
                         var it = [];
-                        for (var i = 0; i < Columns.length; i++) {
-                            switch (toType(item[Columns[i]])) {
+                        for (var i = 0; i < oldColumns.length; i++) {
+                            switch (toType(item[oldColumns[i]])) {
                                 case "array":
-                                    it.push(item[Columns[i]].toString());
+                                    it.push(item[oldColumns[i]].toString());
                                     break;
                                 case "object":
-                                    it.push(JSON.stringify(item[Columns[i]]).replace(/[{"}]/g, function (m) { return JsonObjectsReplaceChars[m] }));
+                                    //handling nested object
+                                    var arr = $.map(item[oldColumns[i]], function (el) { return el; })
+                                    it = it.concat(arr);
                                     break;
                                 default:
-                                    it.push(item[Columns[i]]);
+                                    it.push(item[oldColumns[i]]);
                                     break;
                             }
                         }
@@ -242,7 +272,7 @@
                 sheet.activate();
                 return context.sync();
             }).catch(errorHandler);
-          
+
         }
 
 
