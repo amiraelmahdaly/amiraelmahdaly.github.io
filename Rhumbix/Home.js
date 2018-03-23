@@ -76,9 +76,9 @@
             AbsensesOption: { id: "optAbsences", text: "Absences" },
             NotesOption: { id: "optNotes", text: "Notes" },
             ShiftExtrasOption: { id: "optShiftExtras", text: "Shift Extras" },
-            CompanyFormsOption: { id: "optCompanyForms", text: "Company Forms" },
+            CompanyFormsOption: { id: "optCompanyForms", text: "Project Forms" },
             EmployeesOption: { id: "OptEmployees", text: "Employees" },
-            CostEntriesOption: { id: "optCostEntries", text: "Cost Entries" }
+            CostEntriesOption: { id: "optCostEntries", text: "Cost Codes" }
 
 
         };
