@@ -67,8 +67,8 @@
         var USerCredentials = { UserName: "", Password: "" };
         var TokenDialog;
 
-        var DeploymentHost = "https://amiraelmahdaly.github.io/IDS/";
-       // var DeploymentHost = "https://localhost:44300/";
+        //var DeploymentHost = "https://amiraelmahdaly.github.io/IDS/";
+        var DeploymentHost = "https://localhost:44300/";
         var URI = "https://sg.idsdatanet.com/d2_omv_global_staging/webservice/depotwebservice.html";
 
         var TokenDialogUrl = DeploymentHost + "TokenDialog.html";

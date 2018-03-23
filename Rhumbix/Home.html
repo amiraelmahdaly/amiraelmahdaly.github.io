@@ -49,9 +49,10 @@
         <div class="padding  text-center">
             <input id="txtApiKey"placeholder="Enter Api Key" class="form-control"/><br />
             <button id="btnValidate" class="btn btn-default">Get Projects</button><br /><br />
+            <label class="text-left" for="selProjects">Projects</label>
             <select class="form-control" id="selProjects">
                 <!--<option id="optUnselected" value="" selected disabled>Select Project</option>-->
-                <option ng-repeat="project in Projects" id="{{project.job_number}}">{{project.name}}</option>
+                <option ng-repeat="project in Projects | orderBy: 'name'" id="{{project.job_number}}">{{project.name}}</option>
             </select><br />
             <div class="input-group" id="startDate">
                 <input placeholder="Start Date" type="text" class="form-control" id="datepicker1" />

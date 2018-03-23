@@ -211,10 +211,27 @@
             FreePremium = getQueryStringValue("UserType");
             if (FreePremium == "Free") {
                 PopulateSelect("SelEntries", FreeUserEntries);
+                $(function () {
+                    $("#datepicker1").datepicker({
+                        minDate: "-30d",
+                        maxDate: "0d",
+                        dateFormat: "yy-mm-dd"
+                    });
+                });
+                $(function () {
+                    $("#datepicker2").datepicker({
+                        minDate: "0d",
+                        maxDate: "0d",
+                        defaultDate: "0d",
+                        dateFormat: "yy-mm-dd"
 
+                    });
+                    $("#datepicker2").datepicker("setDate", "0d");
+                });
             }
             else {
                 $('#selProjects').attr('multiple', 'multiple');
+                $('#selProjects').attr('size', '9');
                 PopulateSelect("SelEntries", PremiumUserFeatures);
                 // Edit dates also here
 
@@ -222,10 +239,12 @@
                     var dateFormat = "yy-mm-dd",
                       from = $("#datepicker1")
                         .datepicker({
-                            maxDate: "0d"
+                            maxDate: "0d",
+                            dateFormat: "yy-mm-dd"
                         })
                         .on("change", function () {
                             to.datepicker("option", "minDate", getDate(this));
+                            var k = getDate(this);
                             var msecsIn90ADay = 86400000*90;
                             var endDate = new Date(getDate(this).getTime() + msecsIn90ADay);
                             var now = new Date();
@@ -237,7 +256,8 @@
 
                         }),
                       to = $("#datepicker2").datepicker({
-                          maxDate: "0d"
+                          maxDate: "0d",
+                          dateFormat: "yy-mm-dd"
                       })
                       .on("change", function () {
                           from.datepicker("option", "maxDate", getDate(this));
@@ -376,23 +396,6 @@
             hideErrorMessage();
         }
 
-        // Initialize Dt Pickers
-        $(function () {
-            $("#datepicker1").datepicker({
-                maxDate: "0d",
-                dateFormat: "yy-mm-dd"
-            });
-        });
-        $(function () {
-            $("#datepicker2").datepicker({
-                maxDate: "0d",
-                dateFormat: "yy-mm-dd"
-
-            });
-            //$("#datepicker2").datepicker("setDate", "0d");
-        });
-
-      
     });
 
 })();
