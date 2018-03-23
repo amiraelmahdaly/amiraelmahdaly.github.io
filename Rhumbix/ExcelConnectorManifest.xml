@@ -32,7 +32,7 @@
     <Host Name="Workbook" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://amiraelmahdaly.github.io/Rhumbix/Home.html" />
+    <SourceLocation DefaultValue="https://amiraelmahdaly.github.io/Rhumbix/Login.html" />
   </DefaultSettings>
   <!-- End TaskPane Mode integration.  -->
 
@@ -118,7 +118,7 @@
       </bt:Images>
       <bt:Urls>
         <bt:Url id="Contoso.DesktopFunctionFile.Url" DefaultValue="https://amiraelmahdaly.github.io/Rhumbix/Functions/FunctionFile.html" />
-        <bt:Url id="Contoso.Taskpane.Url" DefaultValue="https://amiraelmahdaly.github.io/Rhumbix/Home.html" />
+        <bt:Url id="Contoso.Taskpane.Url" DefaultValue="https://amiraelmahdaly.github.io/Rhumbix/Login.html" />
         <bt:Url id="Contoso.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->

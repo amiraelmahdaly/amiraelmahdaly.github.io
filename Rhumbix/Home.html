@@ -50,7 +50,7 @@
             <input id="txtApiKey"placeholder="Enter Api Key" class="form-control"/><br />
             <button id="btnValidate" class="btn btn-default">Get Projects</button><br /><br />
             <select class="form-control" id="selProjects">
-                <option id="optUnselected" value="" selected disabled>Select Project</option>
+                <!--<option id="optUnselected" value="" selected disabled>Select Project</option>-->
                 <option ng-repeat="project in Projects" id="{{project.job_number}}">{{project.name}}</option>
             </select><br />
             <div class="input-group" id="startDate">
@@ -63,28 +63,12 @@
             </div><br />
 
 
-            <select class="form-control" id="SelEntries">
-                <option value="" selected disabled>Select Entry</option>
-                <option id="otpTimeEntries">Time Entries</option>
-                <option id="optAbsences">Absences</option>
-                <option id="optNotes">Notes</option>
-                <option id="optShiftExtras">Shift Extras</option>
+            <select  class="form-control" id="SelEntries">
+              
             </select><br /><br />
             <button id="btnRetrieve" class="btn btn-default">Retreive</button>
         </div>
-        <!--<div class="padding">
-            <p>The Rhumbix Add-in is the quickest way to sync your Rhumbix data to and from the current spreadsheet.</p>
-            <div class="ms-fontWeight-semibold">Credentials:</div>
-            <div class="ms-TextField">
-                <label for="TextField9" class="ms-Label">Company Key</label>
-                <input type="text" id="TextField9" label="TextField with a placeholder" placeholder="company_key" value="" class="ms-TextField-field" aria-label="" aria-invalid="false">
-            </div>
-            <div class="ms-TextField">
-                <label for="TextField9" class="ms-Label">Api Key</label>
-                <input type="text" id="TextField9" label="TextField with a placeholder" placeholder="api_key" value="" class="ms-TextField-field" aria-label="" aria-invalid="false">
-            </div>
-            <p><button class="ms-Button" id="login">Login</button></p>
-        </div>-->
+       
     </div>
     <!-- FabricUI component used for displaying notifications -->
     <div class="ms-MessageBanner" style="position:absolute;bottom: 0;">

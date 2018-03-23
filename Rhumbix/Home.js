@@ -50,6 +50,7 @@
         };
     });
     app.controller('myCtrl', function ($scope, $http, $compile) {
+     
 
         //initializations
 
@@ -60,33 +61,42 @@
         $scope.Absences = [];
         $scope.Notes = [];
 
+
+        // data binding Objects for controls
+        var FreeUserEntries = {
+          //  SelectEntryOption: {  text: "Select Entry", value: "", selected: true, disabled:true },
+            TimeEntriesOption: { id: "otpTimeEntries", text: "Time Entries" },
+            AbsensesOption: {id : "optAbsences", text: "Absences" }, 
+            NotesOption: { id: "optNotes", text: "Notes" },
+            ShiftExtrasOption: {id : "optShiftExtras", text: "Shift Extras" } 
+        };
+        var PremiumUserFeatures = {
+       
+            TimeEntriesOption: { id: "otpTimeEntries", text: "Time Entries" },
+            AbsensesOption: { id: "optAbsences", text: "Absences" },
+            NotesOption: { id: "optNotes", text: "Notes" },
+            ShiftExtrasOption: { id: "optShiftExtras", text: "Shift Extras" },
+            CompanyFormsOption: { id: "optCompanyForms", text: "Company Forms" },
+            EmployeesOption: { id: "OptEmployees", text: "Employees" },
+            CostEntriesOption: { id: "optCostEntries", text: "Cost Entries" }
+
+
+        };
+        var FreePremium = "Free";
+           
         // the default Page Size (page_size query Param)
         var defaultPageSize = 200;
         var BaseURI = "https://rc.rhumbix.com/public_api/v2/";
 
-        $scope.Initial = function () {
-            //  GetProjects();
-        }
-
-        // to be used 
-        $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
-            $('.accordion-toggle').click(function () {
-                $(".wellboreCon").hide();
-                setTimeout(SlideToggle.bind(this), 0);
-                var id = $(this).attr('data-uidWell');
-                $scope.GetWellbores(id);
-            });
-            $("#grid-row1").hide();
-            $("#accordion").show();
-            $("#header").show();
-        })
+        //Event Handlers
         angular.element(document).ready(function () {
             $scope.Initial();
         });
+        $scope.Initial = function () {
+            //  GetProjects();
+            PopulateEntryTypes();
 
-
-        //Event Handlers
-
+        }
         $("#btnRetrieve").click(function () {
 
 
@@ -118,11 +128,6 @@
                             showNotification("Please choose Entry Type!")
                             break;
 
-
-
-
-
-
                     }
      
 
@@ -130,10 +135,7 @@
         $("#btnValidate").click(function () {
             GetProjects();
         });
-
-
-        // Services
-
+      
         // Push Entries Recursively into dataOBJ and export it using exportFN Method
         function GetAndExportService(URI, dataOBJ, job_number, exportFN, sheetName, tableName , groupBy) {
             $http.get(URI,
@@ -146,7 +148,7 @@
                         dataOBJ.push(response.data.results[i]);
                     }
                     if (response.data.next != null)
-                        GetAndExportService(response.data.next, dataOBJ, job_number, exportFN);
+                        GetAndExportService(response.data.next, dataOBJ, job_number, exportFN,sheetName,tableName,groupBy);
                     else
                         if (exportFN != null) {
                             if (groupBy == null)
@@ -194,8 +196,76 @@
         function toType(obj) {
             return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
         }
+        function PopulateSelect(id, Options) {
+            $.each(Options, function (i, item) {
+                $('#'+ id).append($('<option>', {
+                    value: item.value,
+                    text: item.text,
+                    id: item.id,
+                    disabled: item.disabled,
+                    selected: item.selected
+                }));
+            });
+        }
+        function PopulateEntryTypes() {
+            FreePremium = getQueryStringValue("UserType");
+            if (FreePremium == "Free") {
+                PopulateSelect("SelEntries", FreeUserEntries);
 
-        // group 
+            }
+            else {
+                $('#selProjects').attr('multiple', 'multiple');
+                PopulateSelect("SelEntries", PremiumUserFeatures);
+                // Edit dates also here
+
+                $(function () {
+                    var dateFormat = "yy-mm-dd",
+                      from = $("#datepicker1")
+                        .datepicker({
+                            maxDate: "0d"
+                        })
+                        .on("change", function () {
+                            to.datepicker("option", "minDate", getDate(this));
+                            var msecsIn90ADay = 86400000*90;
+                            var endDate = new Date(getDate(this).getTime() + msecsIn90ADay);
+                            var now = new Date();
+                            now.setHours(0, 0, 0, 0);
+                            if (endDate < now) 
+                                to.datepicker("option", "maxDate", endDate);
+                            else
+                                to.datepicker("option", "maxDate", now);
+
+                        }),
+                      to = $("#datepicker2").datepicker({
+                          maxDate: "0d"
+                      })
+                      .on("change", function () {
+                          from.datepicker("option", "maxDate", getDate(this));
+                          var msecsIn90ADay = 86400000 * 90;
+                          var startDate = new Date(getDate(this).getTime() - msecsIn90ADay);
+                          var now = new Date();
+                          now.setHours(0, 0, 0, 0);
+                          from.datepicker("option", "minDate", startDate);
+
+                      });
+
+                    function getDate(element) {
+                        var date;
+                        try {
+                            date = $.datepicker.parseDate(dateFormat, element.value);
+                        } catch (error) {
+                            date = null;
+                        }
+
+                        return date;
+                    }
+                });
+            }
+
+        }
+        function getQueryStringValue(key) {
+            return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+        }
         function GroupBy(arr, property) {
             return arr.reduce(function (memo, x) {
                 if (!memo[x[property]]) { memo[x[property]] = []; }
@@ -204,8 +274,7 @@
             }, {});
         }
 
-        // Exporting
-        // Generic Entries Export.
+        // Exporting To Excel
         function ExportEntries(sheetName, job_number, tableName, Entries) {
             Excel.run(function (context) {
                 if (Entries.length == 0) {
@@ -275,9 +344,7 @@
 
         }
 
-
         // Error Handling Region
-        // Hiding Error Message
         function hideErrorMessage() {
             setTimeout(function () {
                 messageBanner.hideBanner();
@@ -309,31 +376,23 @@
             hideErrorMessage();
         }
 
-
         // Initialize Dt Pickers
         $(function () {
             $("#datepicker1").datepicker({
-                minDate: "-30d",
                 maxDate: "0d",
                 dateFormat: "yy-mm-dd"
             });
         });
         $(function () {
             $("#datepicker2").datepicker({
-                minDate: "0d",
                 maxDate: "0d",
-                defaultDate: "0d",
                 dateFormat: "yy-mm-dd"
 
             });
-            $("#datepicker2").datepicker("setDate", "0d");
+            //$("#datepicker2").datepicker("setDate", "0d");
         });
 
       
     });
-
-
-
-
 
 })();
