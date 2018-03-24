@@ -154,10 +154,15 @@
                             if (groupBy == null)
                                 exportFN(sheetName, job_number, tableName, dataOBJ);
                             else {
-                                var newDataObj = GroupBy(dataOBJ, groupBy);
-                                for (var key in newDataObj) {
-                                    exportFN(sheetName+"-"+key, "", tableName, newDataObj[key]);
+                                if (dataOBJ.length != 0) {
+                                    var newDataObj = GroupBy(dataOBJ, groupBy);
+                                    for (var key in newDataObj) {
+                                        exportFN(sheetName + "-" + key, "", tableName, newDataObj[key]);
+                                    }
+                               
                                 }
+                                else
+                                    showNotification("No Entries available");
                             }
 
                         }
@@ -176,7 +181,7 @@
         function GetTimeKeepingEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
             $scope.TimeKeepingEntries = [];
-            GetAndExportService(BaseURI + "timekeeping_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.TimeKeepingEntries, job_number, ExportEntries, "Time Entries", "TimeEntriesTable",null);
+            GetAndExportService(BaseURI + "timekeeping_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.TimeKeepingEntries, job_number, ExportEntries, "Time Entries", "TimeEntriesTable", null);
         }
         function GetAbsencesAndExport(start_date, end_date) {
             // Initialization before calling the service
@@ -186,12 +191,12 @@
         function GetNotesEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
             $scope.Notes = [];
-            GetAndExportService(BaseURI + "notes/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.Notes, job_number, ExportEntries, "Notes Entries", "NotesEntriesTable",null);
+            GetAndExportService(BaseURI + "notes/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.Notes, job_number, ExportEntries, "Notes Entries", "NotesEntriesTable", null);
         }
         function GetShiftExtrasEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
             $scope.ShiftExtras = [];
-            GetAndExportService(BaseURI + "shift_extra_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + job_number, $scope.ShiftExtras, job_number, ExportEntries, "Shift Extras", "ShiftExtrasTable","entry_name");
+            GetAndExportService(BaseURI + "shift_extra_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.ShiftExtras, job_number, ExportEntries, "Shift Extras", "ShiftExtrasTable", "entry_name");
         }
         function toType(obj) {
             return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
