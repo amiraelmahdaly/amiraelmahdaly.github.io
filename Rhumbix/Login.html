@@ -31,6 +31,8 @@
     <div id="content-main">
 
         <div class="padding  text-center">
+            <input id="txtApiKey" placeholder="Enter Api Key" class="form-control" /><br />
+     
             <button id="btnFree" class="btn btn-default btn-block">Login as a free user</button>
             <button id="btnPremium" class="btn btn-default btn-block">Login as a premium user</button>
     </div>    
@@ -55,7 +57,7 @@
         $("#btnFree").click(function () { Redirect("Free");});
         $("#btnPremium").click(function () { Redirect("Premium") });
         function Redirect(q) {
-            window.location.href = "Home.html?UserType=" + q;
+            window.location.href = "Home.html?UserType=" + q + "&ApiKey=" + $("#txtApiKey").val();
         }
     </script>
 </body>

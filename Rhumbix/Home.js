@@ -12,8 +12,7 @@
             var element = document.querySelector('.ms-MessageBanner');
             messageBanner = new fabric.MessageBanner(element);
             messageBanner.hideBanner();
-
-            // Add a click event handler for the highlight button.
+           
 
         });
     }
@@ -50,7 +49,7 @@
         };
     });
     app.controller('myCtrl', function ($scope, $http, $compile) {
-     
+
 
         //initializations
 
@@ -60,18 +59,19 @@
         $scope.TimeKeepingEntries = [];
         $scope.Absences = [];
         $scope.Notes = [];
+        $scope.CompanyForms = [];
 
 
         // data binding Objects for controls
         var FreeUserEntries = {
-          //  SelectEntryOption: {  text: "Select Entry", value: "", selected: true, disabled:true },
+            //  SelectEntryOption: {  text: "Select Entry", value: "", selected: true, disabled:true },
             TimeEntriesOption: { id: "otpTimeEntries", text: "Time Entries" },
-            AbsensesOption: {id : "optAbsences", text: "Absences" }, 
+            AbsensesOption: { id: "optAbsences", text: "Absences" },
             NotesOption: { id: "optNotes", text: "Notes" },
-            ShiftExtrasOption: {id : "optShiftExtras", text: "Shift Extras" } 
+            ShiftExtrasOption: { id: "optShiftExtras", text: "Shift Extras" }
         };
         var PremiumUserFeatures = {
-       
+
             TimeEntriesOption: { id: "otpTimeEntries", text: "Time Entries" },
             AbsensesOption: { id: "optAbsences", text: "Absences" },
             NotesOption: { id: "optNotes", text: "Notes" },
@@ -83,7 +83,7 @@
 
         };
         var FreePremium = "Free";
-           
+        var ApiKey = "";
         // the default Page Size (page_size query Param)
         var defaultPageSize = 200;
         var BaseURI = "https://rc.rhumbix.com/public_api/v2/";
@@ -93,7 +93,8 @@
             $scope.Initial();
         });
         $scope.Initial = function () {
-            //  GetProjects();
+            ApiKey = getQueryStringValue("ApiKey");
+            GetProjects();
             PopulateEntryTypes();
 
         }
@@ -124,23 +125,26 @@
                             GetShiftExtrasEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
                             break;
 
+                        case "optCompanyForms":
+                            GetCompanyFormsEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
+                            break;
                         default:
                             showNotification("Please choose Entry Type!")
                             break;
 
                     }
-     
+
 
         });
         $("#btnValidate").click(function () {
             GetProjects();
         });
-      
+
         // Push Entries Recursively into dataOBJ and export it using exportFN Method
-        function GetAndExportService(URI, dataOBJ, job_number, exportFN, sheetName, tableName , groupBy) {
+        function GetAndExportService(URI, dataOBJ, job_number, exportFN, sheetName, tableName, groupBy) {
             $http.get(URI,
                 {
-                    headers: { "x-api-key": $("#txtApiKey").val() }
+                    headers: { "x-api-key": ApiKey }
                     //"nTkrUJUcCp47VeIKJWNmG52ByfQ8Hbk26iUwFwVZ"
                 })
                 .then(function (response) {
@@ -148,25 +152,22 @@
                         dataOBJ.push(response.data.results[i]);
                     }
                     if (response.data.next != null)
-                        GetAndExportService(response.data.next, dataOBJ, job_number, exportFN,sheetName,tableName,groupBy);
+                        GetAndExportService(response.data.next, dataOBJ, job_number, exportFN, sheetName, tableName, groupBy);
                     else
-                        if (exportFN != null) {
+                        if (dataOBJ.length == 0)
+                            showNotification("No Entries Available");
+                        else
+                            if (exportFN != null) {
                             if (groupBy == null)
                                 exportFN(sheetName, job_number, tableName, dataOBJ);
                             else {
-                                if (dataOBJ.length != 0) {
-                                    var newDataObj = GroupBy(dataOBJ, groupBy);
-                                    for (var key in newDataObj) {
-                                        exportFN(sheetName + "-" + key, "", tableName, newDataObj[key]);
-                                    }
-                               
+                                var newDataObj = GroupBy(dataOBJ, groupBy);
+                                for (var key in newDataObj) {
+                                    exportFN(sheetName + "-" + key, "", tableName, newDataObj[key]);
                                 }
-                                else
-                                    showNotification("No Entries available");
                             }
-
                         }
-                        
+
                 }).catch(function (e) {
                     errorHandler(e);
                 });
@@ -176,7 +177,7 @@
         function GetProjects() {
             // Initialization before calling the service
             $scope.Projects = [];
-            GetAndExportService(BaseURI + "projects/?page_size=" + defaultPageSize, $scope.Projects, "", null, "", "",null);
+            GetAndExportService(BaseURI + "projects/?page_size=" + defaultPageSize, $scope.Projects, "", null, "", "", null);
         }
         function GetTimeKeepingEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
@@ -186,7 +187,7 @@
         function GetAbsencesAndExport(start_date, end_date) {
             // Initialization before calling the service
             $scope.Absences = [];
-            GetAndExportService(BaseURI + "absences/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize, $scope.Absences, "", ExportEntries, "Absences", "AbsencesTable",null);
+            GetAndExportService(BaseURI + "absences/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize, $scope.Absences, "", ExportEntries, "Absences", "AbsencesTable", null);
         }
         function GetNotesEntriesAndExport(start_date, end_date, job_number) {
             // Initialization before calling the service
@@ -198,12 +199,18 @@
             $scope.ShiftExtras = [];
             GetAndExportService(BaseURI + "shift_extra_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.ShiftExtras, job_number, ExportEntries, "Shift Extras", "ShiftExtrasTable", "entry_name");
         }
+        function GetCompanyFormsEntriesAndExport(created_start_date, created_end_date, job_number) {
+            // Initialization before calling the service
+            $scope.CompanyForms = [];
+            GetAndExportService(BaseURI + "project_entries/?created_start_date=" + created_start_date + "&created_end_date=" + created_end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.CompanyForms, job_number, ExportEntries, "Company Forms", "CompanyFormsTable", "schema_name");
+        }
+
         function toType(obj) {
             return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
         }
         function PopulateSelect(id, Options) {
             $.each(Options, function (i, item) {
-                $('#'+ id).append($('<option>', {
+                $('#' + id).append($('<option>', {
                     value: item.value,
                     text: item.text,
                     id: item.id,
@@ -250,11 +257,11 @@
                         .on("change", function () {
                             to.datepicker("option", "minDate", getDate(this));
                             var k = getDate(this);
-                            var msecsIn90ADay = 86400000*90;
+                            var msecsIn90ADay = 86400000 * 90;
                             var endDate = new Date(getDate(this).getTime() + msecsIn90ADay);
                             var now = new Date();
                             now.setHours(0, 0, 0, 0);
-                            if (endDate < now) 
+                            if (endDate < now)
                                 to.datepicker("option", "maxDate", endDate);
                             else
                                 to.datepicker("option", "maxDate", now);
@@ -315,7 +322,7 @@
 
                 // WorkSheet Naming with/without Job Number
                 var WorkSheetName = (job_number != "") ? job_number + "-" + sheetName : sheetName;
-              
+                WorkSheetName = WorkSheetName.replace(/[/\\&<>'"]/g, function (m) { return SheetNameEscapeChars[m] });
                 // adding worksheet
                 var sheet = context.workbook.worksheets.add(WorkSheetName);
                 // Get Entry Property Names to be the Table Columns
