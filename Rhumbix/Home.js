@@ -1,4 +1,4 @@
-﻿/// <reference path="/Scripts/FabricUI/MessageBanner.js" />
+/// <reference path="/Scripts/FabricUI/MessageBanner.js" />
 
 (function () {
     "use strict";
@@ -352,7 +352,12 @@
                                     break;
                                 case "object":
                                     //handling nested object
-                                    var arr = $.map(item[oldColumns[i]], function (el) { return el; })
+                                    var arr = $.map(item[oldColumns[i]], function (el) {
+                                        if (toType(el) == "object")
+                                            return JSON.stringify(el);
+                                        else
+                                            return el;
+                                    })
                                     it = it.concat(arr);
                                     break;
                                 default:
