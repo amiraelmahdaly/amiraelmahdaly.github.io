@@ -1,4 +1,4 @@
-/// <reference path="/Scripts/FabricUI/MessageBanner.js" />
+﻿/// <reference path="/Scripts/FabricUI/MessageBanner.js" />
 
 (function () {
     "use strict";
@@ -202,7 +202,8 @@
         function GetCompanyFormsEntriesAndExport(created_start_date, created_end_date, job_number) {
             // Initialization before calling the service
             $scope.CompanyForms = [];
-            GetAndExportService(BaseURI + "project_entries/?created_start_date=" + created_start_date + "&created_end_date=" + created_end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.CompanyForms, job_number, ExportEntries, "Company Forms", "CompanyFormsTable", "schema_name");
+            var h = BaseURI + "project_entries/?created_start_date=" + created_start_date + "&created_end_date=" + created_end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number);
+            GetAndExportService(BaseURI + "project_entries/?created_start_date=" + created_start_date + "&created_end_date=" + created_end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.CompanyForms, job_number, ExportEntries, "Project Forms", "CompanyFormsTable", "schema_name");
         }
 
         function toType(obj) {
@@ -301,11 +302,18 @@
         function GroupBy(arr, property) {
             return arr.reduce(function (memo, x) {
                 if (!memo[x[property]]) { memo[x[property]] = []; }
+                if (noNull(x))
                 memo[x[property]].push(x);
                 return memo;
             }, {});
         }
-
+        function noNull(target) {
+            for (var member in target) {
+                if (target[member] == null)
+                    return false;
+            }
+            return true;
+        }
         // Exporting To Excel
         function ExportEntries(sheetName, job_number, tableName, Entries) {
             Excel.run(function (context) {
