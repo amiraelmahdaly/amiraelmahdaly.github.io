@@ -367,7 +367,7 @@
                 var WorkSheetName = (job_number != "") ? job_number + "-" + sheetName : sheetName;
                 WorkSheetName = WorkSheetName.replace(/[/\\&<>'"]/g, function (m) { return SheetNameEscapeChars[m] });
                 // adding worksheet
-                var sheet = context.workbook.worksheets.add(WorkSheetName);
+                var sheet = context.workbook.worksheets.add(WorkSheetName.substring(0, 31));
                 // Get Entry Property Names to be the Table Columns
                 var oldColumns = Object.getOwnPropertyNames(Entries[0]);
                 //editing headers to contain second level keys
@@ -398,6 +398,8 @@
                                     var arr = $.map(item[oldColumns[i]], function (el) {
                                         if (toType(el) == "object")
                                             return JSON.stringify(el);
+                                        else if (el == null)
+                                            return "";
                                         else
                                             return el;
                                     })
