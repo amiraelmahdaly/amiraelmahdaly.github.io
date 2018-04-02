@@ -12,7 +12,7 @@
             var element = document.querySelector('.ms-MessageBanner');
             messageBanner = new fabric.MessageBanner(element);
             messageBanner.hideBanner();
-           
+
 
         });
     }
@@ -60,6 +60,9 @@
         $scope.Absences = [];
         $scope.Notes = [];
         $scope.CompanyForms = [];
+        $scope.Employees = [];
+        $scope.CostEntries = [];
+
 
 
         // data binding Objects for controls
@@ -82,6 +85,7 @@
 
 
         };
+
         var FreePremium = "Free";
         var ApiKey = "";
         // the default Page Size (page_size query Param)
@@ -99,46 +103,52 @@
 
         }
         $("#btnRetrieve").click(function () {
+            var selectedEntryType = $('#SelEntries').find(":selected").attr("id");
+            var date1 = $("#datepicker1").val();
+            var date2 = $("#datepicker2").val();
+            var jobIDS = $('#selProjects option:selected').map(function () {
+                return this.id
+            }).get();
+                
 
+            if (selectedEntryType == "OptEmployees")
+                GetEmployeesEntriesAndExport();
 
-            if ($("#datepicker1").val().trim() == "" || $("#datepicker2").val().trim() == "") {
+          else if (date1.trim() == "" || date2.trim() == "") {
                 showNotification("Please choose dates!");
                 return;
             }
 
-            if ($('#SelEntries').find(":selected").attr("id") == "optAbsences")
-                GetAbsencesAndExport($("#datepicker1").val(), $("#datepicker2").val());
+           else if (selectedEntryType == "optAbsences")
+                GetAbsencesAndExport(date1, date2);
+           else if (jobIDS.length == 0)
+               showNotification("Please Choose Project")
             else
-                if ($('#selProjects').find(":selected").attr("id") == "optUnselected")
-                    showNotification("Please Choose a project First");
-                else
-                    switch ($('#SelEntries').find(":selected").attr("id")) {
+                    switch (selectedEntryType) {
                         case "otpTimeEntries":
-                            GetTimeKeepingEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
+                            GetTimeKeepingEntriesAndExport(date1, date2, jobIDS);
                             break;
-
                         case "optNotes":
-                            GetNotesEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
+                            GetNotesEntriesAndExport(date1, date2, jobIDS);
                             break;
-
                         case "optShiftExtras":
-                            GetShiftExtrasEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
+                            GetShiftExtrasEntriesAndExport(date1, date2, jobIDS);
                             break;
-
                         case "optCompanyForms":
-                            GetCompanyFormsEntriesAndExport($("#datepicker1").val(), $("#datepicker2").val(), $('#selProjects').find(":selected").attr("id"));
+                            GetCompanyFormsEntriesAndExport(date1, date2, jobIDS);
+                            break;
+                        case "optCostEntries":
+                            GetCostEntriesAndExport(jobIDS);
                             break;
                         default:
                             showNotification("Please choose Entry Type!")
                             break;
 
-                    }
-
+                    
+                }
 
         });
-        $("#btnValidate").click(function () {
-            GetProjects();
-        });
+       
 
         // Push Entries Recursively into dataOBJ and export it using exportFN Method
         function GetAndExportService(URI, dataOBJ, job_number, exportFN, sheetName, tableName, groupBy) {
@@ -153,22 +163,21 @@
                     }
                     if (response.data.next != null)
                         GetAndExportService(response.data.next, dataOBJ, job_number, exportFN, sheetName, tableName, groupBy);
-                    else
-                        if (dataOBJ.length == 0)
+                    else if (dataOBJ.length == 0)
                             showNotification("No Entries Available");
-                        else
-                            if (exportFN != null) {
-                            if (groupBy == null)
-                                exportFN(sheetName, job_number, tableName, dataOBJ);
-                            else {
-                                var newDataObj = GroupBy(dataOBJ, groupBy);
-                                for (var key in newDataObj) {
-                                    exportFN(sheetName + "-" + key, "", tableName, newDataObj[key]);
-                                }
-                            }
-                        }
+                        else if (exportFN != null) {
+                                if (groupBy == null)
+                                    exportFN(sheetName, job_number, tableName, dataOBJ);
+                                else {
+                                    var newDataObj = GroupBy(dataOBJ, groupBy);
+                                    for (var key in newDataObj) {
+                                        exportFN(sheetName + "-" + key, "", tableName, newDataObj[key]);
+                                    }
 
-                }).catch(function (e) {
+                                }
+                        }
+                })
+                .catch(function (e) {
                     errorHandler(e);
                 });
         }
@@ -179,31 +188,56 @@
             $scope.Projects = [];
             GetAndExportService(BaseURI + "projects/?page_size=" + defaultPageSize, $scope.Projects, "", null, "", "", null);
         }
-        function GetTimeKeepingEntriesAndExport(start_date, end_date, job_number) {
-            // Initialization before calling the service
+        function GetTimeKeepingEntriesAndExport(start_date, end_date, job_numbers) {
+        // Initialization before calling the service
+        for (var i = 0; i < job_numbers.length; i++) {
             $scope.TimeKeepingEntries = [];
-            GetAndExportService(BaseURI + "timekeeping_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.TimeKeepingEntries, job_number, ExportEntries, "Time Entries", "TimeEntriesTable", null);
+            GetAndExportService(BaseURI + "timekeeping_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_numbers[i]), $scope.TimeKeepingEntries, job_numbers[i], ExportEntries, "Time Entries", "TimeEntriesTable", null);
         }
+    }
         function GetAbsencesAndExport(start_date, end_date) {
             // Initialization before calling the service
             $scope.Absences = [];
             GetAndExportService(BaseURI + "absences/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize, $scope.Absences, "", ExportEntries, "Absences", "AbsencesTable", null);
         }
-        function GetNotesEntriesAndExport(start_date, end_date, job_number) {
+        function GetNotesEntriesAndExport(start_date, end_date, job_numbers) {
             // Initialization before calling the service
-            $scope.Notes = [];
-            GetAndExportService(BaseURI + "notes/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.Notes, job_number, ExportEntries, "Notes Entries", "NotesEntriesTable", null);
+            for (var i = 0; i < job_numbers.length; i++) {
+                $scope.Notes = [];
+                GetAndExportService(BaseURI + "notes/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_numbers[i]), $scope.Notes, job_numbers[i], ExportEntries, "Notes Entries", "NotesEntriesTable", null);
+            }
+            }
+        function GetShiftExtrasEntriesAndExport(start_date, end_date, job_numbers) {
+
+            // Initialization before calling the service
+            for (var i = 0; i < job_numbers.length; i++) {
+                $scope.ShiftExtras = [];
+                GetAndExportService(BaseURI + "shift_extra_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_numbers[i]), $scope.ShiftExtras, job_numbers[i], ExportEntries, "Shift Extras", "ShiftExtrasTable", "entry_name");
+
+            }
+           }
+        function GetCompanyFormsEntriesAndExport(created_start_date, created_end_date, job_numbers) {
+
+            // Initialization before calling the service
+            for (var i = 0; i < job_numbers.length; i++) {
+                $scope.CompanyForms = [];
+                GetAndExportService(BaseURI + "project_entries/?created_start_date=" + created_start_date + "&created_end_date=" + created_end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_numbers[i]), $scope.CompanyForms, job_numbers[i], ExportEntries, "Project Forms", "CompanyFormsTable", "schema_name");
+
+            }
+             }
+        function GetEmployeesEntriesAndExport() {
+            $scope.Employees = [];
+            GetAndExportService(BaseURI + "employees/?page_size=" + defaultPageSize, $scope.Employees, "", ExportEntries, "Employees", "EmployeesTable", null);
+
         }
-        function GetShiftExtrasEntriesAndExport(start_date, end_date, job_number) {
+        function GetCostEntriesAndExport(job_numbers) {
             // Initialization before calling the service
-            $scope.ShiftExtras = [];
-            GetAndExportService(BaseURI + "shift_extra_entries/?start_date=" + start_date + "&end_date=" + end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.ShiftExtras, job_number, ExportEntries, "Shift Extras", "ShiftExtrasTable", "entry_name");
-        }
-        function GetCompanyFormsEntriesAndExport(created_start_date, created_end_date, job_number) {
-            // Initialization before calling the service
-            $scope.CompanyForms = [];
-            var h = BaseURI + "project_entries/?created_start_date=" + created_start_date + "&created_end_date=" + created_end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number);
-            GetAndExportService(BaseURI + "project_entries/?created_start_date=" + created_start_date + "&created_end_date=" + created_end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_number), $scope.CompanyForms, job_number, ExportEntries, "Project Forms", "CompanyFormsTable", "schema_name");
+            for (var i = 0; i < job_numbers.length; i++) {
+                $scope.CostEntries = [];
+                GetAndExportService(BaseURI + "cost_codes/?page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_numbers[i]), $scope.CostEntries, job_numbers[i], ExportEntries, "Cost Codes", "CostCodesTable", null);
+
+            }
+           
         }
 
         function toType(obj) {
@@ -303,7 +337,7 @@
             return arr.reduce(function (memo, x) {
                 if (!memo[x[property]]) { memo[x[property]] = []; }
                 if (noNull(x))
-                memo[x[property]].push(x);
+                    memo[x[property]].push(x);
                 return memo;
             }, {});
         }
@@ -314,6 +348,7 @@
             }
             return true;
         }
+
         // Exporting To Excel
         function ExportEntries(sheetName, job_number, tableName, Entries) {
             Excel.run(function (context) {
@@ -391,6 +426,7 @@
 
         // Error Handling Region
         function hideErrorMessage() {
+           
             setTimeout(function () {
                 messageBanner.hideBanner();
             }, 2000);
@@ -420,7 +456,6 @@
             messageBanner.toggleExpansion();
             hideErrorMessage();
         }
-
     });
 
 })();
