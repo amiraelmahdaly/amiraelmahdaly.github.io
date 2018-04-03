@@ -221,7 +221,7 @@
             // Initialization before calling the service
             for (var i = 0; i < job_numbers.length; i++) {
                 $scope.CompanyForms = [];
-                GetAndExportService(BaseURI + "project_entries/?created_start_date=" + created_start_date + "&created_end_date=" + created_end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_numbers[i]), $scope.CompanyForms, job_numbers[i], ExportEntries, "Project Forms", "CompanyFormsTable", "schema_name");
+                GetAndExportService(BaseURI + "project_entries/?created_start_date=" + created_start_date + "&created_end_date=" + created_end_date + "&page_size=" + defaultPageSize + "&job_number=" + encodeURIComponent(job_numbers[i]), $scope.CompanyForms, job_numbers[i], ExportEntries, "PF", "CompanyFormsTable", "schema_id");
 
             }
              }
