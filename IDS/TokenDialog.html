@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>User Authentication</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -162,7 +163,7 @@
         }
     </style>
 </head>
-<body class="container">
+<body data-ng-app="myApp" data-ng-controller="myCtrl">
     <div class="grid-row">
         <div class="col">
 
@@ -173,15 +174,15 @@
             </ul>
 
         </div>
-    </div>    
+    </div>
     <div id="mainCon">
-        
+
         <input type="text" placeholder="User Name" class="form-control form-control-sm" id="txtUserName" />
         <input type="password" placeholder="Password" class="form-control form-control-sm" id="txtPassword" />
 
         <p id="Result" class="text-center" style="color:red;font-size:12px; height:14px;"></p>
         <div dir="rtl">
-            <button class="btn btn-sm btn-primary" id="btnLogin" onclick="Login()">Login</button>
+            <button class="btn btn-sm btn-primary" id="btnLogin" ng-click="authenticate()">Login</button>
         </div>
     </div>
     <script>
@@ -189,41 +190,40 @@
         Office.initialize = function (reason) {
 
         };
-        //$("#txtUserName").val("witsmltest"); 
-        //$("#txtPassword").val("witsmltest123");
-        $(".grid-row").hide();
-        function Login() {
-            $(".grid-row").show();
-            $("#mainCon").attr("style", "opacity:0.3");
-            var settings = {
-                "async": true,
-                "crossDomain": true,
-                "url": "https://sg.idsdatanet.com/d2_omv_global_staging/webservice/depotwebservice.html",
-                "method": "GET",
-                "headers": {
-                    "authorization": "Basic " + window.btoa($("#txtUserName").val() + ":" + $("#txtPassword").val())
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function ($scope, $http, $compile) {
+            $("#txtUserName").val("witsmltest");
+            $("#txtPassword").val("witsmltest123");
+            $(".grid-row").hide();
+            $scope.authenticate = function () {
+                $(".grid-row").show();
+                $("#mainCon").attr("style", "opacity:0.3");
+                var url = " https://sandbox.idsdatanet.com/d2_omv_global/webservice/depotwebservice.html";
+                $http.get(url,
+                    {
+                        headers: {
+                            "Authorization": "Basic " + window.btoa($("#txtUserName").val() + ":" + $("#txtPassword").val()),
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        }
+                    })
+                    .then(function (response) {
+                        if (response.status == 200) {
+                            Office.context.ui.messageParent(JSON.stringify({ UserName: $("#txtUserName").val(), Password: $("#txtPassword").val() }));
+                        }
+                        else {
 
-                }
+                            $(".grid-row").hide();
+                            $("#mainCon").removeAttr("style");
+                            $("#Result").html("Invalid username or password.");
+                        }
+                    });
             }
 
 
-            $.ajax(settings).done(function (response, status) {
-
-                Office.context.ui.messageParent(JSON.stringify({ UserName: $("#txtUserName").val(), Password: $("#txtPassword").val() }));
-
-
-            }).fail(function () {
-                $(".grid-row").hide();
-                $("#mainCon").removeAttr("style");
-                $("#Result").html("Invalid username or password.")
-
-            }
-
-               );
-
-        }
-
+        });
+      
 
     </script>
 </body>
+
 </html>

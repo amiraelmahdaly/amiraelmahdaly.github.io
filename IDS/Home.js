@@ -19,6 +19,7 @@
         var element = document.querySelector('.ms-MessageBanner');
         messageBanner = new fabric.MessageBanner(element);
         messageBanner.hideBanner();
+   
 
     });
 
@@ -57,20 +58,15 @@
 
         //initializations
         $scope.Wells = [];
-        $scope.Wellbores = {};
+        $scope.Wellbores = [];
         $scope.UIDWell = -1;
 
 
 
         // Functions 
 
-        var USerCredentials = { UserName: "", Password: "" };
+        $scope.USerCredentials = { UserName: "", Password: "" };
         var TokenDialog;
-
-        //var DeploymentHost = "https://amiraelmahdaly.github.io/IDS/";
-        var DeploymentHost = "https://localhost:44300/";
-        var URI = "https://sg.idsdatanet.com/d2_omv_global_staging/webservice/depotwebservice.html";
-
         var TokenDialogUrl = DeploymentHost + "TokenDialog.html";
 
         function SlideToggle() {
@@ -101,9 +97,9 @@
             $("#grid-row1").hide();
             $("#accordion").show();
             $("#header").show();
+           
        })
         function ShowTokenDialog() {
-
             Office.context.ui.displayDialogAsync(TokenDialogUrl, { height: 27, width: 22,displayInIframe: true },
                 function (asyncResult) {
                     TokenDialog = asyncResult.value;
@@ -112,19 +108,18 @@
                 }
             );
         }
-
         function sleep(miliseconds) {
             var currentTime = new Date().getTime();
 
             while (currentTime + miliseconds >= new Date().getTime()) {
             }
         }
-
         function processtokenDialogMessage(arg) {
             var MessageObj = JSON.parse(arg.message);
-            USerCredentials.UserName = MessageObj.UserName;
-            USerCredentials.Password = MessageObj.Password;
+            $scope.USerCredentials.UserName = MessageObj.UserName;
+            $scope.USerCredentials.Password = MessageObj.Password;
             TokenDialog.close();
+            RedirectIfTagged();
             $("#grid-row1").show();
             $scope.GetWells();
 
@@ -139,26 +134,36 @@
         });
 
 
-        function GetHeader(UserName, Password) {
-            return {
-                "Authorization": "Basic " + window.btoa(UserName + ":" + Password),
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-            }
+    
+  
+        function RedirectIfTagged() {
+            Word.run(function (context) {
+                context.document.properties.load("comments");
+                return context.sync().then(function () {
+                    if (context.document.properties.comments != "") {
+                        window.location.href = context.document.properties.comments;
+                    }
+                });
+            })
+.catch(function (error) {
+    console.log('Error: ' + JSON.stringify(error));
+    if (error instanceof OfficeExtension.Error) {
+        console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+    }
+});
         }
-        function GetURI(data_object,query_template) {
-             var c =  URI + "?type=witsml&version=1.3.1.1&data_object=" + data_object + "&query_template=" + encodeURIComponent(query_template);
-             return c;
-        }
+     
         $scope.GetWells = function () {
             $http.get(GetURI("well",'<wells xmlns="http://www.witsml.org/schemas/131" version="1.3.1.1"> <well uid=""><name/></well></wells>'),
                 {
-                    headers:GetHeader(USerCredentials.UserName,USerCredentials.Password)
+                    headers: GetHeader($scope.USerCredentials.UserName, $scope.USerCredentials.Password)
                 })
                 .then(function (response) {
                  $scope.Wells = GetJson(response.data.response.result).wells.well;
                  
-                }).catch(function (data) {
-                    console.log(data);
+                }).catch(function (e) {
+                    throw e;
+                    console.log(e);
                 });
 
         }
@@ -171,11 +176,15 @@
            // $("#" + $scope.UIDWell).next("div").first().text("");
             $http.get(GetURI("wellbore", '<wellbores xmlns="http://www.witsml.org/schemas/131" version="1.3.1.1"><wellbore uidWell="' + $scope.UIDWell+ '" uid=""><name /></wellbore></wellbores>'),
               {
-                  headers: GetHeader(USerCredentials.UserName, USerCredentials.Password)
+                  headers: GetHeader($scope.USerCredentials.UserName, $scope.USerCredentials.Password)
               })
               .then(function (response) {
+                  $scope.Wellbores = [];
+                  if ($.isArray(GetJson(response.data.response.result).wellbores.wellbore))
+                      $scope.Wellbores = GetJson(response.data.response.result).wellbores.wellbore;
+                  else
+                      $scope.Wellbores.push(GetJson(response.data.response.result).wellbores.wellbore)
 
-                  $scope.Wellbores = GetJson(response.data.response.result).wellbores.wellbore;
                   $(".grid-row2").hide();
                   $(".wellboreCon").show();
               }).catch(function (data) {
@@ -183,54 +192,11 @@
                   $(".grid-row2").hide();
               });
         }
-        function xmlToJson(xml) {
-
-            // Create the return object
-            var obj = {};
-
-            if (xml.nodeType == 1) { // element
-                // do attributes
-                if (xml.attributes.length > 0) {
-                    obj["@attributes"] = {};
-                    for (var j = 0; j < xml.attributes.length; j++) {
-                        var attribute = xml.attributes.item(j);
-                        obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
-                    }
-                }
-            } else if (xml.nodeType == 3) { // text
-                obj = xml.nodeValue;
-            }
-
-            // do children
-            if (xml.hasChildNodes()) {
-                for (var i = 0; i < xml.childNodes.length; i++) {
-                    var item = xml.childNodes.item(i);
-                    var nodeName = item.nodeName;
-                    if (typeof (obj[nodeName]) == "undefined") {
-                        obj[nodeName] = xmlToJson(item);
-                    } else {
-                        if (typeof (obj[nodeName].push) == "undefined") {
-                            var old = obj[nodeName];
-                            obj[nodeName] = [];
-                            obj[nodeName].push(old);
-                        }
-                        obj[nodeName].push(xmlToJson(item));
-                    }
-                }
-            }
-            return obj;
-        };
-       function GetJson (xml) {
-            var edittedXml = xml.replace("\n", " ").replace('\"', '"');
-            var xmlDOM = new DOMParser().parseFromString(edittedXml, 'text/xml');
-            return  xmlToJson(xmlDOM);
-           
-        }
-    
+      
        $scope.Initial = function () {
 
-            ShowTokenDialog();
-
+           ShowTokenDialog();
+          
         }
 
     });
@@ -244,6 +210,10 @@
             console.log("Debug info: " + JSON.stringify(error.debugInfo));
         }
     }
+
+
+
+  
 
     // Helper function for displaying notifications
     function showNotification(header, content) {
