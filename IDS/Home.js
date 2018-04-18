@@ -13,6 +13,7 @@
     
     $(document).ready(function () {
         $("#mainCon").attr("style", "display:block;");
+        $("#LLcon").hide();
         $("#header").hide();
         $("#accordion").hide();
         $("#grid-row1").hide();
@@ -60,6 +61,7 @@
         $scope.Wells = [];
         $scope.Wellbores = [];
         $scope.UIDWell = -1;
+        $scope.LessonsLearned = [];
 
 
 
@@ -97,6 +99,8 @@
             $("#grid-row1").hide();
             $("#accordion").show();
             $("#header").show();
+            $("#LLcon").show();
+
            
        })
         function ShowTokenDialog() {
@@ -126,7 +130,9 @@
         }
 
        
-
+        $("#getLL").click(function () {
+            InsertLessonLearnedTable();
+        });
         angular.element(document).ready(function () {
             $scope.Initial();
 
@@ -192,14 +198,123 @@
                   $(".grid-row2").hide();
               });
         }
-      
+        $scope.GetLessonLearned= function (keyword,size) {
+            
+            $http.get("https://sandbox.idsdatanet.com/d2_omv_global/webservice/wellplanlessonsearch.html?keyword=" +  keyword+ "&size=" + size,
+              {
+                  headers: GetHeader($scope.USerCredentials.UserName, $scope.USerCredentials.Password)
+              })
+              .then(function (response) {
+                  $scope.LessonsLearned = [];
+                  $scope.LessonsLearned = response.data.result;
+                  InsertLessonLearnedTable();
+              }).catch(function (data) {
+                  console.log(data);
+              });
+        }
+        function InsertLessonLearnedTable() {
+            Word.run(function (ctx) {
+                var entry = [];
+
+
+                var keys = ["d_lessonticket_isPlanned", "c_ll_wellName", "d_lessonticket_rp2Date", "c_ll_campaignName", "d_lessonticket_lessonTitle", "d_lessonticket_descrEvent", "highlight", "_groupUid"];
+                var survs = [["Lesson #", "Well", "Date", "Campaign", "Lesson Title", "Lesson Description", "Result", "Region Site"]];
+                var firstTajectoryStation = $scope.LessonsLearned;
+
+                for (var i = 0; i < firstTajectoryStation.length ; i++) {
+                    entry = [];
+                    for (var j = 0; j < survs[0].length; j++) {
+
+                        if (firstTajectoryStation[i].hasOwnProperty(keys[j])) {
+                            if (keys[j] == "d_lessonticket_isPlanned") {
+                                if (!firstTajectoryStation[i][keys[j]])
+                                    var concat = firstTajectoryStation[i]["d_lessonticket_lessonTicketNumberPrefix"] + "-" + firstTajectoryStation[i]["d_lessonticket_rp2Date"] + "-" + firstTajectoryStation[i]["d_lessonticket_lessonTicketNumber"];
+                                else
+                                    var concat = "PLL-" + firstTajectoryStation[i]["d_lessonticket_lessonTicketNumberPrefix"] + "-" + firstTajectoryStation[i]["d_lessonticket_lessonTicketNumber"];
+                                entry.push(concat);
+                            }
+                            else if (keys[j] == "_groupUid") {
+                                if (firstTajectoryStation[i][keys[j]] == "OMV_GLOBAL")
+                                    entry.push(firstTajectoryStation[i][keys[j]]);
+                                else
+                                    entry.push("UNKNOWN");
+
+                            }
+                            else if (keys[j] == "highlight") {
+                                var arr = new Array;
+                                for (var o in firstTajectoryStation[i][keys[j]]) {
+                                    arr.push(firstTajectoryStation[i][keys[j]][o]);
+                                }
+
+                                var html = arr.concat();//.replace(",", "");
+                                var div = document.createElement("div");
+                                div.innerHTML = html;
+                                var text = div.textContent || div.innerText || "";
+                                entry.push(text);
+                            }
+                            else
+                                entry.push(firstTajectoryStation[i][keys[j]]);
+
+                        }
+
+                        else
+                            entry.push("");
+                    }
+                    survs.push(entry);
+
+                }
+
+
+                var table = ctx.document.body.insertTable(survs.length, survs[0].length, "end", survs);
+                ctx.load(table);
+                return ctx.sync().then(function () {
+                    table.style = "Grid Table 4 - Accent 5";
+                    table.distributeColumns();
+                    $("#grid-row1").hide();
+
+
+                }).catch(function (e) {
+                    console.log(e.message);
+
+                });
+            });
+        }
        $scope.Initial = function () {
 
            ShowTokenDialog();
           
-        }
+       }
+
+       $("#btnGetLL").click(function () {
+           Word.run(function (context) {
+
+               // Queue a command to get the current selection and then
+               // create a proxy range object with the results.
+               var range = context.document.getSelection();
+
+               // variable for keeping the search results for the longest word.
+
+               // Queue a command to load the range selection result.
+               context.load(range, 'text');
+
+               // Synchronize the document state by executing the queued commands
+               // and return a promise to indicate task completion.
+               return context.sync()
+                   .then(function () {
+
+                       // Get the longest word from the selection.
+                       var words = range.text;
+                       var number = $("#numCon").val();
+                       $scope.GetLessonLearned(words, number);
+
+                   })
+
+      .catch(errorHandler);
+           });
+       });
 
     });
+
 
     //$$(Helper function for treating errors, $loc_script_taskpane_home_js_comment34$)$$
     function errorHandler(error) {

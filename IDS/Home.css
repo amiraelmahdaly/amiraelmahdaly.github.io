@@ -12,6 +12,9 @@
     color: #2b8ccd;
     text-shadow: 0 -1px 0 rgba(0,0,0,.6);
 }
+#LLcon{
+    margin-right:15px;
+}
 .accordion-toggle {
     cursor: pointer;
     padding:0 0 0 10px!important;

@@ -323,15 +323,20 @@
 
 
 
+               
 
                 //var fruitsNonuniform = [["Apple", "red"], ["Banana", "yellow", "long", "mushy"], ["Pear", "green", "oblong"]];
                 //var fruitsUnderfilled = [["Apple", "red", "", ""], ["Banana", "yellow", "long", "mushy"], ["Pear", "green", "oblong", ""]];
 
                 // number of rows to insert, number of columns, insert location , and finally the values which is the array itself.
                 var table = ctx.document.body.insertTable(survs.length, survs[0].length, "end", survs);
+             //   var table = context.document.getSelection().insertTable(survs.length, survs[0].length, "afer", survs);
+               
                 //    ctx.document.body.insertTable()
                 ctx.load(table);
                 return ctx.sync().then(function () {
+               
+
                     table.style = "Grid Table 4 - Accent 5";
                     table.distributeColumns();
                     $("#grid-row1").hide();

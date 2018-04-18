@@ -1,6 +1,6 @@
 ﻿var URI = "https://sandbox.idsdatanet.com/d2_omv_global/webservice/depotwebservice.html";
-var DeploymentHost = "https://amiraelmahdaly.github.io/IDS/";
-//var DeploymentHost = "https://localhost:44300/";
+//var DeploymentHost = "https://amiraelmahdaly.github.io/IDS/";
+var DeploymentHost = "https://localhost:44300/";
 
 function GetHeader(UserName, Password) {
     return {
