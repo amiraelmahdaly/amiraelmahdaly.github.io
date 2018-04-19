@@ -34,9 +34,10 @@
 </head>
 <body class="container" data-ng-app="myApp" data-ng-controller="myCtrl">
     <div id="mainCon" style="display:none;">
-        <div id="LLcon">
+        <div class="text-center" id="LLcon">
             <input type="text" value="10" class="form-control" id="numCon" />
             <button class="btn btn-block btn-default" id="btnGetLL">Get LL</button>
+            <button ng-repeat="LL in LessonsLearned" class="btnInsertLL btn btn-primary" id="LL{{$index}}" on-finish-render="ngRepeatFinished"> Insert LL {{$index}}</button>
         </div>
         <div class="text-center" id="header"><h4>All Wells</h4></div>
         <div class="grid-row" id="grid-row1">

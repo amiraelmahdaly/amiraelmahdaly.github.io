@@ -84,7 +84,10 @@
         }
         $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
             
-
+            $('.btnInsertLL').unbind().click(function () {
+                var LLid = $(this).attr('id').replace('LL', '');
+                InsertLessonLearnedTable(LLid);
+                });
 
             $('.accordion-toggle').click(function () {
               
@@ -207,62 +210,59 @@
               .then(function (response) {
                   $scope.LessonsLearned = [];
                   $scope.LessonsLearned = response.data.result;
-                  InsertLessonLearnedTable();
+                  //InsertLessonLearnedTable();
               }).catch(function (data) {
                   console.log(data);
               });
         }
-        function InsertLessonLearnedTable() {
+        function InsertLessonLearnedTable(id) {
             Word.run(function (ctx) {
                 var entry = [];
 
 
                 var keys = ["d_lessonticket_isPlanned", "c_ll_wellName", "d_lessonticket_rp2Date", "c_ll_campaignName", "d_lessonticket_lessonTitle", "d_lessonticket_descrEvent", "highlight", "_groupUid"];
-                var survs = [["Lesson #", "Well", "Date", "Campaign", "Lesson Title", "Lesson Description", "Result", "Region Site"]];
+                var survs = [["Lesson #"], ["Well"], ["Date"], ["Campaign"], ["Lesson Title"], ["Lesson Description"], ["Result"], ["Region Site"]];
                 var firstTajectoryStation = $scope.LessonsLearned;
+                //var index = $(this).attr('id').replace('LL', '');
+                    for (var j = 0; j < survs.length; j++) {
 
-                for (var i = 0; i < firstTajectoryStation.length ; i++) {
-                    entry = [];
-                    for (var j = 0; j < survs[0].length; j++) {
-
-                        if (firstTajectoryStation[i].hasOwnProperty(keys[j])) {
+                        if (firstTajectoryStation[id].hasOwnProperty(keys[j])) {
                             if (keys[j] == "d_lessonticket_isPlanned") {
-                                if (!firstTajectoryStation[i][keys[j]])
-                                    var concat = firstTajectoryStation[i]["d_lessonticket_lessonTicketNumberPrefix"] + "-" + firstTajectoryStation[i]["d_lessonticket_rp2Date"] + "-" + firstTajectoryStation[i]["d_lessonticket_lessonTicketNumber"];
+                                if (!firstTajectoryStation[id][keys[j]])
+                                    var concat = firstTajectoryStation[id]["d_lessonticket_lessonTicketNumberPrefix"] + "-" + firstTajectoryStation[id]["d_lessonticket_rp2Date"] + "-" + firstTajectoryStation[id]["d_lessonticket_lessonTicketNumber"];
                                 else
-                                    var concat = "PLL-" + firstTajectoryStation[i]["d_lessonticket_lessonTicketNumberPrefix"] + "-" + firstTajectoryStation[i]["d_lessonticket_lessonTicketNumber"];
-                                entry.push(concat);
+                                    var concat = "PLL-" + firstTajectoryStation[id]["d_lessonticket_lessonTicketNumberPrefix"] + "-" + firstTajectoryStation[id]["d_lessonticket_lessonTicketNumber"];
+                                survs[j].push(concat);
                             }
                             else if (keys[j] == "_groupUid") {
-                                if (firstTajectoryStation[i][keys[j]] == "OMV_GLOBAL")
-                                    entry.push(firstTajectoryStation[i][keys[j]]);
+                                if (firstTajectoryStation[id][keys[j]] == "OMV_GLOBAL")
+                                    survs[j].push(firstTajectoryStation[id][keys[j]]);
                                 else
-                                    entry.push("UNKNOWN");
+                                    survs[j].push("UNKNOWN");
 
                             }
                             else if (keys[j] == "highlight") {
                                 var arr = new Array;
-                                for (var o in firstTajectoryStation[i][keys[j]]) {
-                                    arr.push(firstTajectoryStation[i][keys[j]][o]);
+                                for (var o in firstTajectoryStation[id][keys[j]]) {
+                                    arr.push(firstTajectoryStation[id][keys[j]][o]);
                                 }
 
                                 var html = arr.concat();//.replace(",", "");
                                 var div = document.createElement("div");
                                 div.innerHTML = html;
                                 var text = div.textContent || div.innerText || "";
-                                entry.push(text);
+                                survs[j].push(text);
                             }
                             else
-                                entry.push(firstTajectoryStation[i][keys[j]]);
+                                survs[j].push(firstTajectoryStation[id][keys[j]]);
 
                         }
 
                         else
-                            entry.push("");
+                            survs[j].push("");
                     }
-                    survs.push(entry);
 
-                }
+                
 
 
                 var table = ctx.document.body.insertTable(survs.length, survs[0].length, "end", survs);
