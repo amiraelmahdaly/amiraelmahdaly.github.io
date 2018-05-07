@@ -4,10 +4,84 @@
     <meta charset="UTF-8" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
-    <script src="FunctionFile.js" type="text/javascript"></script>
 
 </head>
 <body>
     <!-- NOTE: The body is empty on purpose. Since this is invoked via a button, there is no UI to render. -->
+    <script>
+
+
+        (function () {
+
+            Office.initialize = function (reason) {
+                //If you need to initialize something you can do so here.
+
+
+            };
+        })();
+
+        localStorage.removeItem("Headers");
+        var itemUrl = "";
+        var rawToken = "";
+        //var DeploymentHost = "https://realdocs.pronetcre.com/";
+        var DeploymentHost = "https://localhost:44392/";
+        var HeadersDialogUrl = DeploymentHost + "HeadersDialog.html";
+        // The initialize function must be run each time a new page is loaded.
+
+
+        function loadRestDetails() {
+            var restId = '';
+            if (Office.context.mailbox.diagnostics.hostName !== 'OutlookIOS') {
+                // Loaded in non-mobile context, so ID needs to be converted
+                restId = Office.context.mailbox.convertToRestId(
+                    Office.context.mailbox.item.itemId,
+                    Office.MailboxEnums.RestVersion.Beta
+                );
+            } else {
+                restId = Office.context.mailbox.item.itemId;
+            }
+
+            // Build the URL to the item
+            //var itemUrl = Office.context.mailbox.restUrl + 
+            itemUrl = Office.context.mailbox.restUrl +
+                '/v2.0/me/messages/' + restId;
+
+            Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function (result) {
+                if (result.status === "succeeded") {
+                    rawToken = result.value;
+                    getItemHeadersViaRest();
+                } else {
+                    rawToken = 'error';
+                }
+            });
+        }
+        function getItemHeadersViaRest() {
+            $.ajax({
+                url: itemUrl + '?$select = InternetMessageHeaders',
+                dataType: 'json',
+                headers: { 'Authorization': 'Bearer ' + rawToken }
+            }).done(function (item) {
+                var headersNames = item.InternetMessageHeaders.map(function (el) {
+                    return el.Name;
+                });
+                var index = $.inArray("X-Sn-Email-Phishing", headersNames);
+                if (index !== -1)
+                    localStorage.setItem("Headers", "X-Sn-Email-Phishing = " + item.InternetMessageHeaders[index].Value);
+                else
+                    localStorage.setItem("Headers", "Header not found.");
+                ShowHeadersDialog();
+                return;
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+
+
+        function ShowHeadersDialog() {
+            Office.context.ui.displayDialogAsync(HeadersDialogUrl, { height: 60, width: 25, displayInIframe: false });
+        }
+
+
+    </script>
 </body>
 </html>
