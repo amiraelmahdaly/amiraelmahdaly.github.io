@@ -66,7 +66,7 @@
                 });
                 var index = $.inArray("X-Sn-Email-Phishing", headersNames);
                 if (index !== -1)
-                    localStorage.setItem("Headers", "X-Sn-Email-Phishing = " + item.InternetMessageHeaders[index].Value);
+                    localStorage.setItem("Headers", "X-SN-EMAIL-PHISHING = " + item.InternetMessageHeaders[index].Value);
                 else
                     localStorage.setItem("Headers", "Header not found.");
                 ShowHeadersDialog();
