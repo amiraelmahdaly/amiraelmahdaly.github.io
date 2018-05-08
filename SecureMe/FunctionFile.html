@@ -58,13 +58,16 @@
         function getItemHeadersViaRest() {
             $.ajax({
                 url: itemUrl + '?$select = InternetMessageHeaders',
-                dataType: 'json',
-                headers: { 'Authorization': 'Bearer ' + rawToken }
+                "method": "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': 'Bearer ' + rawToken
+                }
             }).done(function (item) {
                 var headersNames = item.InternetMessageHeaders.map(function (el) {
-                    return el.Name;
+                    return el.Name.toLowerCase();
                 });
-                var index = $.inArray("X-Sn-Email-Phishing", headersNames);
+                var index = $.inArray("x-sn-email-phishing", headersNames);
                 if (index !== -1)
                     localStorage.setItem("Headers", "X-SN-EMAIL-PHISHING = " + item.InternetMessageHeaders[index].Value);
                 else
@@ -75,7 +78,6 @@
                 console.log(error);
             });
         }
-
 
         function ShowHeadersDialog() {
             Office.context.ui.displayDialogAsync(HeadersDialogUrl, { height: 60, width: 25, displayInIframe: false });
