@@ -18,10 +18,10 @@
 
         var rawToken = "";
         var restId = '';
-        var restId = '';
+        var restUrl = '';
 
 
-        function loadRestDetails() {
+        function loadRestDetails(event) {
             if (Office.context.mailbox.diagnostics.hostName !== 'OutlookIOS') {
                 restId = Office.context.mailbox.convertToRestId(
                     Office.context.mailbox.item.itemId,
@@ -34,13 +34,14 @@
             Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function (result) {
                 if (result.status === "succeeded") {
                     rawToken = result.value;
-                    getItemHeadersViaRest();
+                    getItemHeadersViaRest(event);
                 } else {
                     rawToken = 'error';
                 }
             });
+           
         }
-        function getItemHeadersViaRest() {
+        function getItemHeadersViaRest(event) {
             $.ajax({
                 url: restUrl + 'messages/' + restId + '?$select = InternetMessageHeaders',
                 method: "GET",
@@ -54,15 +55,16 @@
                 });
                 var index = $.inArray("x-sn-email-phishing", headersNames);
                 if (index !== -1)
-                    CreatePhishingFolder(item.Id);
+                    CreatePhishingFolder(item.Id,event);
                 else
-                    localStorage.setItem("Headers", "Header not found.");
+                    event.completed()
+                   
             }).fail(function (error) {
                 console.log(error);
             });
         }
 
-        function CreatePhishingFolder(messageId) {
+        function CreatePhishingFolder(messageId,event) {
             var settings = {
                 "url": restUrl + 'mailFolders',
                 "type":"POST",
@@ -74,12 +76,13 @@
             }
 
             $.ajax(settings).done(function (response) {
-                MoveMessageToFolder(messageId, response.Id);
+                MoveMessageToFolder(messageId, response.Id,event);
             }).fail(function (error) {
-                MoveIfExist(messageId);
+                if (error.status  == 409)
+                MoveIfExist(messageId,event);
                 });
         }
-        function MoveMessageToFolder(messageId,folderId) {
+        function MoveMessageToFolder(messageId,folderId,event) {
             var settings = {
                 "url": restUrl + 'messages/' + messageId + '/move',
                 "type": "POST",
@@ -91,13 +94,13 @@
             }
 
             $.ajax(settings).done(function (response) {
-                console.log(response);
+                event.completed();
             }).fail(function (error) {
                 console.log(error);
             });
         }
 
-        function MoveIfExist(messageId) {
+        function MoveIfExist(messageId,event) {
             var settings = {
                 "url": restUrl + 'mailFolders',
                 "headers": {
@@ -111,7 +114,7 @@
                     return el.DisplayName;
                 });
                 var folderId = response.value[$.inArray("Phishing", foldersNames)].Id;
-                MoveMessageToFolder(messageId, folderId);
+                MoveMessageToFolder(messageId, folderId,event);
             }).fail(function (error) {
                 console.log(error);
             });
