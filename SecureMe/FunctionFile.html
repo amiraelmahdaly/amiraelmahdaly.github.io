@@ -12,27 +12,17 @@
 
 
         (function () {
-
             Office.initialize = function (reason) {
-                //If you need to initialize something you can do so here.
-
-
             };
         })();
 
-        localStorage.removeItem("Headers");
-        var itemUrl = "";
         var rawToken = "";
-        var DeploymentHost = "https://amiraelmahdaly.github.io/SecureMe/";
-        //var DeploymentHost = "https://localhost:44392/";
-        var HeadersDialogUrl = DeploymentHost + "HeadersDialog.html";
-        // The initialize function must be run each time a new page is loaded.
+        var restId = '';
+        var restId = '';
 
 
         function loadRestDetails() {
-            var restId = '';
             if (Office.context.mailbox.diagnostics.hostName !== 'OutlookIOS') {
-                // Loaded in non-mobile context, so ID needs to be converted
                 restId = Office.context.mailbox.convertToRestId(
                     Office.context.mailbox.item.itemId,
                     Office.MailboxEnums.RestVersion.Beta
@@ -40,12 +30,7 @@
             } else {
                 restId = Office.context.mailbox.item.itemId;
             }
-
-            // Build the URL to the item
-            //var itemUrl = Office.context.mailbox.restUrl + 
-            itemUrl = Office.context.mailbox.restUrl +
-                '/v2.0/me/messages/' + restId;
-
+            restUrl = Office.context.mailbox.restUrl + '/v2.0/me/';
             Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function (result) {
                 if (result.status === "succeeded") {
                     rawToken = result.value;
@@ -57,8 +42,8 @@
         }
         function getItemHeadersViaRest() {
             $.ajax({
-                url: itemUrl + '?$select = InternetMessageHeaders',
-                "method": "GET",
+                url: restUrl + 'messages/' + restId + '?$select = InternetMessageHeaders',
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     'Authorization': 'Bearer ' + rawToken
@@ -69,20 +54,71 @@
                 });
                 var index = $.inArray("x-sn-email-phishing", headersNames);
                 if (index !== -1)
-                    localStorage.setItem("Headers", "X-SN-EMAIL-PHISHING = " + item.InternetMessageHeaders[index].Value);
+                    CreatePhishingFolder(item.Id);
                 else
                     localStorage.setItem("Headers", "Header not found.");
-                ShowHeadersDialog();
-                return;
             }).fail(function (error) {
                 console.log(error);
             });
         }
 
-        function ShowHeadersDialog() {
-            Office.context.ui.displayDialogAsync(HeadersDialogUrl, { height: 60, width: 25, displayInIframe: false });
+        function CreatePhishingFolder(messageId) {
+            var settings = {
+                "url": restUrl + 'mailFolders',
+                "type":"POST",
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + rawToken
+                },
+                "data": "{'DisplayName': 'Phishing'}"
+            }
+
+            $.ajax(settings).done(function (response) {
+                MoveMessageToFolder(messageId, response.Id);
+            }).fail(function (error) {
+                MoveIfExist(messageId);
+                });
+        }
+        function MoveMessageToFolder(messageId,folderId) {
+            var settings = {
+                "url": restUrl + 'messages/' + messageId + '/move',
+                "type": "POST",
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + rawToken
+                },
+                "data": "{'DestinationId':'"+ folderId+"'}"
+            }
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+            }).fail(function (error) {
+                console.log(error);
+            });
         }
 
+        function MoveIfExist(messageId) {
+            var settings = {
+                "url": restUrl + 'mailFolders',
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + rawToken
+                }
+            }
+
+            $.ajax(settings).done(function (response) {
+                var foldersNames = response.value.map(function (el) {
+                    return el.DisplayName;
+                });
+                var folderId = response.value[$.inArray("Phishing", foldersNames)].Id;
+                MoveMessageToFolder(messageId, folderId);
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+
+    
+     
 
     </script>
 </body>
