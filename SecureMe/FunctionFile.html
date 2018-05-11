@@ -82,10 +82,7 @@
             $.ajax(settings).done(function (response) {
                 MoveMessageToFolder(messageId, response.Id,event);
             }).fail(function (error) {
-                Office.context.mailbox.item.notificationMessages.addAsync("error", {
-                    type: "errorMessage",
-                    message: error.responseText
-                });
+               
                     MoveIfExist(messageId, event);
                
                 });
@@ -118,10 +115,7 @@
         }
 
         function MoveIfExist(messageId, event) {
-            Office.context.mailbox.item.notificationMessages.addAsync("progress", {
-                type: "progressIndicator",
-                message: "Add-in is Getting Phishing Folder ID."
-            });
+            
             var settings = {
                 "url": restUrl + 'mailFolders',
                 "headers": {
@@ -136,10 +130,6 @@
                     return el.DisplayName;
                 });
                 var folderId = response.value[$.inArray("Phishing", foldersNames)].Id;
-                Office.context.mailbox.item.notificationMessages.addAsync("progress", {
-                    type: "progressIndicator",
-                    message: folderId
-                });
                 MoveMessageToFolder(messageId, folderId,event);
             }).fail(function (error) {
                 console.log(error);
