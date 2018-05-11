@@ -83,7 +83,11 @@
                 MoveMessageToFolder(messageId, response.Id,event);
             }).fail(function (error) {
                
-                    MoveIfExist(messageId, event);
+                MoveIfExist(messageId, event);
+                Office.context.mailbox.item.notificationMessages.addAsync("progress", {
+                    type: "progressIndicator",
+                    message: "Add-in is Getting folder Id."
+                });
                
                 });
         }
