@@ -92,13 +92,9 @@
             $.ajax(settings).done(function (response) {
                 MoveMessageToFolder(messageId, response.Id,event);
             }).fail(function (error) {
-                if (error.status  == 409)
+               
                     MoveIfExist(messageId, event);
-                else
-                    Office.context.mailbox.item.notificationMessages.addAsync("error", {
-                        type: "errorMessage",
-                        message: error.responseText
-                    });
+               
                 });
         }
         function MoveMessageToFolder(messageId, folderId, event) {
