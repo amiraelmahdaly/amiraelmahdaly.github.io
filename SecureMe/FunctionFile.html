@@ -55,9 +55,8 @@
                 });
                 var index = $.inArray("x-sn-email-phishing", headersNames);
                 if (index !== -1)
-                    CreatePhishingFolder(item.Id,event);
-                else
-                    event.completed()
+                    var x = 5; 
+                CreatePhishingFolder(item.Id, event);
                    
             }).fail(function (error) {
                 console.log(error);
