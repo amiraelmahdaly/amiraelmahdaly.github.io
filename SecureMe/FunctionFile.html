@@ -125,7 +125,10 @@
             }
 
             $.ajax(settings).done(function (response) {
-
+                Office.context.mailbox.item.notificationMessages.addAsync("progress", {
+                    type: "progressIndicator",
+                    message: "Add-in is Getting folder Id."
+                });
                 var foldersNames = response.value.map(function (el) {
                     return el.DisplayName;
                 });
