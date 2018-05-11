@@ -115,7 +115,10 @@
         }
 
         function MoveIfExist(messageId, event) {
-            
+            Office.context.mailbox.item.notificationMessages.addAsync("progress", {
+                type: "progressIndicator",
+                message: "Add-in is Getting folder Id."
+            });
             var settings = {
                 "url": restUrl + 'mailFolders',
                 "headers": {
