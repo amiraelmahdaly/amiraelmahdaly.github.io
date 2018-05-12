@@ -130,7 +130,7 @@
                 var folderId = response.value[$.inArray("Phishing", foldersNames)].Id;
                 Office.context.mailbox.item.notificationMessages.addAsync("progress", {
                     type: "progressIndicator",
-                    message: folderId
+                    message: "folderId"
                 });
                 MoveMessageToFolder(messageId, folderId,event);
             }).fail(function (error) {
