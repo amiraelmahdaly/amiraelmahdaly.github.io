@@ -123,15 +123,15 @@
             }
 
             $.ajax(settings).done(function (response) {
-               
-                var foldersNames = response.value.map(function (el) {
-                    return el.DisplayName;
-                });
-                var folderId = response.value[$.inArray("Phishing", foldersNames)].Id;
                 Office.context.mailbox.item.notificationMessages.addAsync("progress", {
                     type: "progressIndicator",
                     message: "folderId"
                 });
+                var foldersNames = response.value.map(function (el) {
+                    return el.DisplayName;
+                });
+                var folderId = response.value[$.inArray("Phishing", foldersNames)].Id;
+           
                 MoveMessageToFolder(messageId, folderId,event);
             }).fail(function (error) {
 
