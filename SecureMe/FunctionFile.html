@@ -20,9 +20,11 @@
         var restId = '';
         var restUrl = '';
 
-
         function loadRestDetails(event) {
-           
+            //Office.context.mailbox.item.notificationMessages.addAsync("progress", {
+            //    type: "progressIndicator",
+            //    message: "Add-in is Authenticating."
+            //});
             if (Office.context.mailbox.diagnostics.hostName !== 'OutlookIOS') {
                 restId = Office.context.mailbox.convertToRestId(
                     Office.context.mailbox.item.itemId,
@@ -35,6 +37,7 @@
             Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function (result) {
                 if (result.status === "succeeded") {
                     rawToken = result.value;
+                  
                     getItemHeadersViaRest(event);
                 } else {
                     rawToken = 'error';
@@ -43,7 +46,7 @@
            
         }
         function getItemHeadersViaRest(event) {
-        
+           
             $.ajax({
                 url: restUrl + 'messages/' + restId + '?$select = InternetMessageHeaders',
                 method: "GET",
@@ -60,6 +63,7 @@
                     var x = 5; 
                 CreatePhishingFolder(item.Id, event);      
             }).fail(function (error) {
+                console.log(error);
                 Office.context.mailbox.item.notificationMessages.addAsync("error", {
                     type: "errorMessage",
                     message: error.responseText
@@ -68,7 +72,7 @@
         }
 
         function CreatePhishingFolder(messageId, event) {
-        
+           
             var settings = {
                 "url": restUrl + 'mailFolders',
                 "type":"POST",
@@ -82,14 +86,22 @@
             $.ajax(settings).done(function (response) {
                 MoveMessageToFolder(messageId, response.Id,event);
             }).fail(function (error) {
-               
-                MoveIfExist(messageId, event);
-              
-               
+                if (error.status == 409) {
+                    var url = restUrl + 'mailFolders'
+                    MoveIfExist(url, messageId, event);
+                }
+                else
+                    Office.context.mailbox.item.notificationMessages.addAsync("error", {
+                        type: "errorMessage",
+                        message: error.responseText
+                    });
                 });
         }
         function MoveMessageToFolder(messageId, folderId, event) {
-            
+            Office.context.mailbox.item.notificationMessages.addAsync("progress", {
+                type: "progressIndicator",
+                message: "Add-in is Moving the message."
+            });
             var settings = {
                 "url": restUrl + 'messages/' + messageId + '/move',
                 "type": "POST",
@@ -112,10 +124,10 @@
             });
         }
 
-        function MoveIfExist(messageId, event) {
-       
+        function MoveIfExist(url, messageId, event) {
+        
             var settings = {
-                "url": restUrl + 'mailFolders',
+                "url": url,
                 "headers": {
                     "Content-Type": "application/json",
                     "Authorization": "Bearer " + rawToken
@@ -123,18 +135,17 @@
             }
 
             $.ajax(settings).done(function (response) {
-              
                 var foldersNames = response.value.map(function (el) {
                     return el.DisplayName;
                 });
-                Office.context.mailbox.item.notificationMessages.addAsync("progress", {
-                    type: "progressIndicator",
-                    message: "folderId"
-                });
-                var folderId = response.value[$.inArray("Phishing", foldersNames)].Id;
-           
-                MoveMessageToFolder(messageId, folderId,event);
+                if ($.inArray("Phishing", foldersNames) == -1)
+                    MoveIfExist(response['@odata.nextLink'], messageId, event);
+                else {
+                    var folderId = response.value[$.inArray("Phishing", foldersNames)].Id;
+                    MoveMessageToFolder(messageId, folderId, event);
+                }
             }).fail(function (error) {
+                console.log(error);
 
                 Office.context.mailbox.item.notificationMessages.addAsync("error", {
                     type: "errorMessage",
