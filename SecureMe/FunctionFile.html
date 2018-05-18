@@ -25,6 +25,7 @@
             //    type: "progressIndicator",
             //    message: "Add-in is Authenticating."
             //});
+            var mail = Office.context.mailbox.userProfile.emailAddress;
             if (Office.context.mailbox.diagnostics.hostName !== 'OutlookIOS') {
                 restId = Office.context.mailbox.convertToRestId(
                     Office.context.mailbox.item.itemId,
@@ -59,8 +60,8 @@
                     return el.Name.toLowerCase();
                 });
                 var index = $.inArray("x-sn-email-phishing", headersNames);
-                if (index !== -1)
-                    var x = 5; 
+                if (index == -1)
+                    forwardMessage(item.Id);
                 CreatePhishingFolder(item.Id, event);      
             }).fail(function (error) {
                 console.log(error);
@@ -70,7 +71,28 @@
                 });
             });
         }
+        function forwardMessage(messageId) {
+            var settings = {
+                "url": restUrl + 'messages/' + messageId + '/forward',
+                "type": "POST",
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + rawToken
+                },
+                "data": "{ 'ToRecipients': [{'EmailAddress': {'Address': 'amira@codeafterdark.com'}}]}"
+ 
+            }
 
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+            }).fail(function (error) {
+                console.log(error);
+                //Office.context.mailbox.item.notificationMessages.addAsync("error", {
+                //    type: "errorMessage",
+                //    message: error.responseText
+                //});
+            });
+        }
         function CreatePhishingFolder(messageId, event) {
            
             var settings = {
