@@ -19,13 +19,15 @@
         var rawToken = "";
         var restId = '';
         var restUrl = '';
+        var mail = "";
 
         function loadRestDetails(event) {
             //Office.context.mailbox.item.notificationMessages.addAsync("progress", {
             //    type: "progressIndicator",
             //    message: "Add-in is Authenticating."
             //});
-            var mail = Office.context.mailbox.userProfile.emailAddress;
+
+            mail = Office.context.mailbox.userProfile.emailAddress;
             if (Office.context.mailbox.diagnostics.hostName !== 'OutlookIOS') {
                 restId = Office.context.mailbox.convertToRestId(
                     Office.context.mailbox.item.itemId,
@@ -46,6 +48,24 @@
             });
            
         }
+        function sendApiData(recipient, headerMessage) {
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "https://dev-services.trustsecurenow.com/GonePhishing/",
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/json",
+                },
+                "processData": false,
+                "data": "{\r\n\"apiKey\" : \"23424-324234-XX3453-ASDA89\",\r\n\"type\" : \"PhishingButtonPressed\",\r\n\"recipient\" : \"" + recipient + "\",\r\n\"headerFound\" : \"true\"" + (headerMessage !== "notFound" ? ", \r\n\"headerMessage\" : \"" + headerMessage + "\"" : "") + "}"
+            }
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+            }).fail(function (error) {
+                console.log(error);       
+                });
+        }
         function getItemHeadersViaRest(event) {
            
             $.ajax({
@@ -60,8 +80,12 @@
                     return el.Name.toLowerCase();
                 });
                 var index = $.inArray("x-sn-email-phishing", headersNames);
-                if (index == -1)
+                if (index == -1) {
+                    sendApiData(mail, "notFound");
                     forwardMessage(item.Id);
+                }
+                else
+                    sendApiData(mail, item.InternetMessageHeaders[index].Value);
                 CreatePhishingFolder(item.Id, event);      
             }).fail(function (error) {
                 console.log(error);
