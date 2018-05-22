@@ -124,7 +124,10 @@
             });
         }
         function CreatePhishingFolder(messageId, event) {
-           
+            Office.context.mailbox.item.notificationMessages.addAsync("progress", {
+                type: "progressIndicator",
+                message: "Add-in is moving the message to phishing folder."
+            });
             var settings = {
                 "url": restUrl + 'mailFolders',
                 "type":"POST",
