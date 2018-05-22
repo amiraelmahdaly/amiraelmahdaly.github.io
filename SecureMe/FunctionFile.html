@@ -58,8 +58,9 @@
                     "Content-Type": "application/json",
                 },
                 "processData": false,
-                "data": "{\r\n\"apiKey\" : \"23424-324234-XX3453-ASDA89\",\r\n\"type\" : \"PhishingButtonPressed\",\r\n\"recipient\" : \"" + recipient + "\",\r\n\"headerFound\" : \"true\"" + (headerMessage !== "notFound" ? ", \r\n\"headerMessage\" : \"" + headerMessage + "\"" : "") + "}"
+                "data": "{\r\n\"apiKey\" : \"23424-324234-XX3453-ASDA89\",\r\n\"type\" : \"PhishingButtonPressed\",\r\n\"recipient\" : \"" + recipient + "\",\r\n\"headerFound\" : " + (headerMessage !== "notFound" ? "\"true\", \r\n\"headerMessage\" : \"" + headerMessage + "\"" : "\"false\"") + "}"
             }
+            var x = "";
             $.ajax(settings).done(function (response) {
                 console.log(response);
             }).fail(function (error) {
