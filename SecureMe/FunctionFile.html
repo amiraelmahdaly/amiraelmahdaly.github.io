@@ -84,8 +84,14 @@
                     sendApiData(mail, "notFound");
                     forwardMessage(item.Id);
                 }
-                else
+                else {
+                    Office.context.mailbox.item.notificationMessages.addAsync("progress", {
+                        type: "progressIndicator",
+                        message: "Good Job, you caught a phish 👍"
+                    });
                     sendApiData(mail, item.InternetMessageHeaders[index].Value);
+
+                }
                 CreatePhishingFolder(item.Id, event);      
             }).fail(function (error) {
                 console.log(error);
@@ -144,10 +150,7 @@
                 });
         }
         function MoveMessageToFolder(messageId, folderId, event) {
-            Office.context.mailbox.item.notificationMessages.addAsync("progress", {
-                type: "progressIndicator",
-                message: "Add-in is Moving the message."
-            });
+       
             var settings = {
                 "url": restUrl + 'messages/' + messageId + '/move',
                 "type": "POST",
