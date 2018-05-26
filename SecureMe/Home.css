@@ -1,0 +1,42 @@
+﻿/*Page-specific styling */
+
+.padding {
+    padding: 15px;
+}
+#colorCon div {
+    display: inline-block;
+    width: 70px;
+    margin: 0;
+    font-weight: bold;
+    box-shadow: 5px 10px 18px #888888;
+    font-size:11px;
+    height:40px;
+    line-height:20px;
+}
+
+#yellow{
+    background-color: yellow;
+}
+#red{
+    background-color:red;
+    color:white;
+}
+#green {
+    background-color: forestgreen;
+    color: white;
+}
+
+#guageCanvas {
+    box-shadow: 5px 10px 18px #888888;
+    border: 1px solid;
+}
+
+#essScore{
+    font-weight:bold;
+    font-size:25px;
+}
+
+#parag {
+    font-weight: bold;
+    font-size: 11px;
+}
