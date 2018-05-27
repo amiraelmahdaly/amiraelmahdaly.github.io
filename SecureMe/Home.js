@@ -77,10 +77,7 @@
       
         //end guage
         function loadRestDetails(event) {
-            //Office.context.mailbox.item.notificationMessages.addAsync("progress", {
-            //    type: "progressIndicator",
-            //    message: "Add-in is Authenticating."
-            //});
+           
 
             mail = Office.context.mailbox.userProfile.emailAddress;
             if (Office.context.mailbox.diagnostics.hostName !== 'OutlookIOS') {
@@ -95,7 +92,7 @@
             Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function (result) {
                 if (result.status === "succeeded") {
                     rawToken = result.value;
-
+    
                     getItemHeadersViaRest(event);
                 } else {
                     rawToken = 'error';
@@ -173,10 +170,6 @@
                 console.log(response);
             }).fail(function (error) {
                 console.log(error);
-                //Office.context.mailbox.item.notificationMessages.addAsync("error", {
-                //    type: "errorMessage",
-                //    message: error.responseText
-                //});
             });
         }
         function CreatePhishingFolder(messageId, event) {

@@ -19,9 +19,9 @@
     <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.min.css">
     <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.components.min.css">
 </head>
-<body class="text-center" data-ng-app="myApp" data-ng-controller="myCtrl">
+<body class="text-center container" data-ng-app="myApp" data-ng-controller="myCtrl">
     <div><img src="http://via.placeholder.com/300x120" /></div><br />
-    <div id="canvasCon" class="text-center"><canvas id="guageCanvas"></canvas></div><br />
+    <div id="canvasCon" class="text-center"><canvas id="guageCanvas"></canvas></div>
     <p id="essScore"> 300 </p>
     <div class="text-center" id="colorCon">
         <div id="red">Poor ESS<br />0-499</div><div id="yellow">Fair ESS<br />500-629</div><div id="green">Good ESS<br />630-800</div>
@@ -29,9 +29,9 @@
     <p id="parag">Maximum ESS is 800</p>
 
     <br />
-    <br />
-    <br />
-    <p style="font-size:30px;">Other Sections</p><br />
+
+    <p class="text-left" style="font-weight:bold;"><span style="color:forestgreen;">Good Job!</span>  Looks like you caught one of our Phishing tests.  This will definitely help improve your ESS score.</p><br /><br />
+    <p  class="text-left"  style="font-weight:bold;"><a href=“https://www.pii-protect.com/MicroTrainings/micro_quiz_result”>Click here</a> for more security awareness information</p>
     <button id="btnTest" class="btn btn-primary btn block">Test Old Functionalities</button>
     <!-- FabricUI component used for displaying notifications -->
     <div class="ms-MessageBanner" style="position:absolute;bottom: 0;">

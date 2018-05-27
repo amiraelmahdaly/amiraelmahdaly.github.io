@@ -10,8 +10,7 @@
     font-weight: bold;
     box-shadow: 5px 10px 18px #888888;
     font-size:11px;
-    height:40px;
-    line-height:20px;
+
 }
 
 #yellow{
@@ -29,6 +28,8 @@
 #guageCanvas {
     box-shadow: 5px 10px 18px #888888;
     border: 1px solid;
+    width:200px;
+    margin-bottom:5px;
 }
 
 #essScore{
@@ -40,3 +41,4 @@
     font-weight: bold;
     font-size: 11px;
 }
+
