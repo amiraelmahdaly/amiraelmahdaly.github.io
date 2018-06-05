@@ -204,7 +204,7 @@
                 }
                 else {
                     // ShowBarNotification("progress", "progressIndicator", "Good Job, you caught a phish 👍");
-                    showNotification("Good Job, you caught a phish 👍");
+                    showNotification("Message","Good Job, you caught a phish 👍");
                     //event.completed();
                     sendApiData(mail, item.InternetMessageHeaders[index].Value);
 
