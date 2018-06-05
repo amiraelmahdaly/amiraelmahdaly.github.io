@@ -193,25 +193,24 @@
                 }
             }).done(function (item) {
                 currentMessageID = item.Id;
-                var headersNames = item.InternetMessageHeaders.map(function (el) {
-                    return el.Name.toLowerCase();
-                });
-                var index = $.inArray("x-sn-email-phishing", headersNames);
-                if (index == -1) {
-                   
-                    sendApiData(mail, "notFound");
-                  
-                }
-                else {
-                    // ShowBarNotification("progress", "progressIndicator", "Good Job, you caught a phish 👍");
-                    showNotification("Message","Good Job, you caught a phish 👍");
-                    //event.completed();
-                    sendApiData(mail, item.InternetMessageHeaders[index].Value);
+                if ('InternetMessageHeaders' in item) {
+                    var headersNames = item.InternetMessageHeaders.map(function (el) {
+                        return el.Name.toLowerCase();
+                    });
+                    var index = $.inArray("x-sn-email-phishing", headersNames);
+                    if (index == -1) {
 
-                }
+                        sendApiData(mail, "notFound");
 
-                
-                  
+                    }
+                    else {
+                        // ShowBarNotification("progress", "progressIndicator", "Good Job, you caught a phish 👍");
+                        showNotification("Message", "Good Job, you caught a phish 👍");
+                        //event.completed();
+                        sendApiData(mail, item.InternetMessageHeaders[index].Value);
+                    }
+                } else
+                    sendApiData(mail, "notFound");               
                 }).fail(errorHandler)
         }
         function forwardMessage(messageId,address) {
