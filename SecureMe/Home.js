@@ -298,7 +298,7 @@
 
         function GenerateLink(href, text, justify) {
 
-            return "<a href='" + href + "' class='text-" + justify + "' > " + text + "</a > ";
+            return "<p class='text-" + justify + "'><a href='" + href + "' > " + text + "</a ></p> ";
         }
 
         function GenerateImage(src, alt, justify) {
@@ -306,7 +306,7 @@
         }
 
         function GenerateText(text, justify) {
-            return "<span class='text-" + justify + "' >" + text + "</span>"; 
+            return "<p class='text-" + justify + "' >" + text + "</p>"; 
         }
 
         function GenerateSeparator(lines){ 
