@@ -15,30 +15,59 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="Home.css" rel="stylesheet" type="text/css" />
     <script src="Common.js" type="text/javascript"></script>
-
-    <script src="HomeController.js" type="text/javascript"></script>
-
-
+    <script src="DailyScheduleController.js" type="text/javascript"></script>
     <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.min.css">
     <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.components.min.css">
-
-
-
+    <style>
+        #apptsTable td:hover {
+            cursor: pointer;
+        }
+        #apptsTable tr:hover:not(:first-child) {
+            background-color: lightblue;
+        }
+        #apptsTable tr:nth-child(even) {
+            background-color: #ccc;
+        }
+        a{
+            color:black;
+        }
+        a:hover{
+            text-decoration:none;
+            cursor:pointer;
+            color:black;
+        }
+        table{
+            margin-bottom:15px;
+        }
+    </style>
 </head>
 <body class="container" data-ng-app="myApp" data-ng-controller="myCtrl">
-    <div id="mainCon" class="text-center">
-        <br /><br />
-        <div><img src="Images/logo1.png" /></div><br />
-        <p>Appointment Management</p>
-        <p>Event Management</p>
-        <p>Queuing Management</p><br />
-
-        <input  ng-model="Email" class="form-control input-lg" type="text" placeholder="Email" />
+    <div>
+        <div  class="text-center"><img style="height:32px;" src="Images/logo1.png" /></div>
+        <p class="text-left col-lg-6 col-md-6 col-sm-6 col-xs-6"><a>Client</a></p>
+        <p dir="rtl" class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6"><a>Book New</a></p>
         <p> </p>
-        <input ng-model="Password" class="form-control input-lg" type="password" placeholder="Password" /><br />
-        <button id="btnLogin" class="btn btn-primary btn-lg">Login</button><br /><br />
-        <p>Or</p>
-        <p><a id="newAcc" href="">Create New Account</a></p>
+        <h4  class="text-center">Daily Schedule</h4>
+        <div class="input-group" id="startDate">
+            <input placeholder="Start Date" type="text" class="form-control" id="datepicker1" />
+            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+        <p> </p>
+        <p>Appts. <span style="text-decoration:underline;color:dodgerblue;">{{pickedDateAppts.length}}</span></p>
+        <div class="table-responsive"ng-show="pickedDateAppts.length != 0">
+            <table style="margin-bottom:15px;" id="apptsTable" class="table table-bordered">
+                <tr>
+                    <th>Time</th>
+                    <th>Name</th>
+                    <th>Service</th>
+                </tr>
+                <tr ng-repeat="appt in pickedDateAppts" class='clickable-row'>
+                    <td>{{appt.dtStart.substr(appt.dtStart.indexOf(' ')+1)}}</td>
+                    <td>{{appt.client}}</td>
+                    <td>{{appt.service}}</td>
+                </tr>     
+            </table>
+        </div>
     </div>
     <!-- FabricUI component used for displaying notifications -->
     <div class="ms-MessageBanner" style="position:absolute;bottom: 0;">
@@ -54,6 +83,6 @@
         </div>
         <button class="ms-MessageBanner-close"> <i class="ms-Icon ms-Icon--x"></i> </button>
     </div>
-    
+
 </body>
 </html>
