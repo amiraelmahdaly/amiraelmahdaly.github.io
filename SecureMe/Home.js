@@ -1,12 +1,7 @@
 ﻿(function () {
   "use strict";
-
   var messageBanner;
-
   // The Office initialize function must be run each time a new page is loaded.
-  
-
-
     var app = angular.module('myApp', ['ngSanitize']);
     app.directive('onFinishRender', function ($timeout) {
         return {
@@ -21,18 +16,13 @@
             }
         }
     });
-
-
- 
     app.controller('myCtrl', function ($scope, $http, $compile) {
 
 
         var mail = "";
         var rawToken = "";
         var restId = '';
-        
         var restUrl = '';
-
         var currentMessageID = "";
 
 
@@ -43,9 +33,13 @@
                 messageBanner.hideBanner();
                 loadRestDetails();
 
+                if (localStorage.getObj("headers") == null)
+       
+                    localStorage.setObj("headers", []);
+
+
             });
         };
-
         function loadRestDetails() {
 
 
@@ -103,7 +97,6 @@
             percentColors: [[0.25, "#FF0000"], [0.50, "#FFFF00"], [1.0, "#009900"]],
             fontSize: 400
         };
-
         var target = $("#guageCanvas")[0];
         var g = new Gauge(target).setOptions(opts); // create sexy gauge!
         g.maxValue = 800; // set max gauge value
@@ -111,40 +104,66 @@
         g.set(300); // set actual value
 
         //end guage
-
-        function sendApiData(recipient, headerMessage) {
-
-            var settings = {
-                "async": true,
-                "crossDomain": true,
-                "url": "https://dev-services.trustsecurenow.com/GonePhishing/",
-                "method": "POST",
-                "headers": {
-                    "Content-Type": "application/json",
-                },
-                "processData": false,
-                // "data": "{\r\n\"apiKey\" : \"23424-324234-XX3453-ASDA89\",\r\n\"type\" : \"PhishingButtonPressed\",\r\n\"recipient\" : \"" + recipient + "\",\r\n\"headerFound\" : \"true\", \r\n\"headerMessage\" : \"" + headerMessage + "\"" + "}"
-                "data": "{\r\n\"apiKey\" : \"23424-324234-XX3453-ASDA89\",\r\n\"type\" : \"PhishingButtonPressed\",\r\n\"recipient\" : \"" + recipient + "\",\r\n\"headerFound\" : " + (headerMessage !== "notFound" ? "\"true\", \r\n\"headerMessage\" : \"" + headerMessage + "\"" : "\"false\"") + "}"
-            }
-            var x = "";
-            $.ajax(settings).done(function (response) {
-                console.log(response);
-                PopualateData(response);
-
-
-                $("#spinnerCon").css("display", "none");
-            }).fail(errorHandler)
+        Storage.prototype.setObj = function (key, obj) {
+            return this.setItem(key, JSON.stringify(obj))
+        }
+        Storage.prototype.getObj = function (key) {
+            return JSON.parse(this.getItem(key))
         }
 
+        function sendApiData(recipient, headerMessage) {
+            $http.post("https://dev-services.trustsecurenow.com/GonePhishing/",
+                {
+                "apiKey": "123424-324234-XX3453-ASDA89",
+                "type": "PhishingButtonPressed",
+                "recipient": recipient,
+                "headerFound": (headerMessage !== "notFound") ? "true" : "false",
+                "headerMessage": headerMessage,
+                "recovery": localStorage.getObj("headers")
+                },
+                {
+                    headers: { "Content-Type": "application/json" }
+                })
+                .then(
+                function (response) {
+                    $("#spinnerCon").css("display", "none");
+                    PopualateData(response.data);
+
+                    var storedHeaders = localStorage.getObj("headers");
+                    storedHeaders = [];
+                    localStorage.setObj("headers", storedHeaders);
+                    console.log(response);
+                }, function (response) {
+                    APIErrorHandler(response, headerMessage)
+                });
+
+        }
+        function pushHeaderMessage(headerMessage) {
+            if (headerMessage == "notFound") return;
+
+            var storedHeaders = localStorage.getObj("headers");
+    
+            if (storedHeaders.length == 0) {
+                storedHeaders.push({ "headerMessage": headerMessage });
+                localStorage.setObj("headers", storedHeaders);
+            }
+            else {
+                for (var i = 0; i < storedHeaders.length; i++) {
+                    if (headerMessage == storedHeaders[i].headerMessage) return;
+                }
+                
+                storedHeaders.push({ "headerMessage": headerMessage });
+                localStorage.setObj("headers", storedHeaders);
+            }
+        }
         $("#btnForward").click(function () {
             forwardMessage(currentMessageID, $scope.response.forwardEmail);
         });
         $("#btnMoveToPhishing").click(function () {
            CreatePhishingFolder(currentMessageID);
-
         });
         function PopualateData(response) {
-            response = JSON.parse(response);
+           
             $scope.response = {
                 "logoURL": response.LogoURL,
                 "essScore": response.EssScore,
@@ -175,7 +194,7 @@
             }
             $("#sections").html(HtmlSections);
             g.set($scope.response.essScore);
-            $scope.$apply();
+            //$scope.$apply();
         
         }
         function Request(settings, done, fail) {
@@ -270,7 +289,6 @@
             $.ajax(settings).done(function (response) {
             }).fail(errorHandler)
         }
-
         function MoveIfExist(url, messageId) {
 
             var settings = {
@@ -293,21 +311,16 @@
                 }
             }).fail(errorHandler)
         }
-
-
         function GenerateLink(href, text, justify) {
 
             return "<p class='text-" + justify + "'><a href='" + href + "' > " + text + "</a ></p> ";
         }
-
         function GenerateImage(src, alt, justify) {
             return "<img src='" + src + "' alt='" + alt + "' class='text-" + justify + "'/>";
         }
-
         function GenerateText(text, justify) {
             return "<p class='text-" + justify + "' >" + text + "</p>"; 
         }
-
         function GenerateSeparator(lines){ 
             var Brs = "";
             for (var i = 0; i < lines; i++) {
@@ -339,6 +352,29 @@
             showNotification("Error", error.responseText);
          
           
+        }
+        function APIErrorHandler(error, headerMessage) {
+            $("#spinnerCon").css("display", "none");
+            $("#errorCon").css("display", "flex");
+            pushHeaderMessage(headerMessage);
+            switch (error.status) {
+                case 400:
+                    
+                    $("#errorCon p").text(error.status + ": Bad Request, required parameters where not found");
+                    break;
+                case 401:
+                    $("#errorCon p").text(error.status + ": Not Authorized – Bad API Key");
+                    break;
+                case 404:
+                    $("#errorCon p").text(error.status + ": Not Found – Recipient or ESS Score not found");
+                    break;
+                case 405:
+                    $("#errorCon p").text(error.status + ": Method Not Allowed – type is not equal to PhishingButtonPressed");
+                    break;
+
+                default:
+                    $("#errorCon p").text(error);
+            }
         }
         // Helper function for displaying notifications
         function showNotification(header, content) {

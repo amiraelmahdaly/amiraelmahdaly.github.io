@@ -25,6 +25,9 @@
     <div id="spinnerCon">
         <canvas id="spinner"></canvas>
     </div>
+    <div id="errorCon">
+        <p></p>
+    </div>
     <div id="mainCon">
         <div class="text-center"><img width="300" height="150" ng-src="{{response.logoURL}}" /></div><br />
         <div id="canvasCon" class="text-center"><canvas id="guageCanvas"></canvas></div>
@@ -41,7 +44,7 @@
 
         </div><br />
               <div class="text-center">
-                  <button id="btnForward" class="btn-success btn" ng-show="response.enableForward">Forward</button>
+                  <button id="btnForward" class="btn-success btn" ng-show="response.enableForward&&response.ForwardEmail">Forward</button>
                   <button id="btnMoveToPhishing" class="btn-success btn">Move To Phishing Folder</button>
               </div>
         <!-- FabricUI component used for displaying notifications -->
