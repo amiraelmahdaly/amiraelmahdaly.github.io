@@ -114,7 +114,7 @@
         function sendApiData(recipient, headerMessage) {
             $http.post("https://dev-services.trustsecurenow.com/GonePhishing/",
                 {
-                "apiKey": "123424-324234-XX3453-ASDA89",
+                "apiKey": "23424-324234-XX3453-ASDA89",
                 "type": "PhishingButtonPressed",
                 "recipient": recipient,
                 "headerFound": (headerMessage !== "notFound") ? "true" : "false",
