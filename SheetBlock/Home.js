@@ -34,27 +34,27 @@ myApp.config(function ($routeProvider) {
 
         // route for the home page
         .when('/', {
-            templateUrl: 'views/login.html',
+            templateUrl: 'Views/login.html',
             controller: 'loginController'
         })
         .when('/login', {
-            templateUrl: 'views/login.html',
+            templateUrl: 'Views/login.html',
             controller: 'loginController'
         })
 
         // route for the about page
         .when('/signup', {
-            templateUrl: 'views/signup.html',
+            templateUrl: 'Views/signup.html',
             controller: 'signupController'
         })
         .when('/main', {
-            templateUrl: 'views/main.html',
+            templateUrl: 'Views/main.html',
             controller: 'mainController'
         })
 
         // route for the contact page
         .when('/signupEmail', {
-            templateUrl: 'views/signupEmail.html',
+            templateUrl: 'Views/signupEmail.html',
             controller: 'signupEmailController'
         });
 });
