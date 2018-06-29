@@ -1,0 +1,51 @@
+﻿body {
+    overflow-y: hidden;
+}
+#footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid black;
+    height: 40px;
+}
+.header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border-bottom: 1px solid lightgrey;
+    height: 45px;
+}
+#logoHeader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+    #logoHeader image{
+        width:80%;
+    }
+.mainCon {
+    margin: 0 15px;
+    height: 100%;
+}
+
+.header span {
+    font-size: 18px;
+    margin-top: 27px;
+}
+.header a {
+    color: black;
+    margin-top: 5px;
+}
+.header a:hover{
+    text-decoration:none;
+}
+.viewCon {
+    position: absolute;
+    top: 50%;
+    right:15px;
+    left:15px;
+    transform: translateY(-50%);
+}
