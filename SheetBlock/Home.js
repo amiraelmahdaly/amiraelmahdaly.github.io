@@ -273,7 +273,7 @@ myApp.controller('validationController', function ($scope) {
 });
     $("#noValidate").click(function () {
         window.location.href = '#main';
-        localStorage.setItem("docStatus", "notCertified");
+        localStorage.setItem("docStatus", "notValidated");
 
     });
 });
