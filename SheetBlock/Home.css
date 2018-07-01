@@ -14,8 +14,8 @@
     left: 0;
     top: 0;
     width: 100%;
-    border-bottom: 1px solid lightgrey;
     height: 45px;
+    background-color: #F4F4F4;
 }
 #logoHeader {
     position: fixed;
@@ -48,4 +48,93 @@
     right:15px;
     left:15px;
     transform: translateY(-50%);
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #EDEFF4;
+    overflow-x: hidden;
+    transition: 0.3s;
+    padding-top: 45px;
+}
+
+    .sidenav a {
+        background-color: #FFFFFF;
+        border: 1px solid #EDEFF4;
+        padding: 4px 8px;
+        text-decoration: none;
+        font-size: 18px;
+        display: block;
+        transition: 0.2s;
+        color: black;
+    }
+
+        .sidenav a:not(:first-child):hover {
+            color: #FF8C3D;
+            background-color: #F8F8F8;
+            border-left: 2px solid #FF8C3D;
+        }
+        .sidenav a:first-child:hover {
+            color: #FF8C3D;
+        }
+            .sidenav .closebtn {
+                position: absolute;
+                top: 0;
+                right: 15px;
+                font-size: 14px;
+                margin-left: 50px;
+                background-color: #EDEFF4;
+            }
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+        .sidenav a {
+            font-size: 18px;
+        }
+}
+.menu:hover {
+    color: #FF8C3D;
+}
+
+.homeBtn {
+    width: 100px;
+    height: 80px;
+    margin:20px;
+}
+
+.svg{
+    height:30px;
+}
+
+.yes {
+    color: white;
+    background-color: #ED7D31;
+    height: 40px;
+    width: 100px;
+    font-weight: bold;
+    padding: 4px;
+    font-size: 18px;
+    border: 1px solid #ED7D31;
+    margin: 20px;
+    box-shadow: 3px 3px 7px #888888;
+}
+.no {
+    color: #ED7D31;
+    background-color: white;
+    border: 1px solid #ED7D31;
+    height: 40px;
+    width: 100px;
+    font-weight: bold;
+    padding: 4px;
+    font-size: 18px;
+    margin: 20px;
+    box-shadow: 3px 3px 7px #888888;
 }

@@ -1,10 +1,19 @@
-﻿$(document).ready(function () {
+﻿Office.initialize = function (reason) {
+};
+$(document).ready(function () {
     var element = document.querySelector('.ms-MessageBanner');
     messageBanner = new fabric.MessageBanner(element);
     messageBanner.hideBanner();
-
+    localStorage.setItem("email", "");
+    localStorage.setItem("docStatus", "");
 });
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
 
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
 function hideErrorMessage() {
 
     setTimeout(function () {
@@ -51,6 +60,30 @@ myApp.config(function ($routeProvider) {
             templateUrl: 'Views/main.html',
             controller: 'mainController'
         })
+        .when('/certification', {
+            templateUrl: 'Views/certification.html',
+            controller: 'certificationController'
+        })
+        .when('/certificationDetails', {
+            templateUrl: 'Views/certificationDetails.html',
+            controller: 'certificationDetailsController'
+        })
+        .when('/save', {
+            templateUrl: 'Views/save.html',
+            controller: 'saveController'
+        })
+        .when('/share', {
+            templateUrl: 'Views/share.html',
+            controller: 'shareController'
+        })
+        .when('/shareCompleted', {
+            templateUrl: 'Views/shareCompleted.html',
+            controller: 'shareCompletedController'
+        })
+        .when('/validation', {
+            templateUrl: 'Views/validation.html',
+            controller: 'validationController'
+        })
 
         // route for the contact page
         .when('/signupEmail', {
@@ -75,7 +108,7 @@ myApp.controller('loginController', function ($scope) {
             showNotification("Invalid username or password", "");
     });
    
-});
+}); 
 
 myApp.controller('signupController', function ($scope) {
     $("#register").click(function () {
@@ -98,5 +131,149 @@ myApp.controller('signupEmailController', function ($scope) {
 
 
 myApp.controller('mainController', function ($scope) {
+    switch (localStorage.getItem("docStatus")) {
+
+
+        case "notCertified":
+            $("#certify").removeAttr("disabled");
+            break;
+        default:
+            $("#certify").attr("disabled", "disabled");
+            break;
+    }
+    $("#certify").click(function () {
+        if (!($("#certify").is(":disabled"))) {
+            window.location.href = "#certification";
+            localStorage.setItem("docStatus", "certified");
+        }
+    });
+    Word.run(function (context) {
+
+        // Create a proxy object for the document.
+        var thisDocument = context.document;
+
+        // Queue a commmand to load the document save state (on the saved property).
+        context.load(thisDocument, 'saved');
+
+        // Synchronize the document state by executing the queued commands, 
+        // and return a promise to indicate task completion.
+        return context.sync().then(function () {
+
+            if (thisDocument.saved === false) 
+                // Queue a command to save this document.
+                localStorage.setItem("docStatus", "notSaved");
+
+           
+        });
+    })
+        .catch(function (error) {
+            console.log("Error: " + JSON.stringify(error));
+            if (error instanceof OfficeExtension.Error) {
+                console.log("Debug info: " + JSON.stringify(error.debugInfo));
+            }
+        });
+
+    $("#validate").click(function () {
+        switch (localStorage.getItem("docStatus")) {
+            case "notSaved": 
+                window.location.href = '#save';
+                break;
+            case "notValidated":
+                window.location.href = '#validation';
+                break;
+            case "notCertified":
+                window.location.href = '#certification';
+                break;
+            case "certified":
+                window.location.href = '#certificationDetails';
+                break;
+            default:
+                window.location.href = '#save';
+                break;
+        }
+    });
+});
+
+myApp.controller('certificationController', function ($scope) {
+    setTimeout(function () {
+        $("#Loader").css("display", "none");
+        $("#display").css("display", "block");
+        $("#title").text("Certification Completed");
+    }, 2000);
+
+    $("#next").click(function () {
+        window.location.href ="#share";
+    });
+});
+
+myApp.controller('certificationDetailsController', function ($scope) {
     $("#emailTxt").text(localStorage.getItem("email") + ".");
+});
+
+myApp.controller('saveController', function ($scope) {
+    $("#yesSave").click(function () {
+        Word.run(function (context) {
+
+            // Create a proxy object for the document.
+            var thisDocument = context.document;
+
+            // Queue a commmand to load the document save state (on the saved property).
+            context.load(thisDocument, 'saved');
+
+            // Synchronize the document state by executing the queued commands, 
+            // and return a promise to indicate task completion.
+            return context.sync().then(function () {
+
+                if (thisDocument.saved === false) {
+                    // Queue a command to save this document.
+                    localStorage.setItem("docStatus", "notValidated");
+                    thisDocument.save();
+                    window.location.href = '#validation'
+                } 
+            });
+        })
+            .catch(function (error) {
+                console.log("Error: " + JSON.stringify(error));
+                if (error instanceof OfficeExtension.Error) {
+                    console.log("Debug info: " + JSON.stringify(error.debugInfo));
+                }
+            });
+    });
+    $("#noSave").click(function () {
+        window.location.href = '#main'
+
+    });
+});
+
+myApp.controller('shareController', function ($scope) {
+    $("#send").click(function () {
+        window.location.href = '#shareCompleted';
+    });
+    $("#done").click(function () {
+        window.location.href = '#main';
+    });
+});
+
+myApp.controller('shareCompletedController', function ($scope) {
+    $("#done").click(function () {
+        window.location.href = '#main';
+    });
+});
+
+myApp.controller('validationController', function ($scope) {
+    setTimeout(function () {
+        $("#Loader").css("display", "none");
+        $("#display").css("display", "block");
+    }, 2000);
+
+    $("#yesValidate").click(function () {
+        window.location.href = '#certification';
+        localStorage.setItem("docStatus", "certified");
+
+});
+    $("#noValidate").click(function () {
+        window.location.href = '#main';
+        localStorage.setItem("docStatus", "notCertified");
+
+    });
 });
