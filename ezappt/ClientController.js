@@ -2,20 +2,20 @@
 var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
 
     var staffID = getQueryStringValue("staffID");
-    var userID = getQueryStringValue("userID");
     var grouped = [];
     $scope.allAppts = [];
     $scope.pickedDateAppts = [];
     var editApptDialog;
-    var editApptDialogUrl = DeploymentHost + "editAppt.html?staffID=" + staffID + "&userID=" + userID;
+    var editApptDialogUrl = DeploymentHost + "editAppt.html";
     var editApptDialogUrlStringified = "";
     $(document).ready(function () {
+        getAllAppts();
         $("#datepicker1").datepicker({
             defaultDate: "0d",
             dateFormat: "m/d/yy",
-            onSelect: function () {
-                getAllAppts();
-                
+            onSelect: function (date) {
+                getPickedAppts(date);
+                $scope.$applyAsync();
             }
         });
         $("#datepicker1").datepicker("setDate", "0d");
@@ -47,13 +47,13 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
         $scope.pickedDateAppts = $scope.allAppts.filter(function (value) { return value.dtStart.indexOf(date) >= 0 })
     }
     $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
-        $(".clickable-row").click(function () {
-            var appointmentID = Number($(this).attr("id"));
+        $(".clickable-row").unbind().click(function () {
+            var serviceID = Number($(this).attr("id"));
             var appt = $scope.allAppts.filter(function (obj) {
-                return obj.appointmentid == appointmentID;
+                return obj.serviceid == serviceID;
             });
-            var x = "";
-            editApptDialogUrlStringified = editApptDialogUrl + "&appt=" + encodeURIComponent(JSON.stringify(appt[0]));
+
+            editApptDialogUrlStringified = editApptDialogUrl + "?appt=" + encodeURIComponent(JSON.stringify(appt[0]));
             ShowEditApptDialog();
             
         });

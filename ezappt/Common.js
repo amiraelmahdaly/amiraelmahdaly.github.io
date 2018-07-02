@@ -1,7 +1,6 @@
 ﻿"use strict";
 Office.initialize = function (reason) {
 };
-
 var app = angular.module('myApp', []);
 app.directive('onFinishRender', function ($timeout) {
     return {
@@ -16,10 +15,10 @@ app.directive('onFinishRender', function ($timeout) {
         }
     }
 });
-
+var DeploymentHost = "https://amiraelmahdaly.github.io/ezappt/";
+//var DeploymentHost = "https://localhost:44391/";
 var messageBanner;
 var BaseURI = "https://dakota-wcf.ezsoftco.com/WCFEzapptJsonService.svc/";
-
 // Error Handling Region
 $(document).ready(function () {
     var element = document.querySelector('.ms-MessageBanner');
@@ -56,20 +55,56 @@ function FormatParams(params) {
     }
     return par;
 }
+function AnyEmpty() {
+    for (var i = 0; i < arguments.length; i++)
+        if (arguments[i].trim() == "") return true;
+    return false;
+}
 function Redirect(q) {
     window.location.href = q;
 }
 function getQueryStringValue(key) {
     return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
 }
+Storage.prototype.setObj = function (key, obj) {
+    return this.setItem(key, JSON.stringify(obj))
+}
+Storage.prototype.getObj = function (key) {
+    return JSON.parse(this.getItem(key))
+}
+
 app.service('AngularServices', ['$http', function ($http) {
     var API = {
-        Request: function (EndPoint) {
-            return $http.get(BaseURI + EndPoint + "/" + FormatParams(arguments))
+        GET: function (EndPoint) {
+            
+            return $http(
+                {
+                    method: 'GET',
+                    url: BaseURI + EndPoint + "/" + FormatParams(arguments),
+                    headers: {
+                        //'If-Modified-Since': 'Mon, 26 Jul 1997 05:00:00 GMT',
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
+                })
                 .then(function (response) {
                     return response.data;
                 }).catch(errorHandler);
         }
+        ,
+        POST: function (EndPoint, Params) {
+            return $http({
+                method: 'POST',
+                url: BaseURI + EndPoint,
+                params: Params
+            })
+                .then(function (response) {
+                    return response.data;
+                }).catch(errorHandler);
+        }
+    
+
+
     };
 
     return API;

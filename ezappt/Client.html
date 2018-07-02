@@ -61,7 +61,7 @@
                     <th>Name</th>
                     <th>Service</th>
                 </tr>
-                <tr id="{{appt.appointmentid}}" ng-repeat="appt in pickedDateAppts" class='clickable-row' on-finish-render="ngRepeatFinished">
+                <tr id="{{appt.serviceid}} " ng-repeat="appt in pickedDateAppts" class='clickable-row' on-finish-render="ngRepeatFinished">
                     <td>{{appt.dtStart.substr(appt.dtStart.indexOf(' ')+1)}}</td>
                     <td>{{appt.client}}</td>
                     <td>{{appt.service}}</td>
