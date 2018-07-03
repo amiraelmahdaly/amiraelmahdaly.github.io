@@ -35,14 +35,15 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
                 "userID": userID
 
         }).then(function (data) {
-            var x = "";
+            showNotification("Notification", "Saved Successfully");
         });
     }
     $("#save").click(function () {
         appt1 = $("#datetimepicker1").val() + ":00 " + $("#select1").val();
         appt2 = $("#datetimepicker2").val() + ":00 " + $("#select2").val();
         setAppt(appt1, appt2);
-        $("#select1, #select2, #datetimepicker1, #datetimepicker2").attr("disabled","disabled");
+        $("#select1, #select2, #datetimepicker1, #datetimepicker2").attr("disabled", "disabled");
+      
 
     });
 }];

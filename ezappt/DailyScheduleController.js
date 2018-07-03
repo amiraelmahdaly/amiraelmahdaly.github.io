@@ -25,8 +25,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
         Office.context.ui.displayDialogAsync(editApptDialogUrlStringified, { height: 60, width: 60, displayInIframe: true },
                 function (asyncResult) {
                     editApptDialog = asyncResult.value;
-                   // editApptDialog.addEventHandler(Office.EventType.DialogMessageReceived, processRealDocsDialogMessage);
-                    //editApptDialog.addEventHandler(Office.EventType.DialogEventReceived, MyAgreementsDialogClosed);
+                    editApptDialog.addEventHandler(Office.EventType.DialogEventReceived, editApptDialogClosed);
 
 
                 }
@@ -34,6 +33,9 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
         
 
 
+    }
+    function editApptDialogClosed(arg) {
+        getAllAppts();
     }
     function getAllAppts() {
         AngularServices.GET("GetAppointments", staffID).then(function (data) {
