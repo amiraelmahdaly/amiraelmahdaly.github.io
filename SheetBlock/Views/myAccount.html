@@ -1,0 +1,140 @@
+﻿<div class="text-center">
+    <div id="mySidenav" class="sidenav text-left">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="fas fa-angle-left fa-2x"></i></a>
+        <a href="#main"><i class="fas fa-home"></i> Home</a>
+        <a href="" onclick="closeNav()" style="background-color:#F8F8F8;color:#FF8C3D;border-left:2px solid #FF8C3D;"><i class="fas fa-user"></i> My Account</a>
+        <a href="#login"><i class="fas fa-sign-out-alt"></i> Log out</a>
+    </div>
+
+    <div class="header">
+        <div style="padding:10px 20px;" class="col-xs-2 col-md-2 col-lg-2 text-left"><span class="menu" style="font-size:20px;cursor:pointer;" onclick="openNav()">&#9776; </span></div>
+        <div style="margin-top:10px;font-size:18px;" class="col-xs-8 col-md-8 col-lg-8 text-center"><p>My Account</p></div>
+    </div>
+    <div style="margin-top:50px;">
+
+        <div class="container">
+            <ul id="nav" class="nav nav-tabs ">
+                <li class="active"><a showtab="" show-tab data-toggle="tab" href="#files">Files</a></li>
+                <li id="planpg"><a showtab="" show-tab  data-toggle="tab" href="#plan">Plan</a></li>
+                <li><a showtab="" show-tab data-toggle="tab" href="#profile">Profile</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="files" class="tab-pane fade in active">
+                    <div class="table-responsive">
+                        <table style="margin-bottom:15px;" id="filesTable" class="table table-bordered">
+                            <tr id="clickRow">
+                                <th>File Name</th>
+                                <th>Date</th>
+                                <th>Hash</th>
+                                <th>Share?</th>
+                            </tr>
+                            <tr class='clickable-row'>
+                                <td id="docName"></td>
+                                <td id="date"></td>
+                                <td>0xcctr..</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr class='clickable-row'>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class='clickable-row'>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class='clickable-row'>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class='clickable-row'>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="plan" class="tab-pane fade">
+                    <div class="text-left plan">
+                        <ul class="text-left gfield_radio" id="input_1_10">
+                            <li class="gchoice_10_0">
+                                <input name="input_10" type="radio" value="First Choice" id="choice_1_10_0" tabindex="13">
+                                <label for="choice_1_10_0" id="label_1_10_0">
+                                    <span style="display:inline-block;line-height: 80%;">
+                                        <span>Personal </span><br /><br />
+                                        <span style="font-size:10px;">Our starter plan.</span><br />
+                                        <span style="font-size:10px;">includes 50 monthly transactions.</span>
+                                    </span>
+                                    <span style="font-size:20px;font-weight:bold;float:right;margin-top:15px;">$4.99</span>
+                                </label>
+                            </li>
+                            <li class="gchoice_10_1">
+                                <input name="input_10" type="radio" value="Second Choice" id="choice_1_10_1" tabindex="14">
+                                <label for="choice_1_10_1" id="label_1_10_1">
+                                    <span style="display:inline-block;line-height: 80%;">
+                                        <span>Standard </span><br /><br />
+                                        <span style="font-size:10px;">For contract-intensive firms.</span><br />
+                                        <span style="font-size:10px;">includes 100 monthly transactions.</span>
+                                    </span>
+                                    <span style="font-size:20px;font-weight:bold;float:right;margin-top:15px;">$9.99</span>
+
+                                </label>
+                            </li>
+                            <li class="gchoice_10_2">
+                                <input name="input_10" type="radio" value="Third Choice" id="choice_1_10_2" tabindex="15">
+                                <label for="choice_1_10_2" id="label_1_10_2">
+                                    <span style="display:inline-block;line-height: 80%;">
+                                        <span>Enterprise </span><br /><br />
+                                        <span style="font-size:10px;">For contract-intensive firms.</span><br />
+                                        <span style="font-size:10px;">includes 500 monthly transactions.</span>
+                                    </span>
+                                    <span style="font-size:20px;font-weight:bold;float:right;margin-top:15px;">$12.99</span>
+                                </label>
+                            </li>
+                            <li class="gchoice_10_2">
+                                <input name="input_10" type="radio" value="Fourth Choice" id="choice_1_10_3" tabindex="16">
+                                <label for="choice_1_10_3" id="label_1_10_3">
+                                    <span style="display:inline-block;line-height: 80%;">
+                                        <span>Pay as you go</span><br /><br />
+                                        <span style="font-size:10px;">For sporadic users.</span><br />
+                                        <span style="font-size:10px;">Pay for each individual transaction.</span>
+                                    </span>
+                                    <span style="font-size:20px;font-weight:bold;float:right;margin-top:15px;">$2.99</span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <button id="next" class="yes"><i class="fas fa-check-circle"></i> Next</button>
+                </div>
+                <div id="profile" class="tab-pane fade">
+                    <p> </p>
+                    <input class="form-control" type="text" placeholder="Email" />
+                    <input class="form-control" type="password" placeholder="Password" />
+                    <input class="form-control" type="password" placeholder="Confirm Password" />
+                    <input class="form-control" type="text" placeholder="First Name" />
+                    <input class="form-control" type="text" placeholder="Last Name" />
+                    <select class="form-control">
+                        <option>Country</option>
+                        <option>Country</option>
+                        <option>Country</option>
+                    </select>
+                    <button id="Update" class="btn btn-warning btn-block">Update</button>
+                    <br />
+                    <p><i class="fas fa-download"></i>  Download Personal Information</p>
+                    <p><i class="fas fa-trash"></i>  Delete Account</p>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

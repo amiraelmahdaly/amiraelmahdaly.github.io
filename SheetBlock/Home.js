@@ -5,7 +5,21 @@ $(document).ready(function () {
     messageBanner = new fabric.MessageBanner(element);
     messageBanner.hideBanner();
     localStorage.setItem("email", "");
-    localStorage.setItem("docStatus", "");
+    Office.context.document.getFilePropertiesAsync(function (asyncResult) {
+        var fileUrl = asyncResult.value.url;
+
+        if (fileUrl == "") {
+            localStorage.setItem("docStatus", "notSaved");
+            localStorage.setItem("fileName", "");
+
+        }
+        else {
+            var filename = fileUrl.split("/");
+            filename = filename[filename.length - 1];
+            localStorage.setItem("fileName", filename);
+            localStorage.setItem("docStatus", "notValidated");
+        }
+    });
 });
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -50,6 +64,10 @@ myApp.config(function ($routeProvider) {
             templateUrl: 'Views/login.html',
             controller: 'loginController'
         })
+        .when('/changePlan', {
+            templateUrl: 'Views/changePlan.html',
+            controller: 'changePlanController'
+        })
 
         // route for the about page
         .when('/signup', {
@@ -67,6 +85,10 @@ myApp.config(function ($routeProvider) {
         .when('/certificationDetails', {
             templateUrl: 'Views/certificationDetails.html',
             controller: 'certificationDetailsController'
+        })
+        .when('/myAccount', {
+            templateUrl: 'Views/myAccount.html',
+            controller: 'myAccountController'
         })
         .when('/save', {
             templateUrl: 'Views/save.html',
@@ -131,6 +153,18 @@ myApp.controller('signupEmailController', function ($scope) {
 
 
 myApp.controller('mainController', function ($scope) {
+    localStorage.setItem("page", "");
+    Office.context.document.getFilePropertiesAsync(function (asyncResult) {
+        var fileUrl = asyncResult.value.url;
+
+        if (fileUrl != "") {
+            var filename = fileUrl.split("/");
+            filename = filename[filename.length - 1];
+            localStorage.setItem("fileName", filename);
+            $("#fileName").text(localStorage.getItem("fileName"));
+        }
+    });
+
     switch (localStorage.getItem("docStatus")) {
 
 
@@ -147,31 +181,7 @@ myApp.controller('mainController', function ($scope) {
             localStorage.setItem("docStatus", "certified");
         }
     });
-    Word.run(function (context) {
 
-        // Create a proxy object for the document.
-        var thisDocument = context.document;
-
-        // Queue a commmand to load the document save state (on the saved property).
-        context.load(thisDocument, 'saved');
-
-        // Synchronize the document state by executing the queued commands, 
-        // and return a promise to indicate task completion.
-        return context.sync().then(function () {
-
-            if (thisDocument.saved === false) 
-                // Queue a command to save this document.
-                localStorage.setItem("docStatus", "notSaved");
-
-           
-        });
-    })
-        .catch(function (error) {
-            console.log("Error: " + JSON.stringify(error));
-            if (error instanceof OfficeExtension.Error) {
-                console.log("Debug info: " + JSON.stringify(error.debugInfo));
-            }
-        });
 
     $("#validate").click(function () {
         switch (localStorage.getItem("docStatus")) {
@@ -182,13 +192,13 @@ myApp.controller('mainController', function ($scope) {
                 window.location.href = '#validation';
                 break;
             case "notCertified":
-                window.location.href = '#certification';
+                window.location.href = '#validation';
                 break;
             case "certified":
                 window.location.href = '#certificationDetails';
                 break;
             default:
-                window.location.href = '#save';
+                window.location.href = '#validation';
                 break;
         }
     });
@@ -212,6 +222,7 @@ myApp.controller('certificationDetailsController', function ($scope) {
 
 myApp.controller('saveController', function ($scope) {
     $("#yesSave").click(function () {
+
         Word.run(function (context) {
 
             // Create a proxy object for the document.
@@ -260,6 +271,31 @@ myApp.controller('shareCompletedController', function ($scope) {
     });
 });
 
+
+myApp.directive('showtab',
+    function () {
+        return {
+            link: function (scope, element, attrs) {
+                element.click(function (e) {
+                    e.preventDefault();
+                    $(element).tab('show');
+                });
+            }
+        };
+    });
+myApp.controller('myAccountController', function ($scope) {
+    $("#next").click(function () {
+        window.location.href = '#changePlan';
+    });
+    if (localStorage.getItem("page") == "plan") {
+        $("#nav li").removeClass("active");
+        $("#planpg").addClass("active");
+    }
+    $("#clickRow").click(function () {
+        window.location.href = '#certificationDetails';
+    });
+});
+
 myApp.controller('validationController', function ($scope) {
     setTimeout(function () {
         $("#Loader").css("display", "none");
@@ -273,7 +309,16 @@ myApp.controller('validationController', function ($scope) {
 });
     $("#noValidate").click(function () {
         window.location.href = '#main';
-        localStorage.setItem("docStatus", "notValidated");
+        localStorage.setItem("docStatus", "notCertified");
 
+    });
+});
+
+
+myApp.controller('changePlanController', function ($scope) {
+
+    $("#cancel").click(function () {
+        window.location.href = '#myAccount';
+        localStorage.setItem("page", "plan");
     });
 });
