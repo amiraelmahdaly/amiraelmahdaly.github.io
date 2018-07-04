@@ -123,14 +123,27 @@ myApp.controller('loginController', function ($scope) {
     // create a message to display in our view
     var userName = "admin";
     var password = "admin";
+    var input = $("#password");
+
+    // Execute a function when the user releases a key on the keyboard
+    input.keyup(function (event) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+            // Trigger the button element with a click
+            $("#signIn").click();
+        }
+    });
+
     $("#signIn").click(function () {
         if ($("#userName").val() === userName && $("#password").val() === password)
             window.location.href = '#main';
         else
             showNotification("Invalid username or password", "");
     });
-   
-}); 
+
+});
 
 myApp.controller('signupController', function ($scope) {
     $("#register").click(function () {
@@ -142,7 +155,7 @@ myApp.controller('signupController', function ($scope) {
         var form = $("#form");
         form.validate();
         if (form.valid())
-        window.location.href = '#signupEmail'
+            window.location.href = '#signupEmail'
     });
 
 });
@@ -158,7 +171,7 @@ myApp.controller('mainController', function ($scope) {
         var fileUrl = asyncResult.value.url;
 
         if (fileUrl != "") {
-            var filename = fileUrl.split("/");
+            var filename = fileUrl.split('\\');
             filename = filename[filename.length - 1];
             localStorage.setItem("fileName", filename);
             $("#fileName").text(localStorage.getItem("fileName"));
@@ -185,7 +198,7 @@ myApp.controller('mainController', function ($scope) {
 
     $("#validate").click(function () {
         switch (localStorage.getItem("docStatus")) {
-            case "notSaved": 
+            case "notSaved":
                 window.location.href = '#save';
                 break;
             case "notValidated":
@@ -196,6 +209,7 @@ myApp.controller('mainController', function ($scope) {
                 break;
             case "certified":
                 window.location.href = '#certificationDetails';
+                localStorage.setItem("path", "main");
                 break;
             default:
                 window.location.href = '#validation';
@@ -212,12 +226,13 @@ myApp.controller('certificationController', function ($scope) {
     }, 2000);
 
     $("#next").click(function () {
-        window.location.href ="#share";
+        window.location.href = "#share";
     });
 });
 
 myApp.controller('certificationDetailsController', function ($scope) {
-    $("#emailTxt").text(localStorage.getItem("email") + ".");
+    $("#path").attr("href", "#" + localStorage.getItem("path"));
+
 });
 
 myApp.controller('saveController', function ($scope) {
@@ -240,7 +255,7 @@ myApp.controller('saveController', function ($scope) {
                     localStorage.setItem("docStatus", "notValidated");
                     thisDocument.save();
                     window.location.href = '#validation'
-                } 
+                }
             });
         })
             .catch(function (error) {
@@ -284,15 +299,44 @@ myApp.directive('showtab',
         };
     });
 myApp.controller('myAccountController', function ($scope) {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = mm + '/' + dd + '/' + yyyy;
+    if (localStorage.getItem("docStatus") == "certified") {
+
+        $("#date").text(today);
+        $("#hash").text("0xcctr..");
+        $("#yestab").text("Yes");
+        $("#docName").text(localStorage.getItem("fileName"));
+    }
+
     $("#next").click(function () {
         window.location.href = '#changePlan';
     });
+    function activaTab(tab) {
+        $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+    };
     if (localStorage.getItem("page") == "plan") {
-        $("#nav li").removeClass("active");
-        $("#planpg").addClass("active");
+        activaTab("plan")
     }
     $("#clickRow").click(function () {
-        window.location.href = '#certificationDetails';
+        if (localStorage.getItem("docStatus") == "certified")
+        {
+            window.location.href = '#certificationDetails';
+            localStorage.setItem("path", "myAccount");
+
+        }
     });
 });
 
@@ -306,7 +350,7 @@ myApp.controller('validationController', function ($scope) {
         window.location.href = '#certification';
         localStorage.setItem("docStatus", "certified");
 
-});
+    });
     $("#noValidate").click(function () {
         window.location.href = '#main';
         localStorage.setItem("docStatus", "notCertified");
@@ -316,9 +360,8 @@ myApp.controller('validationController', function ($scope) {
 
 
 myApp.controller('changePlanController', function ($scope) {
-
+    localStorage.setItem("page", "plan");
     $("#cancel").click(function () {
         window.location.href = '#myAccount';
-        localStorage.setItem("page", "plan");
     });
 });

@@ -15,25 +15,32 @@
         <div class="container">
             <ul id="nav" class="nav nav-tabs ">
                 <li class="active"><a showtab="" show-tab data-toggle="tab" href="#files">Files</a></li>
-                <li id="planpg"><a showtab="" show-tab  data-toggle="tab" href="#plan">Plan</a></li>
+                <li id="planpg"><a showtab="" show-tab data-toggle="tab" href="#plan">Plan</a></li>
                 <li><a showtab="" show-tab data-toggle="tab" href="#profile">Profile</a></li>
             </ul>
 
             <div class="tab-content">
                 <div id="files" class="tab-pane fade in active">
+                    <p>Click on any file below to see more details.</p>
                     <div class="table-responsive">
-                        <table style="margin-bottom:15px;" id="filesTable" class="table table-bordered">
-                            <tr id="clickRow">
+                        <table style="font-size:12px;" id="filesTable" class="table table-bordered">
+                            <tr>
                                 <th>File Name</th>
                                 <th>Date</th>
                                 <th>Hash</th>
                                 <th>Share?</th>
                             </tr>
-                            <tr class='clickable-row'>
+                            <tr id="clickRow" class='clickable-row'>
                                 <td id="docName"></td>
                                 <td id="date"></td>
-                                <td>0xcctr..</td>
-                                <td>Yes</td>
+                                <td id="hash"></td>
+                                <td id="yestab"></td>
+                            </tr>
+                            <tr class='clickable-row'>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             <tr class='clickable-row'>
                                 <td></td>
@@ -115,6 +122,20 @@
                     <button id="next" class="yes"><i class="fas fa-check-circle"></i> Next</button>
                 </div>
                 <div id="profile" class="tab-pane fade">
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Your profile has been updated successfully.</h4>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
                     <p> </p>
                     <input class="form-control" type="text" placeholder="Email" />
                     <input class="form-control" type="password" placeholder="Password" />
@@ -126,7 +147,7 @@
                         <option>Country</option>
                         <option>Country</option>
                     </select>
-                    <button id="Update" class="btn btn-warning btn-block">Update</button>
+                    <button data-toggle="modal" data-target="#myModal" id="Update" class="btn btn-warning btn-block">Update</button>
                     <br />
                     <p><i class="fas fa-download"></i>  Download Personal Information</p>
                     <p><i class="fas fa-trash"></i>  Delete Account</p>
