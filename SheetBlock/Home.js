@@ -166,6 +166,7 @@ myApp.controller('signupEmailController', function ($scope) {
 
 
 myApp.controller('mainController', function ($scope) {
+localStorage.setItem("docStatus", "notSaved");
     localStorage.setItem("page", "");
     Office.context.document.getFilePropertiesAsync(function (asyncResult) {
         var fileUrl = asyncResult.value.url;
@@ -176,6 +177,9 @@ myApp.controller('mainController', function ($scope) {
             localStorage.setItem("fileName", filename);
             $("#fileName").text(localStorage.getItem("fileName"));
         }
+else{
+localStorage.setItem("docStatus", "notValidated");
+}
     });
 
     switch (localStorage.getItem("docStatus")) {
