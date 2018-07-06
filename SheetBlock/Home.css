@@ -13,6 +13,7 @@ body {
     height: 40px;
 }
 .header {
+    z-index:111;
     position: fixed;
     left: 0;
     top: 0;
