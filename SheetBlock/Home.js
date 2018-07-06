@@ -121,6 +121,7 @@ myApp.config(function ($routeProvider) {
 // create the controller and inject Angular's $scope
 myApp.controller('loginController', function ($scope) {
     // create a message to display in our view
+    localStorage.removeItem("docStatus");
     var userName = "admin";
     var password = "admin";
     var input = $("#password");
@@ -140,7 +141,7 @@ myApp.controller('loginController', function ($scope) {
         if ($("#userName").val() === userName && $("#password").val() === password)
             window.location.href = '#main';
         else
-            showNotification("Invalid username or password", "");
+            $('#myModal').modal('show');
     });
 
 });
@@ -166,32 +167,26 @@ myApp.controller('signupEmailController', function ($scope) {
 
 
 myApp.controller('mainController', function ($scope) {
-localStorage.setItem("docStatus", "notSaved");
     localStorage.setItem("page", "");
     Office.context.document.getFilePropertiesAsync(function (asyncResult) {
         var fileUrl = asyncResult.value.url;
 
         if (fileUrl != "") {
-            var filename = fileUrl.split('\\');
+            var filename = fileUrl.split('/');
             filename = filename[filename.length - 1];
             localStorage.setItem("fileName", filename);
             $("#fileName").text(localStorage.getItem("fileName"));
+
         }
-else{
-localStorage.setItem("docStatus", "notValidated");
-}
+        else {
+            localStorage.setItem("docStatus", "notSaved");
+        }
     });
 
-    switch (localStorage.getItem("docStatus")) {
+ 
+    if (localStorage.getItem("docStatus") == "notCertified")
+        $("#certify").removeAttr("disabled");
 
-
-        case "notCertified":
-            $("#certify").removeAttr("disabled");
-            break;
-        default:
-            $("#certify").attr("disabled", "disabled");
-            break;
-    }
     $("#certify").click(function () {
         if (!($("#certify").is(":disabled"))) {
             window.location.href = "#certification";
@@ -335,8 +330,7 @@ myApp.controller('myAccountController', function ($scope) {
         activaTab("plan")
     }
     $("#clickRow").click(function () {
-        if (localStorage.getItem("docStatus") == "certified")
-        {
+        if (localStorage.getItem("docStatus") == "certified") {
             window.location.href = '#certificationDetails';
             localStorage.setItem("path", "myAccount");
 
