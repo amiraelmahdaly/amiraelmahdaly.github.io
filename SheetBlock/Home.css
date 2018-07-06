@@ -22,8 +22,12 @@ body {
 }
 
 .mainCon {
-    margin: 0 15px;
-    height: 100%;
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    bottom: 45px;
+    right: 15px;
+    left: 15px;
 }
 
 .header span {
