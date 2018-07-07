@@ -175,7 +175,7 @@ myApp.controller('mainController', function ($scope) {
             var filename = fileUrl.split('/');
             filename = filename[filename.length - 1];
             localStorage.setItem("fileName", filename);
-            $("#fileName").text(localStorage.getItem("fileName"));
+            $("#fileName").text("FileName: "+localStorage.getItem("fileName"));
 
         }
         else {
