@@ -68,7 +68,14 @@ myApp.config(function ($routeProvider) {
             templateUrl: 'Views/changePlan.html',
             controller: 'changePlanController'
         })
-
+        .when('/validation2', {
+            templateUrl: 'Views/validation2.html',
+            controller: 'validation2Controller'
+        })
+        .when('/certification2', {
+            templateUrl: 'Views/certification2.html',
+            controller: 'certification2Controller'
+        })
         // route for the about page
         .when('/signup', {
             templateUrl: 'Views/signup.html',
@@ -122,8 +129,12 @@ myApp.config(function ($routeProvider) {
 myApp.controller('loginController', function ($scope) {
     // create a message to display in our view
     localStorage.removeItem("docStatus");
+    localStorage.removeItem("flowType");
+
     var userName = "admin";
     var password = "admin";
+    var userName2 = "admin2";
+    var password2 = "admin2";
     var input = $("#password");
 
     // Execute a function when the user releases a key on the keyboard
@@ -140,6 +151,11 @@ myApp.controller('loginController', function ($scope) {
     $("#signIn").click(function () {
         if ($("#userName").val() === userName && $("#password").val() === password)
             window.location.href = '#main';
+        else if ($("#userName").val() === userName2 && $("#password").val() === password2) {
+            localStorage.setItem("docStatus", "flow2");
+            localStorage.setItem("flowType", "flow2");
+            window.location.href = '#main';
+        }
         else
             $('#myModal').modal('show');
     });
@@ -168,51 +184,69 @@ myApp.controller('signupEmailController', function ($scope) {
 
 myApp.controller('mainController', function ($scope) {
     localStorage.setItem("page", "");
-    Office.context.document.getFilePropertiesAsync(function (asyncResult) {
-        var fileUrl = asyncResult.value.url;
+    if (!(localStorage.getItem("flowType") == "flow2"))
+        Office.context.document.getFilePropertiesAsync(function (asyncResult) {
+            var fileUrl = asyncResult.value.url;
 
-        if (fileUrl != "") {
-            var filename = fileUrl.split('/');
-            filename = filename[filename.length - 1];
-            localStorage.setItem("fileName", filename);
-            $("#fileName").text("FileName: "+localStorage.getItem("fileName"));
+            if (fileUrl != "") {
+                var filename = fileUrl.split('/');
+                filename = filename[filename.length - 1];
+                localStorage.setItem("fileName", filename);
+                $("#fileName").text("Filename:" + localStorage.getItem("fileName"));
 
-        }
-        else {
-            localStorage.setItem("docStatus", "notSaved");
-        }
-    });
+            }
+            else {
+                localStorage.setItem("docStatus", "notSaved");
+            }
+        });
 
- 
+
     if (localStorage.getItem("docStatus") == "notCertified")
         $("#certify").removeAttr("disabled");
-
+    if ((localStorage.getItem("flowType") == "flow2") && (localStorage.getItem("docStatus") == "notCertified")) {
+        $("#validate").attr("disabled", "disabled");
+    }
+    if ((localStorage.getItem("flowType") == "flow2") && (localStorage.getItem("docStatus") == "certified")) {
+        $("#validate").attr("disabled", "disabled");
+        $("#certify").attr("disabled", "disabled");
+        $("h1").remove();
+        $("#parag").text("You have successfully signed this document");
+        $("#fileName").remove();
+    }
     $("#certify").click(function () {
         if (!($("#certify").is(":disabled"))) {
-            window.location.href = "#certification";
+            if (localStorage.getItem("flowType") == "flow2")
+                window.location.href = "#certification2";
+            else
+                window.location.href = "#certification";
             localStorage.setItem("docStatus", "certified");
         }
     });
 
 
     $("#validate").click(function () {
-        switch (localStorage.getItem("docStatus")) {
-            case "notSaved":
-                window.location.href = '#save';
-                break;
-            case "notValidated":
-                window.location.href = '#validation';
-                break;
-            case "notCertified":
-                window.location.href = '#validation';
-                break;
-            case "certified":
-                window.location.href = '#certificationDetails';
-                localStorage.setItem("path", "main");
-                break;
-            default:
-                window.location.href = '#validation';
-                break;
+        if (!($("#validate").is(":disabled"))) {
+            switch (localStorage.getItem("docStatus")) {
+                case "notSaved":
+                    window.location.href = '#save';
+                    break;
+                case "notValidated":
+                    window.location.href = '#validation';
+                    break;
+                case "notCertified":
+                    window.location.href = '#validation';
+                    break;
+                case "certified":
+                    window.location.href = '#certificationDetails';
+                    localStorage.setItem("path", "main");
+                    break;
+                case "flow2":
+                    window.location.href = '#validation2';
+                    break;
+                default:
+                    window.location.href = '#validation';
+                    break;
+            }
         }
     });
 });
@@ -226,6 +260,18 @@ myApp.controller('certificationController', function ($scope) {
 
     $("#next").click(function () {
         window.location.href = "#share";
+    });
+});
+myApp.controller('certification2Controller', function ($scope) {
+    setTimeout(function () {
+        $("#Loader").css("display", "none");
+        $("#display").css("display", "block");
+        $("#title").text("Certification Completed");
+    }, 2000);
+
+    $("#done").click(function () {
+        window.location.href = "#main";
+        localStorage.setItem("docStatus", "certified")
     });
 });
 
@@ -346,6 +392,24 @@ myApp.controller('validationController', function ($scope) {
 
     $("#yesValidate").click(function () {
         window.location.href = '#certification';
+        localStorage.setItem("docStatus", "certified");
+
+    });
+    $("#noValidate").click(function () {
+        window.location.href = '#main';
+        localStorage.setItem("docStatus", "notCertified");
+
+    });
+});
+
+myApp.controller('validation2Controller', function ($scope) {
+    setTimeout(function () {
+        $("#Loader").css("display", "none");
+        $("#display").css("display", "block");
+    }, 2000);
+
+    $("#yesValidate").click(function () {
+        window.location.href = '#certification2';
         localStorage.setItem("docStatus", "certified");
 
     });
