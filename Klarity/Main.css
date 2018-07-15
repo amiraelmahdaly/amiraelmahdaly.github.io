@@ -1,0 +1,18 @@
+﻿body {
+    padding: 20px;
+    overflow-y: hidden;
+}
+
+.nav li a {
+    padding: 7px;
+}
+
+.nav-tabs > li {
+    float: none;
+    display: inline-block;
+    zoom: 1;
+}
+
+.nav-tabs {
+    text-align: center;
+}
