@@ -74,13 +74,18 @@ Storage.prototype.getObj = function (key) {
 }
 
 app.service('AngularServices', ['$http', function ($http) {
+    
     var API = {
         GET: function (EndPoint) {
-            
+            var URI;
+            if (arguments.length == 1)
+                URI = BaseURI + EndPoint;
+            else
+                URI = BaseURI + EndPoint + "/" + FormatParams(arguments);
             return $http(
                 {
                     method: 'GET',
-                    url: BaseURI + EndPoint + "/" + FormatParams(arguments),
+                    url: URI,
                     headers: {
                         //'If-Modified-Since': 'Mon, 26 Jul 1997 05:00:00 GMT',
                         'Cache-Control': 'no-cache',

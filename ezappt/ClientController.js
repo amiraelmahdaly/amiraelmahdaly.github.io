@@ -1,64 +1,62 @@
 ﻿
 var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
 
-    var staffID = getQueryStringValue("staffID");
-    var grouped = [];
-    $scope.allAppts = [];
-    $scope.pickedDateAppts = [];
-    var editApptDialog;
-    var editApptDialogUrl = DeploymentHost + "editAppt.html";
-    var editApptDialogUrlStringified = "";
+
+    // Variables 
+    $scope.lastAppointment = {};
+    $scope.ClientInfo = {};
+
+    // Event Handlers
     $(document).ready(function () {
-        getAllAppts();
-        $("#datepicker1").datepicker({
-            defaultDate: "0d",
-            dateFormat: "m/d/yy",
-            onSelect: function (date) {
-                getPickedAppts(date);
-                $scope.$applyAsync();
+        AngularServices.GET("GetAllClients").then(function (data) {
+            FillAutoCompleteWidget(data.GetAllClientsResult);
+        });
+    });
+
+    function FillAutoCompleteWidget(Clients) {
+        $('#tags').autocomplete({
+                source: function (request, response) {
+                    var re = $.ui.autocomplete.escapeRegex(request.term);
+                    var matcher = new RegExp("^" + re, "i");
+                    response($.grep(($.map(Clients, function (c, i) {
+                        return {
+                            label: c.lastName + "," + c.firstName,
+                            value: c.lastName + "," + c.firstName,
+                            id: c.clientID
+                        };
+                    })), function (item) {
+                        return matcher.test(item.label);
+                    }))
+
+            },
+                select: function (event, ui) {
+             $("#tags").val(ui.item.label); 
+                    AngularServices.GET("GetClientForm", ui.item.id).then(function (data) {
+                  
+                        $scope.ClientInfo = data.GetClientFormResult;
+                    });
+                    AngularServices.GET("GetClientLastAppointmet", ui.item.id).then(function (data) {
+                        $scope.lastAppointment = data.GetClientLastAppointmetResult;
+                        $("#clientInfo").css("display","block")
+                     //   $scope.$applyAsync();
+                    });
+                
+                return false;
             }
-        });
-        $("#datepicker1").datepicker("setDate", "0d");
-    });
-    function ShowEditApptDialog() {
-      
-        Office.context.ui.displayDialogAsync(editApptDialogUrlStringified, { height: 60, width: 60, displayInIframe: true },
-                function (asyncResult) {
-                    editApptDialog = asyncResult.value;
-                   // editApptDialog.addEventHandler(Office.EventType.DialogMessageReceived, processRealDocsDialogMessage);
-                    //editApptDialog.addEventHandler(Office.EventType.DialogEventReceived, MyAgreementsDialogClosed);
 
-
-                }
-            );
-        
-
-
-    }
-    function getAllAppts() {
-        AngularServices.GET("GetAppointments", staffID).then(function (data) {
-            $scope.allAppts = data.GetAppointmentsResult;
-            getPickedAppts($("#datepicker1").val());
-            $scope.$applyAsync();
-        });
-    }
-
-    function getPickedAppts(date) {
-        $scope.pickedDateAppts = $scope.allAppts.filter(function (value) { return value.dtStart.indexOf(date) >= 0 })
-    }
-    $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
-        $(".clickable-row").unbind().click(function () {
-            var serviceID = Number($(this).attr("id"));
-            var appt = $scope.allAppts.filter(function (obj) {
-                return obj.serviceid == serviceID;
             });
+    }
+ 
 
-            editApptDialogUrlStringified = editApptDialogUrl + "?appt=" + encodeURIComponent(JSON.stringify(appt[0]));
-            ShowEditApptDialog();
-            
-        });
-    });
+
+
+
 
 }];
 
 app.controller("myCtrl", myCtrl);
+
+
+ 
+
+   
