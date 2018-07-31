@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Word Add-In with Commands Sample</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+    <script src="MessageBanner.js" type="text/javascript"></script>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+
+    <!-- To enable offline debugging using a local reference to Office.js, use:                        -->
+    <!-- <script src="Scripts/Office/MicrosoftAjax.js" type="text/javascript"></script>  -->
+    <!-- <script src="Scripts/Office/1/office.js" type="text/javascript"></script>  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link href="Home.css" rel="stylesheet" type="text/css" />
+    <script src="Common.js" type="text/javascript"></script>
+
+    <script src="HomeController.js" type="text/javascript"></script>
+
+    <!-- For the Office UI Fabric, go to https://aka.ms/office-ui-fabric to learn more. -->
+    <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.min.css">
+    <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.components.min.css">
+
+    <!-- To enable the offline use of Office UI Fabric, use: -->
+    <!-- link rel="stylesheet" href="Content/fabric.min.css" -->
+    <!-- link rel="stylesheet" href="Content/fabric.components.min.css" -->
+</head>
+<body class="container" data-ng-app="myApp" data-ng-controller="myCtrl">
+    <h4>Preview <i id="toggle" class="glyphicon glyphicon-pencil" title="Edit abbreviations"></i></h4>
+    <div id="btnsCon">
+        <div data-ng-row="{{Rows.indexOf(row)}}" ng-repeat="row in Rows">
+        
+            <button ng-click="AddComment()" data-ng-col="{{row.indexOf(col)}}"  ng-repeat="col in row" title="{{col.Comment}}"  class="buttons btn btn-primary btn-xs">{{col.Name}}</button>
+            <p></p>
+            <p></p>
+        </div>
+    </div>
+
+    <div id="config" style="display:none;">
+        <div class="rowConfig" ng-repeat="row in Rows" data-ng-row="{{Rows.indexOf(row)}}">
+         
+            <div  class="row" ng-repeat="col in row" data-ng-col="{{row.indexOf(col)}}">
+               
+                <input ng-click="heighlightBtn($event)" ng-model="col.Name" type="text" class="col-xs-3" />
+                <input ng-click="heighlightBtn($event)" ng-model="col.Comment" type="text" class=" col-xs-7" />
+                <div class="col-xs-1">
+                    <i ng-click="DeleteCtrl($event)" class="classDeleteCtrl fas fa-times"></i>
+                </div>
+            </div>
+            <div class="row">
+                <div style="padding-left:5px" class="col-xs-1"><i ng-click="AddCtrls($event)"  class="classAddCtrls fas fa-plus"></i></div>
+                <div class="col-xs-9"></div>
+                <div style="margin-left:9px;" class="col-xs-1"><i style="font-size:17px;"  ng-click="DeleteRow($event)" class="classDeleteRow fas fa-times"></i></div>
+            </div>
+        </div>
+        <i ng-click="AddRow()" style="font-size:17px;" class="fas fa-plus"></i>
+
+        <div class="text-center">
+            <button ng-click="Apply()" class="btn btn-primary btn-sm">Apply</button>
+            <button ng-click="Cancel()" class="btn btn-primary btn-sm">Cancel</button>
+        </div>
+    </div>
+
+
+
+    <!-- FabricUI component used for displaying notifications -->
+    <div class="ms-MessageBanner" id="notification-popup">
+        <div class="ms-MessageBanner-content">
+            <div class="ms-MessageBanner-text">
+                <div class="ms-MessageBanner-clipper">
+                    <div class="ms-font-m-plus ms-fontWeight-semibold" id="notification-header"></div>
+                    <div class="ms-font-m ms-fontWeight-semilight" id="notification-body"></div>
+                </div>
+            </div>
+            <button class="ms-MessageBanner-expand" style="display:none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
+            <div class="ms-MessageBanner-action"></div>
+        </div>
+        <button class="ms-MessageBanner-close"> <i class="ms-Icon ms-Icon--x"></i> </button>
+    </div>
+</body>
+</html>

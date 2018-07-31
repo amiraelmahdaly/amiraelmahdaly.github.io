@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Klarity</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/js/fabric.min.js"></script>
+    <script src="MessageBanner.js" type="text/javascript"></script>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="Main.css" rel="stylesheet" type="text/css" />
+    <script src="Common.js" type="text/javascript"></script>
+
+    <script src="MainController.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.min.css">
+    <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.components.min.css">
+
+
+
+</head>
+<body class="container text-center" data-ng-app="myApp" data-ng-controller="myCtrl">
+    <div>
+        <p>Hi {{userName}}</p>
+    </div>
+    <div id="tabsCon">
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#annotate">Annotate</a></li>
+            <li><a data-toggle="tab" href="#insert">Insert</a></li>
+            <li><a data-toggle="tab" href="#config">Config</a></li>
+            <li><a data-toggle="tab" href="#preview">Preview</a></li>
+        </ul>
+
+        <div class="tab-content text-center">
+            <div id="annotate" class="tab-pane fade in active">
+                <br />
+                <div class="row">
+                    <div class="col-xs-3">
+                        Entity:
+                    </div>
+                    <div class="col-xs-9">
+                        <select class="form-control" id="entity">
+                            <option>Cores</option>
+                            <option>Regions</option>
+                        </select>
+                    </div>
+                </div>
+
+                <br />
+                <div class="row">
+                    <div class="col-xs-3">
+                        Tag Name:
+                    </div>
+                    <div class="col-xs-9">
+                        <select style="display:none;" class="form-control tagSel" id="Cores">
+                            <option ng-repeat="core in config.annotations.cores">{{core.core_name}}</option>
+                        </select>
+                        <select style="display:none;" class="form-control tagSel" id="Regions">
+                            <option ng-repeat="region in config.annotations.regions">{{region}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <br />
+                <div  style="display:none;"  class="row modifierSel" id="{{core.core_name.split(' ').join('')}}"   ng-repeat="core in config.annotations.cores">
+                    <div class="col-xs-3">
+                        Modifier:
+                    </div>
+                    <div class="col-xs-6">
+                        <select class="form-control">
+                            <option ng-repeat="modifier in core.modifiers">{{modifier}}</option>
+                        </select>
+                    </div>
+                    <div  class="col-xs-3">
+                        <button id="addModifierBtn" class="btn btn-primary">+</button>
+                    </div>
+                </div>
+                <br />
+                <button id="generateCommentBtn" class="btn btn-primary">Generate Comment</button>
+            </div>
+            <div id="insert" class="tab-pane fade">
+                <br />
+                <select id="clause" class="form-control ">
+                    <option>Clause Name</option>
+                    <option ng-repeat="clause in config.insertions">{{clause.insertion_name}}</option>
+                </select>
+                <br />
+                <div style="display:none;" class="clauses" id="{{clause.insertion_name.split(' ').join('')}}" ng-repeat="clause in config.insertions" on-finish-render="ngRepeatFinished">
+                    <ul class="text-center gfield_radio" id="input_1_10">
+                        <li id="hi" ng-repeat="option in clause.options" class="gchoice_10_{{$index}}">
+                            <input name="input_10" type="radio" id="choice_1_10_{{$index}}">
+                            <label for="choice_1_10_{{$index}}" id="label_1_10_{{$index}}">
+                                <span>{{option.option_name}}</span>
+                            </label>
+                        </li>
+                    </ul>
+                    <br />
+                    <div id="clauseTxt"></div>
+                    <br />
+                    <button class="btn btn-primary">Insert Clause</button>
+                </div>
+            </div>
+            <div id="config" class="tab-pane fade text-left">
+                <br />
+                <div class="row">
+                    <div class="col-xs-4">
+                        Contract type:
+                    </div>
+                    <div class="col-xs-8">
+                        <select id="contractSel" class="form-control">
+                            <option id="{{option}}" ng-repeat="option in config.contract_type_options">{{option}}</option>
+                        </select>
+                    </div>
+                </div>
+                <p> </p>
+                <div class="row">
+                    <div class="col-xs-4">
+                        Client Name:
+                    </div>
+                    <div class="col-xs-8">
+                        <input type="text" class="form-control" ng-model="config.client_name"/>
+                    </div>
+                </div>
+                <p> </p>
+                <div class="row">
+                    <div class="col-xs-4">
+                        Client Full Name:
+                    </div>
+                    <div class="col-xs-8">
+                        <input type="text" class="form-control" ng-model="config.client_full_name" />
+                    </div>
+                </div>
+                <p> </p>
+                <div class="row">
+                    <div class="col-xs-4">
+                        Client Address
+                    </div>
+                    <div class="col-xs-8">
+                        <textarea rows="4" type="text" class="form-control" ng-model="config.client_address" ></textarea>
+                    </div>
+                </div>
+                <p> </p>
+                <h3>Preferences</h3>
+                <div class="checkbox">
+                    <label><input type="checkbox" ng-model="config.comments">Real­time update of comment text</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="" ng-model="config.body_highlights">Apply Highlights to Main Body</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="" ng-model="config.comment_highlights">Apply Highlights to Comments</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="" ng-model="config.async_anno">Async Annotation</label>
+                </div>
+                <br />
+                <div class="row text-center">
+                    <button id="saveBtn" class="btn btn-primary">Save Changes</button>
+                    <a href="{{file.filepath}}" download="" class="btn btn-primary">Download Risk Policy</a>
+                </div>
+            </div>
+            <div id="preview" class="tab-pane fade">
+                <h3>Menu 3</h3>
+                <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            </div>
+        </div>
+    </div>
+    <!-- FabricUI component used for displaying notifications -->
+    <div class="ms-MessageBanner" style="position:absolute;bottom: 0;left:0">
+        <div class="ms-MessageBanner-content">
+            <div class="ms-MessageBanner-text">
+                <div class="ms-MessageBanner-clipper">
+                    <div class="ms-font-m-plus ms-fontWeight-semibold" id="notificationHeader"></div>
+                    <div class="ms-font-m ms-fontWeight-semilight" id="notificationBody"></div>
+                </div>
+            </div>
+            <button class="ms-MessageBanner-expand" style="display:none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
+            <div class="ms-MessageBanner-action"></div>
+        </div>
+        <button class="ms-MessageBanner-close"> <i class="ms-Icon ms-Icon--x"></i> </button>
+    </div>
+
+</body>
+</html>
