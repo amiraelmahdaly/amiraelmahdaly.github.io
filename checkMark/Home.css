@@ -1,0 +1,55 @@
+﻿body {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#config {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top:15px;
+   
+}
+
+.rowConfig {
+    border-left: 5px solid #3c64a0;
+    padding-left: 15px;
+    margin-bottom:10px;
+    padding-right:10px;
+}
+
+.row {
+    padding-bottom: 5px;
+}
+
+    .row input {
+        margin-left: 5px;
+    }
+
+.fa-times {
+    color: darkred;
+}
+
+    .fa-times:hover {
+        color: red;
+        cursor: pointer;
+    }
+
+.fa-plus {
+    color: darkgreen;
+}
+
+    .fa-plus:hover {
+        color:limegreen;
+        cursor: pointer;
+    }
+.glyphicon-pencil:hover{
+    font-weight:bold;
+    cursor:pointer;
+}
+.buttons{
+    margin-right:5px;
+    margin-bottom:5px;
+}
