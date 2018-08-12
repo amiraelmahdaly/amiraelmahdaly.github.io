@@ -1,13 +1,14 @@
 ﻿
 var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
 
-    var staffID = getQueryStringValue("staffID");
-    var userID = getQueryStringValue("userID");
+    $scope.staffID = getQueryStringValue("staffID");
+    $scope.userID = getQueryStringValue("userID");
+    $scope.userName = getQueryStringValue("userName");
     var grouped = [];
     $scope.allAppts = [];
     $scope.pickedDateAppts = [];
     var editApptDialog;
-    var editApptDialogUrl = DeploymentHost + "editAppt.html?staffID=" + staffID + "&userID=" + userID;
+    var editApptDialogUrl = DeploymentHost + "editAppt.html?staffID=" + $scope.staffID + "&userID=" + $scope.userID;
     var editApptDialogUrlStringified = "";
     $(document).ready(function () {
         $("#datepicker1").datepicker({
@@ -38,7 +39,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
         getAllAppts();
     }
     function getAllAppts() {
-        AngularServices.GET("GetAppointments", staffID).then(function (data) {
+        AngularServices.GET("GetAppointments", $scope.staffID).then(function (data) {
             $scope.allAppts = data.GetAppointmentsResult;
             getPickedAppts($("#datepicker1").val());
             $scope.$applyAsync();

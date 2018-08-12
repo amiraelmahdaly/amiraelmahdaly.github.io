@@ -5,12 +5,20 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     // Variables 
     $scope.lastAppointment = {};
     $scope.ClientInfo = {};
-
+    $scope.Client = {};
+    var staffID = getQueryStringValue("staffID");
+    var userID = getQueryStringValue("userID");
+    var userName = getQueryStringValue("userName");
     // Event Handlers
     $(document).ready(function () {
         AngularServices.GET("GetAllClients").then(function (data) {
             FillAutoCompleteWidget(data.GetAllClientsResult);
         });
+
+        $("#btnBook").click(function () {
+            Redirect("Booking.html?userName=" + userName + "&staffID=" + staffID + "&userID=" + userID + "&clientName=" + $scope.Client.clientName + "&clientID=" + $scope.Client.clientID)
+        });
+
     });
 
     function FillAutoCompleteWidget(Clients) {
@@ -29,17 +37,19 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
                     }))
 
             },
-                select: function (event, ui) {
+            select: function (event, ui) {
+                $scope.Client.clientID = ui.item.id;
+                $scope.Client.clientName = ui.item.label;
              $("#tags").val(ui.item.label); 
-                    AngularServices.GET("GetClientForm", ui.item.id).then(function (data) {
-                  
-                        $scope.ClientInfo = data.GetClientFormResult;
-                    });
-                    AngularServices.GET("GetClientLastAppointmet", ui.item.id).then(function (data) {
-                        $scope.lastAppointment = data.GetClientLastAppointmetResult;
-                        $("#clientInfo").css("display","block")
-                     //   $scope.$applyAsync();
-                    });
+                AngularServices.GET("GetClientForm", ui.item.id).then(function (data) {
+
+                    $scope.ClientInfo = data.GetClientFormResult;
+                });
+                AngularServices.GET("GetClientLastAppointmet", ui.item.id).then(function (data) {
+                    $scope.lastAppointment = data.GetClientLastAppointmetResult;
+                    $("#clientInfo").css("display", "block")
+                    //   $scope.$applyAsync();
+                });
                 
                 return false;
             }

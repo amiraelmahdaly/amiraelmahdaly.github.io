@@ -20,7 +20,7 @@
                     showNotification("Notification", "Incorrect Password");
                     break;
                 case 0:
-                    Redirect("DailySchedule.html?staffID=" + data.ValidateUserPasswordResult.staffID + "&userID=" + data.ValidateUserPasswordResult.UserId)
+                    Redirect("DailySchedule.html?staffID=" + data.ValidateUserPasswordResult.staffID + "&userID=" + data.ValidateUserPasswordResult.UserId + "&userName=" + $scope.Email)
                     break;
                 default:
             }

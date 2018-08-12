@@ -1,64 +1,123 @@
 ﻿
 var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
 
+
+    // Variables 
+    $scope.lastAppointment = {};
+    $scope.ClientInfo = {};
     var staffID = getQueryStringValue("staffID");
-    var grouped = [];
-    $scope.allAppts = [];
-    $scope.pickedDateAppts = [];
-    var editApptDialog;
-    var editApptDialogUrl = DeploymentHost + "editAppt.html";
-    var editApptDialogUrlStringified = "";
+    var userID = getQueryStringValue("userID");
+    var clientName = getQueryStringValue("clientName");
+    var clientID = getQueryStringValue("clientID");
+    $scope.userName = getQueryStringValue("userName");
+    $scope.services = [];
+    $scope.locations = [];
+    $scope.currentDate = "";
+    $scope.serviceName = '';
+    $scope.serviceTime = '';
+    $scope.dateID = '';
+    $scope.clientID = '';
+    $scope.time = "";
+    $scope.notes = ""
+    // Event Handlers
     $(document).ready(function () {
-        getAllAppts();
-        $("#datepicker1").datepicker({
-            defaultDate: "0d",
-            dateFormat: "m/d/yy",
-            onSelect: function (date) {
-                getPickedAppts(date);
-                $scope.$applyAsync();
-            }
+        $("#tags").val(clientName);
+        $scope.clientID = clientID;
+        AngularServices.GET("GetAllClients").then(function (data) {
+            FillAutoCompleteWidget(data.GetAllClientsResult);
+            
+
         });
-        $("#datepicker1").datepicker("setDate", "0d");
-    });
-    function ShowEditApptDialog() {
-      
-        Office.context.ui.displayDialogAsync(editApptDialogUrlStringified, { height: 60, width: 60, displayInIframe: true },
-                function (asyncResult) {
-                    editApptDialog = asyncResult.value;
-                   // editApptDialog.addEventHandler(Office.EventType.DialogMessageReceived, processRealDocsDialogMessage);
-                    //editApptDialog.addEventHandler(Office.EventType.DialogEventReceived, MyAgreementsDialogClosed);
-
-
-                }
-            );
-        
-
-
-    }
-    function getAllAppts() {
-        AngularServices.GET("GetAppointments", staffID).then(function (data) {
-            $scope.allAppts = data.GetAppointmentsResult;
-            getPickedAppts($("#datepicker1").val());
-            $scope.$applyAsync();
+        AngularServices.GET("GetSatffServices", staffID).then(function (data) {
+            $scope.services = data.GetSatffServicesResult;
         });
-    }
-
-    function getPickedAppts(date) {
-        $scope.pickedDateAppts = $scope.allAppts.filter(function (value) { return value.dtStart.indexOf(date) >= 0 })
-    }
-    $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
-        $(".clickable-row").unbind().click(function () {
-            var serviceID = Number($(this).attr("id"));
-            var appt = $scope.allAppts.filter(function (obj) {
-                return obj.serviceid == serviceID;
+        AngularServices.GET("GetAllStaffLocations", staffID).then(function (data) {
+            $scope.locations = data.GetAllStaffLocationsResult;
+        });
+        $('#datepick').datepicker({
+            inline: true,
+            dateFormat: "mm-dd-yy"
+        });
+        $("#btnSearch").click(function () {
+            $scope.currentDate = $('#datepick').val();
+            $scope.serviceName = $("#services").find(":selected").val();
+            $scope.serviceTime = $scope.services[$("#services").find(":selected").index()-1].serviceTime;
+            $scope.serviceID = $("#services").find(":selected").attr("id");
+            $scope.locationID = $("#locations").find(":selected").attr("id");
+            //if ($scope.locationID == undefined)
+            //    $scope.locationID = 20010;
+            AngularServices.GET("GetAvailableHoursByDate", $scope.currentDate, staffID, $scope.locationID).then(function (data) {
+                $scope.dateID = data.GetAvailableHoursByDateResult.Date_ID;
             });
+            AngularServices.GET("GetAvailableHoursByDate1", $scope.currentDate, staffID, $scope.locationID, $scope.serviceID).then(function (data) {
+                $scope.times = data.GetAvailableHoursByDate1Result;
+                $("#date").removeAttr("style");
+            });
+        });
+        $("#btnCancel").click(function () {
+            $("#confirm").css("display", "none");
+            $("#date").removeAttr("style");
+        });
 
-            editApptDialogUrlStringified = editApptDialogUrl + "?appt=" + encodeURIComponent(JSON.stringify(appt[0]));
-            ShowEditApptDialog();
+        $("#btnConfirm").click(function () {
+            var minsToAdd = Number($scope.serviceTime);
+            var endTime = new Date(new Date("1970/01/01 " + $scope.time).getTime() + minsToAdd * 60000).toLocaleTimeString('en-UK', { hour: '2-digit', minute: '2-digit', hour12: true });
+            var appt = { "DateID": $scope.dateID, "appointmentid": 0, "category": 1, "client": "", "clientid": $scope.clientID, "dtEnd": $scope.currentDate +" " + endTime, "dtStart": $scope.currentDate + " " + $scope.time, "isEzapptAppointment": true, "location": "", "locationid": $scope.locationID, "notes": $scope.notes, "service": "", "serviceid": $scope.serviceID }
+            AngularServices.POST("SetAppointment",
+                {
+                    "appointmentJson": appt,
+                    "staffID": staffID,
+                    "userID": userID
+
+                }).then(function (data) {
+                    $("#confirm").css("display", "none");
+                    $("#date").css("display", "none");
+                    showNotification("Notification", "Booked Successfully");
+                    $scope.notes = "";
+                });
             
         });
     });
+    $scope.apptDetails = function () {
+        $scope.time = this.time;
+        $("#date").css("display", "none");
+        $("#confirm").removeAttr("style");
+    }
+    function FillAutoCompleteWidget(Clients) {
+        $('#tags').autocomplete({
+            source: function (request, response) {
+                var re = $.ui.autocomplete.escapeRegex(request.term);
+                var matcher = new RegExp("^" + re, "i");
+                response($.grep(($.map(Clients, function (c, i) {
+                    return {
+                        label: c.lastName + "," + c.firstName,
+                        value: c.lastName + "," + c.firstName,
+                        id: c.clientID
+                    };
+                })), function (item) {
+                    return matcher.test(item.label);
+                }))
+
+            },
+            select: function (event, ui) {
+                $("#tags").val(ui.item.label);
+                $scope.clientID = ui.item.id;
+                return false;
+            }
+
+        });
+    }
+
+
+
+
+
 
 }];
 
 app.controller("myCtrl", myCtrl);
+
+
+
+
+
