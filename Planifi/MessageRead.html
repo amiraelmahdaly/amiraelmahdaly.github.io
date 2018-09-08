@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title></title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/js/fabric.min.js"></script>
+    <script src="MessageBanner.js" type="text/javascript"></script>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="MessageRead.css" />
+ 
+    <script src="Common.js" type="text/javascript"></script>
+    <script src="MessageReadController.js" type="text/javascript"></script>
+</head>
+<body class="container text-center" data-ng-app="myApp" data-ng-controller="myCtrl">
+    <div>
+        <img src="Images/Planfi_Logo_web.png" class="img-responsive" />
+    </div>
+    <div class="text-center">
+        <form>
+            <div class="form-group text-left">
+                <div class="input-group">
+                    <label for="project">Select Project:</label>
+                    <div class="input-group addon">
+                        <span class="input-group-addon"><i class="fas fa-book"></i></span>
+                        <select class="form-control" id="project">
+                            <option ng-repeat="project in Projects" id="{{project.Value}}">{{project.Text}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group text-left">
+                <div class="input-group">
+                    <label for="phase">Select Phase:</label>
+                    <div class="input-group addon">
+                        <span class="input-group-addon"><i class="fas fa-book"></i></span>
+                        <select class="form-control" id="phase">
+                            <option ng-repeat="phase in ProjectPhases" id="{{phase.Value}}">{{phase.Text}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <p> </p>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group addon">
+                        <span class="input-group-addon"><i class="fas fa-tag"></i></span>
+                        <input class="form-control" type="text" placeholder="Add tags" />
+                    </div>
+                </div>
+            </div>
+            <p> </p>
+            <div class="form-group text-right">
+                <div class="input-group">
+                    <div class="input-group addon">
+                        <span class="input-group-addon"><i class="far fa-comment-alt"></i></span>
+                        <textarea class="form-control" type="text" placeholder="Add remarks" maxlength="1000" ng-model="charCount" rows="3"></textarea>
+                    </div>
+                </div>
+                <span>{{charCount.length}} of 1000</span>
+            </div>
+
+            <button id="btnSave" class="btn btn-success btn-block">Save</button>
+            <p> </p>
+            <button id="btnSaveSend" class="btn btn-success btn-block">Save & Send</button>
+        </form>
+    </div>
+    <!-- FabricUI component used for displaying notifications -->
+    <div class="ms-MessageBanner" style="position:absolute;bottom: 0;left:0; display:none;">
+        <div class="ms-MessageBanner-content">
+            <div class="ms-MessageBanner-text">
+                <div class="ms-MessageBanner-clipper">
+                    <div class="ms-font-m-plus ms-fontWeight-semibold" id="notificationHeader"></div>
+                    <div class="ms-font-m ms-fontWeight-semilight" id="notificationBody"></div>
+                </div>
+            </div>
+            <button class="ms-MessageBanner-expand" style="display:none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
+            <div class="ms-MessageBanner-action"></div>
+        </div>
+        <button class="ms-MessageBanner-close"> <i class="ms-Icon ms-Icon--x"></i> </button>
+    </div>
+
+</body>
+</html>
