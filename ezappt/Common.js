@@ -18,7 +18,7 @@ app.directive('onFinishRender', function ($timeout) {
 var DeploymentHost = "https://amiraelmahdaly.github.io/ezappt/";
 //var DeploymentHost = "https://localhost:44391/";
 var messageBanner;
-var BaseURI = "https://dakota-wcf.ezsoftco.com/WCFEzapptJsonService.svc/";
+var BaseURI = "https://anoka-wcf.ezsoftco.com/WCFEzapptJsonService.svc/";
 // Error Handling Region
 $(document).ready(function () {
     var element = document.querySelector('.ms-MessageBanner');
@@ -34,7 +34,7 @@ function hideErrorMessage() {
 }
 // Helper function for treating errors
 function errorHandler(error) {
-    showNotification("Error", error);
+        showNotification("Error", error);
 }
 // Helper function for displaying notifications
 function showNotification(header, content) {
@@ -105,6 +105,18 @@ app.service('AngularServices', ['$http', function ($http) {
             })
                 .then(function (response) {
                     return response.data;
+                }).catch(errorHandler);
+        },
+
+        POSTDATA: function (EndPoint, headers,data) {
+            return $http({
+                method: 'POST',
+                url:  EndPoint,
+                data: data,
+                headers: headers
+            })
+                .then(function (response) {
+                    return response;
                 }).catch(errorHandler);
         }
     
