@@ -158,14 +158,14 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
             }
         }).done(function (item) {
             console.log(item);
-            //AngularServices.POST("RemoveSyncItemsFromDb", { "apptIdsJson": [$scope.allAppts[k].Appointmentid] }).then(function (data) {
-
-            //});
-            k++;
-            if (k < $scope.allAppts.length)
-                CreateEvent(k)
-            else
-                showNotification("outlook sync completed");
+            AngularServices.POST("RemoveApptSyncItemsFromDb", { "apptIdsJson": [$scope.allAppts[k].appointmentid] }).then(function (data) {
+                k++;
+                if (k < $scope.allAppts.length)
+                    CreateEvent(k);
+                else
+                    showNotification("outlook sync completed");
+            });
+            
         }).fail(errorHandler);
 
 
