@@ -34,7 +34,7 @@ function hideErrorMessage() {
 }
 // Helper function for treating errors
 function errorHandler(error) {
-        showNotification("Error", error);
+    showNotification("Error", error.responseText);
 }
 // Helper function for displaying notifications
 function showNotification(header, content) {
@@ -42,7 +42,7 @@ function showNotification(header, content) {
     $("#notificationBody").text(content);
     messageBanner.showBanner();
     messageBanner.toggleExpansion();
-    hideErrorMessage();
+    //hideErrorMessage();
 }
 function FormatParams(params) {
     var par = "";
