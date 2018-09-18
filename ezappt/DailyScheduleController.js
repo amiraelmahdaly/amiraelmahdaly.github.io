@@ -158,7 +158,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
             }
         }).done(function (item) {
             console.log(item);
-            AngularServices.POST("RemoveApptSyncItemsFromDb", { "apptIdsJson": [$scope.allAppts[k].appointmentid] }).then(function (data) {
+            AngularServices.POST("RemoveApptSyncItemsFromDb", { "apptIdsJson": JSON.stringify([$scope.allAppts[k].appointmentid]) }).then(function (data) {
                 k++;
                 if (k < $scope.allAppts.length)
                     CreateEvent(k);
