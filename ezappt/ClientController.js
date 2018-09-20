@@ -6,9 +6,9 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     $scope.lastAppointment = {};
     $scope.ClientInfo = {};
     $scope.Client = {};
-    var staffID = getQueryStringValue("staffID");
-    var userID = getQueryStringValue("userID");
-    var userName = getQueryStringValue("userName");
+    $scope.staffID = getQueryStringValue("staffID");
+    $scope.userID = getQueryStringValue("userID");
+    $scope.userName = getQueryStringValue("userName");
     // Event Handlers
     $(document).ready(function () {
         AngularServices.GET("GetAllClients").then(function (data) {
@@ -16,7 +16,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
         });
 
         $("#btnBook").click(function () {
-            Redirect("Booking.html?userName=" + userName + "&staffID=" + staffID + "&userID=" + userID + "&clientName=" + $scope.Client.clientName + "&clientID=" + $scope.Client.clientID)
+            Redirect("Booking.html?userName=" + $scope.userName + "&staffID=" + $scope.staffID + "&userID=" + $scope.userID + "&clientName=" + $scope.Client.clientName + "&clientID=" + $scope.Client.clientID)
         });
 
     });
@@ -47,7 +47,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
                 });
                 AngularServices.GET("GetClientLastAppointmet", ui.item.id).then(function (data) {
                     $scope.lastAppointment = data.GetClientLastAppointmetResult;
-                    $("#clientInfo").css("display", "block")
+                    $("#clientInfo").css("display", "block");
                     //   $scope.$applyAsync();
                 });
                 

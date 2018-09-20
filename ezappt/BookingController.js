@@ -5,10 +5,10 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     // Variables 
     $scope.lastAppointment = {};
     $scope.ClientInfo = {};
-    var staffID = getQueryStringValue("staffID");
-    var userID = getQueryStringValue("userID");
-    var clientName = getQueryStringValue("clientName");
-    var clientID = getQueryStringValue("clientID");
+    $scope.staffID = getQueryStringValue("staffID");
+    $scope.userID = getQueryStringValue("userID");
+    $scope.clientName = getQueryStringValue("clientName");
+    $scope.clientID = getQueryStringValue("clientID");
     $scope.userName = getQueryStringValue("userName");
     $scope.services = [];
     $scope.locations = [];
@@ -16,22 +16,20 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     $scope.serviceName = '';
     $scope.serviceTime = '';
     $scope.dateID = '';
-    $scope.clientID = '';
     $scope.time = "";
-    $scope.notes = ""
+    $scope.notes = "";
     // Event Handlers
     $(document).ready(function () {
-        $("#tags").val(clientName);
-        $scope.clientID = clientID;
+        $("#tags").val($scope.clientName);
         AngularServices.GET("GetAllClients").then(function (data) {
             FillAutoCompleteWidget(data.GetAllClientsResult);
             
 
         });
-        AngularServices.GET("GetSatffServices", staffID).then(function (data) {
+        AngularServices.GET("GetSatffServices", $scope.staffID).then(function (data) {
             $scope.services = data.GetSatffServicesResult;
         });
-        AngularServices.GET("GetAllStaffLocations", staffID).then(function (data) {
+        AngularServices.GET("GetAllStaffLocations", $scope.staffID).then(function (data) {
             $scope.locations = data.GetAllStaffLocationsResult;
         });
         $('#datepick').datepicker({
@@ -46,10 +44,10 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
             $scope.locationID = $("#locations").find(":selected").attr("id");
             //if ($scope.locationID == undefined)
             //    $scope.locationID = 20010;
-            AngularServices.GET("GetAvailableHoursByDate", $scope.currentDate, staffID, $scope.locationID).then(function (data) {
+            AngularServices.GET("GetAvailableHoursByDate", $scope.currentDate, $scope.staffID, $scope.locationID).then(function (data) {
                 $scope.dateID = data.GetAvailableHoursByDateResult.Date_ID;
             });
-            AngularServices.GET("GetAvailableHoursByDate1", $scope.currentDate, staffID, $scope.locationID, $scope.serviceID).then(function (data) {
+            AngularServices.GET("GetAvailableHoursByDate1", $scope.currentDate, $scope.staffID, $scope.locationID, $scope.serviceID).then(function (data) {
                 $scope.times = data.GetAvailableHoursByDate1Result;
                 $("#date").removeAttr("style");
             });
@@ -66,8 +64,8 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
             AngularServices.POST("SetAppointment",
                 {
                     "appointmentJson": appt,
-                    "staffID": staffID,
-                    "userID": userID
+                    "staffID": $scope.staffID,
+                    "userID": $scope.userID
 
                 }).then(function (data) {
                     $("#confirm").css("display", "none");

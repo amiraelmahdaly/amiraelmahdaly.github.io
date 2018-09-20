@@ -18,6 +18,8 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
         '7': 'Fraud'
     };
     $scope.allAppts = [];
+    $scope.allSyncAppts = [];
+    var arrSyncIds = [];
     $scope.pickedDateAppts = [];
     var editApptDialog;
     var editApptDialogUrl = DeploymentHost + "editAppt.html?staffID=" + $scope.staffID + "&userID=" + $scope.userID;
@@ -27,14 +29,18 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     Office.initialize = function (reason) {
         $(document).ready(function () {
             //loadRestDetails();
+        
             getAllAppts();
             $("#btnSync").click(function () {
-
-                if ($scope.allAppts.length > 0) {
-                    loadRestDetails();
-                }
-                else
-                    showNotification("No Appointments to sync");
+                AngularServices.GET("GetSyncItems", $scope.staffID).then(function (data) {
+                    $scope.allSyncAppts = data.GetSyncItemsResult;
+                    if ($scope.allSyncAppts.length > 0) {
+                        loadRestDetails();
+                    }
+                    else
+                        showNotification("No Appointments to sync");
+                });
+              
             });
             $("#datepicker1").datepicker({
                 defaultDate: "0d",
@@ -151,21 +157,25 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
             'url': restUrl + '/events',
             // 'url': restUrl + 'calendars/' + CalendarID + '/events',
             'type': "POST",
-            'data': '{"Subject": "' + $scope.allAppts[k].client + "  " + $scope.allAppts[k].service + "service  " + categories[$scope.allAppts[k].category] + '", "Categories": ["Purple category"],"Body": {"ContentType": "HTML","Content": ""},"Start": {"DateTime": "' + new Date($scope.allAppts[k].dtStart).toISOString() + '","TimeZone": "Pacific Standard Time"},"End": {"DateTime": "' + new Date($scope.allAppts[k].dtEnd).toISOString() + '","TimeZone": "Pacific Standard Time"},"Attendees": []}',
+            'data': '{"Subject": "' + $scope.allSyncAppts[k].client + "  " + $scope.allSyncAppts[k].service + "service  " + categories[$scope.allSyncAppts[k].category] + '", "Categories": ["Purple category"],"Body": {"ContentType": "HTML","Content": ""},"Start": {"DateTime": "' + new Date($scope.allSyncAppts[k].dtStart).toISOString() + '","TimeZone": "Pacific Standard Time"},"End": {"DateTime": "' + new Date($scope.allSyncAppts[k].dtEnd).toISOString() + '","TimeZone": "Pacific Standard Time"},"Attendees": []}',
             'headers': {
                 "Content-Type": "application/json",
                 'Authorization': 'Bearer ' + rawToken
             }
         }).done(function (item) {
             console.log(item);
-            AngularServices.POST("RemoveApptSyncItemsFromDb", { "apptIdsJson": JSON.stringify([$scope.allAppts[k].appointmentid]) }).then(function (data) {
-                k++;
-                if (k < $scope.allAppts.length)
-                    CreateEvent(k);
-                else
+            arrSyncIds.push($scope.allSyncAppts[k].appointmentid);
+            k++;
+            if (k < $scope.allSyncAppts.length)
+                CreateEvent(k);
+            else {
+                AngularServices.POST("RemoveApptSyncItemsFromDb", { "apptIdsJson": JSON.stringify(arrSyncIds) }).then(function (data) {
+
                     showNotification("outlook sync completed");
-            });
-            
+                });
+            }
+
+
         }).fail(errorHandler);
 
 
@@ -206,7 +216,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     }
     function ShowEditApptDialog() {
 
-        Office.context.ui.displayDialogAsync(editApptDialogUrlStringified, { height: 60, width: 60, displayInIframe: true },
+        Office.context.ui.displayDialogAsync(editApptDialogUrlStringified, { height: 70, width: 60, displayInIframe: true },
             function (asyncResult) {
                 editApptDialog = asyncResult.value;
                 editApptDialog.addEventHandler(Office.EventType.DialogEventReceived, editApptDialogClosed);
@@ -228,6 +238,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
             $scope.$applyAsync();
         });
     }
+
 
     function getPickedAppts(date) {
         $scope.pickedDateAppts = $scope.allAppts.filter(function (value) { return value.dtStart.indexOf(date) >= 0 })

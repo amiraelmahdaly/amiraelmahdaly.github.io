@@ -32,8 +32,8 @@
         <input id="datetimepicker1" type="text" disabled="disabled"> <select id="select1"><option>AM</option><option>PM</option></select>
     </p>
     <p class="col-xs-3 col-md-3 col-lg-3">End Time</p><p class="col-xs-9 col-md-9 col-lg-9">
-    <input id="datetimepicker2" type="text" disabled="disabled"> <select id="select2"><option>AM</option><option>PM</option></select>
-</p>
+        <input id="datetimepicker2" type="text" disabled="disabled"> <select id="select2"><option>AM</option><option>PM</option></select>
+    </p>
     <p class="col-xs-3 col-md-3 col-lg-3">Status</p><p class="col-xs-9 col-md-9 col-lg-9">
         <label class="radio-inline"><input id="1" type="radio" name="status" /> Active</label>
         <label class="radio-inline"><input id="2" type="radio" name="status" /> No Show</label>
@@ -43,12 +43,18 @@
         <label class="radio-inline"><input id="6" type="radio" name="status" /> In Progress</label>
         <label class="radio-inline"><input id="7" type="radio" name="status" /> Fraud</label>
     </p>
+    <br />
+    <p>Notes:</p>
+    <textarea rows="5" class="form-control" id="notesCon" ng-model="appt.notes">
+              
+            </textarea>
+    <p> </p>
     <div class="text-right">
         <!--<button id="reschedule" class="btn btn-primary">Reschedule</button>-->
         <button id="save" class="btn btn-primary">Save</button>
     </div>
     <!-- FabricUI component used for displaying notifications -->
-    <div class="ms-MessageBanner" style="position:absolute;bottom: 0;">
+    <div class="ms-MessageBanner" style="position:fixed;bottom: 0;left:0;right:0;">
         <div class="ms-MessageBanner-content">
             <div class="ms-MessageBanner-text">
                 <div class="ms-MessageBanner-clipper">

@@ -1,6 +1,6 @@
 ﻿var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
-    $scope.Password = "test11";
-    $scope.Email = "Lynns@ezappt.com";
+    $scope.Password = "";
+    $scope.Email = "";
 
    
     $("#btnLogin").click(Login);

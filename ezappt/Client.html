@@ -47,7 +47,7 @@
 </head>
 <body class="container" data-ng-app="myApp" data-ng-controller="myCtrl">
     <div>
-        <div class="text-center"><a href="DailySchedule.html"><img style="height:32px;" src="Images/logo1.png" /></a></div>
+        <div class="text-center"><a href="DailySchedule.html?userName={{userName}}&staffID={{staffID}}&userID={{userID}}"><img style="height:32px;" src="Images/logo1.png" /></a></div>
         <br />
         <div class="ui-widget">
             <label for="tags">Client: </label><br />
@@ -86,13 +86,13 @@
             </div>
             <br />
             <div dir="rtl">
-                <button id="btnBook"  class="btn btn-primary">New</button>
+                <button id="btnBook" class="btn btn-primary">New</button>
             </div>
         </div>
 
     </div>
     <!-- FabricUI component used for displaying notifications -->
-    <div class="ms-MessageBanner" style="position:absolute;bottom: 0;">
+    <div class="ms-MessageBanner" style="position:fixed;bottom: 0;left:0;right:0;">
         <div class="ms-MessageBanner-content">
             <div class="ms-MessageBanner-text">
                 <div class="ms-MessageBanner-clipper">

@@ -42,7 +42,7 @@ function showNotification(header, content) {
     $("#notificationBody").text(content);
     messageBanner.showBanner();
     messageBanner.toggleExpansion();
-    hideErrorMessage();
+    //hideErrorMessage();
 }
 function FormatParams(params) {
     var par = "";

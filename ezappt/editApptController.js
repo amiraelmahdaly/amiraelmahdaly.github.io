@@ -28,6 +28,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
         $scope.appt.dtStart = dtStart;
         $scope.appt.dtEnd = dtEnd;
         $scope.appt.category = $('input[name=status]:checked').attr("id");
+        $scope.appt.category = $('input[name=status]:checked').attr("id");
         AngularServices.POST("SetAppointment",
             {
                 "appointmentJson": $scope.appt,
@@ -35,7 +36,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
                 "userID": userID
 
         }).then(function (data) {
-            showNotification("Notification", "Saved Successfully");
+            showNotification("Saved Successfully");
         });
     }
     $("#save").click(function () {
