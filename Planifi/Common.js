@@ -1,6 +1,6 @@
 ﻿"use strict";
-Office.initialize = function (reason) {
-};
+//Office.initialize = function (reason) {
+//};
 var app = angular.module('myApp', []);
 //app.config(['$httpProvider', function ($httpProvider) {
   //  $httpProvider.defaults.withCredentials = true;
@@ -98,30 +98,36 @@ app.service('AngularServices', ['$http', function ($http) {
                     
                 })
                 .then(function (response) {
+                    console.log("Success");
                     return response.data;
+
                 }).catch(function (response) {
+                    console.log("Fail");
                     return response;
                 });
         }
         ,
-        POST: function (EndPoint, body, headers) {
-            var settings = {
-                method: 'POST',
-                url: BaseURI + EndPoint,
-                data: body,
-                headers: headers
-            };
-            return $http(settings)
+        POST: function (EndPoint,body) {
+          
+            return $http(
+                {
+                    method: 'POST',
+                    url: BaseURI + EndPoint,
+                    data: body
+
+                    //headers: {
+                    //    'Content-Type': 'application/json;'
+                    //}
+
+            })
                 .then(function (response) {
                     return response;
                 }).catch(function (response) {
                     return response;
                 });
         }
+      
    
-
-
-
     };
 
     return API;
