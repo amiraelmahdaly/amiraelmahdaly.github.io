@@ -29,12 +29,9 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
         $scope.appt.dtEnd = dtEnd;
         $scope.appt.category = $('input[name=status]:checked').attr("id");
         $scope.appt.category = $('input[name=status]:checked').attr("id");
-        AngularServices.POST("SetAppointment",
+        AngularServices.POST("UpdateAppointment",
             {
-                "appointmentJson": $scope.appt,
-                "staffID": staffID,
-                "userID": userID
-
+                "apJson": $scope.appt
         }).then(function (data) {
             showNotification("Saved Successfully");
         });

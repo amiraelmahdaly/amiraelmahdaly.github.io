@@ -47,12 +47,15 @@
         <p class="text-left col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="Client.html?userName={{userName}}&staffID={{staffID}}&userID={{userID}}">Client</a></p>
         <p dir="rtl" class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="Booking.html?userName={{userName}}&staffID={{staffID}}&userID={{userID}}&clientName=&clientID=">Book New</a></p>
         <p> </p>
-        <button class="btn btn-block btn-primary btn-sm" id="btnSync">Outlook Sync</button>
+        <button class="btn btn-block btn-primary btn-sm" id="btnSyncAppt">Sync Appointments</button>
+        <p> </p>
+        <button class="btn btn-block btn-primary btn-sm" id="btnSyncAv">Sync Available Times</button>
         <p> </p>
         <h4 class="text-center">Daily Schedule</h4>
         <div class="input-group" id="startDate">
             <input placeholder="Start Date" type="text" class="form-control" id="datepicker1" />
             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+          
         </div>
         <p> </p>
         <p>Appts. <span style="text-decoration:underline;color:dodgerblue;">{{pickedDateAppts.length}}</span></p>

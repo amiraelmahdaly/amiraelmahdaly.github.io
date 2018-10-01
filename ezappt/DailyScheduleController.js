@@ -4,6 +4,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     var rawToken = "";
     var restId = '';
     var restUrl = '';
+    var clicked = '';
     $scope.staffID = getQueryStringValue("staffID");
     $scope.userID = getQueryStringValue("userID");
     $scope.userName = getQueryStringValue("userName");
@@ -19,6 +20,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     };
     $scope.allAppts = [];
     $scope.allSyncAppts = [];
+    $scope.allSyncAvs = [];
     var arrSyncIds = [];
     $scope.pickedDateAppts = [];
     var editApptDialog;
@@ -29,9 +31,10 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     Office.initialize = function (reason) {
         $(document).ready(function () {
             //loadRestDetails();
-        
+
             getAllAppts();
-            $("#btnSync").click(function () {
+            $("#btnSyncAppt").click(function () {
+                clicked = 'appt';
                 AngularServices.GET("GetSyncItems", $scope.staffID).then(function (data) {
                     $scope.allSyncAppts = data.GetSyncItemsResult;
                     if ($scope.allSyncAppts.length > 0) {
@@ -40,7 +43,20 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
                     else
                         showNotification("No Appointments to sync");
                 });
-              
+
+            });
+            $("#btnSyncAppt").click();
+            $("#btnSyncAv").click(function () {
+                clicked = 'Av';
+                AngularServices.GET("EzapptAvailableDates", $scope.staffID).then(function (data) {
+                    $scope.allSyncAvs = data.EzapptAvailableDatesResult;
+                    if ($scope.allSyncAvs.length > 0) {
+                        loadRestDetails();
+                    }
+                    else
+                        showNotification("No Avialable Times to sync");
+                });
+
             });
             $("#datepicker1").datepicker({
                 defaultDate: "0d",
@@ -151,30 +167,41 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
 
     }
     function CreateEvent(k) {
-
-
+        var apptSynced;
+        if (clicked === 'appt')
+             apptSynced = '{"Subject": "' + $scope.allSyncAppts[k].client + "  " + $scope.allSyncAppts[k].service + "service  " + categories[$scope.allSyncAppts[k].category] + '", "Categories": ["Purple category"],"Body": {"ContentType": "HTML","Content": ""},"Start": {"DateTime": "' + new Date($scope.allSyncAppts[k].dtStart).toISOString() + '","TimeZone": "Pacific Standard Time"},"End": {"DateTime": "' + new Date($scope.allSyncAppts[k].dtEnd).toISOString() + '","TimeZone": "Pacific Standard Time"},"Attendees": []}';
+        else
+            apptSynced = '{"Subject": "", "Categories": ["Free"],"Body": {"ContentType": "HTML","Content": ""},"Start": {"DateTime": "' + new Date($scope.allSyncAvs[k].Schedule_Start_Time).toISOString() + '","TimeZone": "Pacific Standard Time"},"End": {"DateTime": "' + new Date($scope.allSyncAvs[k].Schedule_End_Time).toISOString() + '","TimeZone": "Pacific Standard Time"},"Attendees": []}';
         $.ajax({
             'url': restUrl + '/events',
             // 'url': restUrl + 'calendars/' + CalendarID + '/events',
             'type': "POST",
-            'data': '{"Subject": "' + $scope.allSyncAppts[k].client + "  " + $scope.allSyncAppts[k].service + "service  " + categories[$scope.allSyncAppts[k].category] + '", "Categories": ["Purple category"],"Body": {"ContentType": "HTML","Content": ""},"Start": {"DateTime": "' + new Date($scope.allSyncAppts[k].dtStart).toISOString() + '","TimeZone": "Pacific Standard Time"},"End": {"DateTime": "' + new Date($scope.allSyncAppts[k].dtEnd).toISOString() + '","TimeZone": "Pacific Standard Time"},"Attendees": []}',
+            'data': apptSynced,
             'headers': {
                 "Content-Type": "application/json",
                 'Authorization': 'Bearer ' + rawToken
             }
         }).done(function (item) {
             console.log(item);
-            arrSyncIds.push($scope.allSyncAppts[k].appointmentid);
-            k++;
-            if (k < $scope.allSyncAppts.length)
-                CreateEvent(k);
-            else {
-                AngularServices.POST("RemoveApptSyncItemsFromDb", { "apptIdsJson": JSON.stringify(arrSyncIds) }).then(function (data) {
+            if (clicked === 'appt') {
+                arrSyncIds.push($scope.allSyncAppts[k].appointmentid);
+                k++;
+                if (k < $scope.allSyncAppts.length)
+                    CreateEvent(k);
+                else {
+                    AngularServices.POST("RemoveApptSyncItemsFromDb", { "apptIdsJson": JSON.stringify(arrSyncIds) }).then(function (data) {
 
-                    showNotification("outlook sync completed");
-                });
+                        showNotification("outlook Appointments sync completed");
+                    });
+                }
             }
-
+            else {
+                k++;
+                if (k < 5/*$scope.allSyncAvs.length*/)
+                    CreateEvent(k);
+                else 
+                    showNotification("outlook Available Times sync completed");
+            }
 
         }).fail(errorHandler);
 
