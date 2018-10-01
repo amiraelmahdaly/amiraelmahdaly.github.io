@@ -20,8 +20,8 @@ app.directive('onFinishRender', function ($timeout) {
         }
     };
 });
-//var DeploymentHost = "";
-var DeploymentHost = "https://localhost:44353/Home/";
+var DeploymentHost = "https://amiraelmahdaly.github.io/Skore/Home/";
+//var DeploymentHost = "https://localhost:44353/Home/";
 var messageBanner;
 var subDomain = "app";
 var BaseURI = "https://" + subDomain +".spekit.co/api/";
