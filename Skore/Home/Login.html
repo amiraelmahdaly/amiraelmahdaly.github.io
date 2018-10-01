@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Spekit</title>
+    <script src="analytics.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/js/fabric.min.js"></script>
+    <script src="MessageBanner.js" type="text/javascript"></script>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="Login.css" rel="stylesheet" type="text/css" />
+    <script src="Common.js" type="text/javascript"></script>
+    <script src="LoginController.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.min.css" />
+    <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.components.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous" />
+
+
+</head>
+<body class="container text-center" data-ng-app="myApp" data-ng-controller="myCtrl">
+    <br />
+    <div id="logo">
+        <img style="padding:0 25%;" class="img-responsive" src="Images/Logo.6543ab5e.svg" />
+    </div>
+    <br />
+    <p style="color:#637280;"><i class="fas fa-exclamation-triangle"> </i> Login to <a target="_blank" href="https://app.spekit.co/login" style="color:#6B9AED;">Spekit</a> to continue.</p>
+    <br />
+    <br />
+    <button id="btnLoginWithSalesForce" style="background-color: #0097D8;" class="btn btn-block btn-primary">Login with Salesforce production</button>
+    <button id="btnLoginWithSalesForceSandBox" style="color:white;background-color: #9FA9BA;" class="btn btn-block btn-default">Login with Salesforce sandbox</button>
+    <br />
+    <p style="color:#9FA9BA;">— or —</p>
+    <p style="color:#637280;">Login with email</p>
+    <input class="form-control" ng-model="Email" type="text" placeholder="Email" />
+    <p> </p>
+    <input class="form-control" ng-model="Password" placeholder="Password" type="password" />
+    <br />
+    <button style="background-color: #3576E8;" id="btnLogin" class="btn btn-block btn-primary">Login</button>
+    <!--<br /> 
+    <button style="background-color: #3576E8;" id="btnClearLC" class="btn btn-block btn-primary">clear local storage</button>-->
+    <br />
+    <div class="text-center">
+        <img style="height:50px;opacity:0.7;margin: 0 auto; " class="img-responsive" src="Images/0 (1).png" />
+    </div>
+    <!-- FabricUI component used for displaying notifications -->
+    <div class="ms-MessageBanner" style="position:absolute;bottom: 0;left:0">
+        <div class="ms-MessageBanner-content">
+            <div class="ms-MessageBanner-text">
+                <div class="ms-MessageBanner-clipper">
+                    <div class="ms-font-m-plus ms-fontWeight-semibold" id="notificationHeader"></div>
+                    <div class="ms-font-m ms-fontWeight-semilight" id="notificationBody"></div>
+                </div>
+            </div>
+            <button class="ms-MessageBanner-expand" style="display:none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
+            <div class="ms-MessageBanner-action"></div>
+        </div>
+        <button class="ms-MessageBanner-close"> <i class="ms-Icon ms-Icon--x"></i> </button>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+﻿/* Page-specific styling */
+
+.padding {
+    padding: 15px;
+}
+#textDiv {
+    border: 2px solid dodgerblue;
+    min-height:100px;
+    width:100%;
+}
