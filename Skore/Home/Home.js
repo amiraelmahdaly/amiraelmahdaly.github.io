@@ -7,10 +7,10 @@
     var uploadDialog;
     var editDialogUrl = DeploymentHost + "Edit.html";
     var uploadDialogUrl = DeploymentHost + "Upload.html";
-
+    $scope.txt = '';
     $(document).ready(function () {
         $("#editBtn").click(function () {
-            Office.context.ui.displayDialogAsync(editDialogUrl, { height: 50, width: 50, displayInIframe: true },
+            Office.context.ui.displayDialogAsync(editDialogUrl + '?txt=' + $scope.txt, { height: 50, width: 50, displayInIframe: true },
                 function (asyncResult) {
                     editDialog = asyncResult.value;
                     editDialog.addEventHandler(Office.EventType.DialogMessageReceived, processEditMessage);
@@ -32,7 +32,8 @@
         );
     }
     function processEditMessage(arg) {
-        $("#textDiv").text(JSON.parse(arg.message).val);
+        $scope.txt = JSON.parse(arg.message).val;
+        $scope.$applyAsync();
         editDialog.close();
     }
    
