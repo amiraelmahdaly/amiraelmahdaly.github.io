@@ -20,8 +20,7 @@
             GetProjectPhases($("#project option:selected").attr("id"));
         });
 
-        $("#btnSave").click($scope.makeServiceRequest);
-        $("#btnSaveSend").click($scope.makeServiceRequest);
+
 
        
 
