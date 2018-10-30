@@ -1,0 +1,50 @@
+<html>
+<head>
+
+</head>
+<body>
+
+<script>
+
+    // Returns an array of dates between the two dates
+    function getEvents(startDate, endDate, startTime, endTime) {
+        var Dates = getDates(startDate, endDate);
+        var Events = [];
+        var dt;
+
+        for (var i = 0; i < Dates.length; i++) {
+            dt = new Date(Dates[i].toString());
+            dt.setHours(dt.getHours() + startTime);
+            for (var j = 0; j < (endTime - startTime) * 2; j++) {
+                dt.setMinutes(dt.getMinutes() + 30);
+
+                var event = '{"Subject": "", "Categories": ["Free"],"Body": {"ContentType": "HTML","Content": ""},"Start": {"DateTime": "' + new Date(dt).toISOString() + '","TimeZone": "Pacific Standard Time"},"End": {"DateTime": "' + new Date(new Date(dt).setMinutes(dt.getMinutes() + 30)).toISOString() + '","TimeZone": "Pacific Standard Time"},"Attendees": []}';
+                Events.push(event);
+            }
+
+        }
+        return Events;
+    }
+function getDates(startDate, endDate) {
+  var dates = [],
+      currentDate = startDate,
+      addDays = function(days) {
+        var date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+      };
+  while (currentDate <= endDate) {
+    dates.push(currentDate);
+    currentDate = addDays.call(currentDate, 1);
+  }
+  return dates;
+};
+
+// Usage
+    console.log(getEvents(new Date(10-29-2018), new Date(10-31-2018),8,15.5));                                                                                               
+
+
+</script>
+</body>
+
+</html>

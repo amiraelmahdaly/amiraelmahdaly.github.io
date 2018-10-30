@@ -47,9 +47,8 @@
         <p class="text-left col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="Client.html?userName={{userName}}&staffID={{staffID}}&userID={{userID}}">Client</a></p>
         <p dir="rtl" class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="Booking.html?userName={{userName}}&staffID={{staffID}}&userID={{userID}}&clientName=&clientID=">Book New</a></p>
         <p> </p>
-        <button class="btn btn-block btn-primary btn-sm" id="btnSyncAppt">Sync Appointments</button>
-        <p> </p>
-        <button class="btn btn-block btn-primary btn-sm" id="btnSyncAv">Sync Available Times</button>
+        <button class="btn btn-block btn-primary btn-sm" id="btnSync">Sync with outlook</button>
+        
         <p> </p>
         <h4 class="text-center">Daily Schedule</h4>
         <div class="input-group" id="startDate">
@@ -74,6 +73,7 @@
             </table>
         </div>
     </div>
+ 
     <!-- FabricUI component used for displaying notifications -->
     <div class="ms-MessageBanner" style="position:fixed;bottom: 0;left:0;right:0;">
         <div class="ms-MessageBanner-content">
