@@ -88,7 +88,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     }
     function CalendarExists(Calendars) {
         for (var i = 0; i < Calendars.length; i++) {
-            if (Calendars[i].Name.trim() === "Ezappt") {
+            if (Calendars[i].Name.trim() === "EzapptNew") {
                 CalendarID = Calendars[i].Id;
                 return true;
             }
@@ -114,7 +114,7 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
         $.ajax({
             url: restUrl + 'calendars',
             method: "POST",
-            data: '{ "Name": "Ezappt" }',
+            data: '{ "Name": "EzapptNew" }',
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': 'Bearer ' + rawToken
@@ -248,6 +248,11 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     }
     // Returns an array of dates between the two dates
     function getEvents(startDate, endDate, startTime, endTime) {
+        Number.isInteger = Number.isInteger || function (value) {
+            return typeof value === "number" &&
+                isFinite(value) &&
+                Math.floor(value) === value;
+        };
         var Dates = getDates(startDate, endDate);
         var Events = [];
         var dt;
@@ -255,6 +260,8 @@ var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
         for (var i = 0; i < Dates.length; i++) {
             dt = new Date(Dates[i].toString());
             dt.setHours(dt.getHours() + startTime);
+            if (!Number.isInteger(startTime))
+                dt.setMinutes(dt.getMinutes() + 30);
             for (var j = 0; j < (endTime - startTime) * 2; j++) {
                 var event = '{"Subject": "", "Categories": ["Free"],"Body": {"ContentType": "HTML","Content": ""},"Start": {"DateTime": "' + new Date(dt).toISOString() + '","TimeZone": "Pacific Standard Time"},"End": {"DateTime": "' + new Date(new Date(dt).setMinutes(dt.getMinutes() + 30)).toISOString() + '","TimeZone": "Pacific Standard Time"},"Attendees": []}';
                 Events.push(event);
