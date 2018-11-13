@@ -16,20 +16,20 @@ app.directive('onFinishRender', function ($timeout) {
     }
 });
 
-var messageBanner;
-// Error Handling Region
-$(document).ready(function () {
-    var element = document.querySelector('.ms-MessageBanner');
-    messageBanner = new fabric.MessageBanner(element);
-    messageBanner.hideBanner();
+//var messageBanner;
+//// Error Handling Region
+//$(document).ready(function () {
+//    //var element = document.querySelector('.ms-MessageBanner');
+//    //messageBanner = new fabric.MessageBanner(element);
+//    //messageBanner.hideBanner();
 
-});
-function hideErrorMessage() {
+//});
+//function hideErrorMessage() {
 
-    setTimeout(function () {
-        messageBanner.hideBanner();
-    }, 2000);
-}
+//    setTimeout(function () {
+//        messageBanner.hideBanner();
+//    }, 2000);
+//}
 // Helper function for treating errors
 function errorHandler(error) {
     showNotification("Error", error);

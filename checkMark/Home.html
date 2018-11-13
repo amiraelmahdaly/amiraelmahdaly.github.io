@@ -6,7 +6,7 @@
     <title>Word Add-In with Commands Sample</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
-    <script src="MessageBanner.js" type="text/javascript"></script>
+    <!--<script src="MessageBanner.js" type="text/javascript"></script>-->
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 
@@ -34,7 +34,18 @@
     <!-- link rel="stylesheet" href="Content/fabric.components.min.css" -->
 </head>
 <body class="container" data-ng-app="myApp" data-ng-controller="myCtrl">
+    <div id="getStarted">
+        <div id="con">
+            <div id="inner" class="text-center">
+                <p>
+                    CheckMark gives the user easy access to oft-used comments. you will be able to create a bank of comments to use when grading papers, providing feedback on writing, or proofreading your own work. Originally designed for teachers, CheckMark is used by professionals wanting to give faster feedback by creating comments ahead of time to be quickly accessed through CheckMark's easy menu.
+                </p>
+                <button class="btn btn-primary" id="start">Get Started</button>
+            </div>
+        </div>
+    </div>
     <h4>Preview <i id="toggle" class="glyphicon glyphicon-pencil" title="Edit abbreviations"></i></h4>
+    <h5>- Hover to check the comment before adding.</h5>
     <div id="btnsCon">
         <div data-ng-row="{{Rows.indexOf(row)}}" ng-repeat="row in Rows">
         
@@ -72,7 +83,7 @@
 
 
     <!-- FabricUI component used for displaying notifications -->
-    <div class="ms-MessageBanner" id="notification-popup">
+    <!--<div class="ms-MessageBanner" id="notification-popup">
         <div class="ms-MessageBanner-content">
             <div class="ms-MessageBanner-text">
                 <div class="ms-MessageBanner-clipper">
@@ -84,6 +95,6 @@
             <div class="ms-MessageBanner-action"></div>
         </div>
         <button class="ms-MessageBanner-close"> <i class="ms-Icon ms-Icon--x"></i> </button>
-    </div>
+    </div>-->
 </body>
 </html>
