@@ -1,5 +1,7 @@
 ﻿var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
+    Office.initialize = function (reason) {
 
+    };
     angular.element(document).ready(function () {
         $scope.meetingID = getQueryStringValue("meetingID");
         $scope.BaseURL = BaseURL + "broadcast/" + $scope.meetingID +"/";

@@ -4,7 +4,9 @@
     $scope.Password = "";
     //$("#btnLogin").click(Login);
       
+    Office.initialize = function (reason) {
 
+    };
     $scope.Login = function () {
 
       

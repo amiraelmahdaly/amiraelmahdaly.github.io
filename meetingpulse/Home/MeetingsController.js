@@ -1,6 +1,10 @@
 ﻿var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
 
+    Office.initialize = function (reason) {
+
+    };
     angular.element(document).ready(function () {
+
         GetMeetings();
 
     });

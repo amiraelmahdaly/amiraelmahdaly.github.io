@@ -1,17 +1,19 @@
 ﻿var myCtrl = ['$scope', 'AngularServices', function ($scope, AngularServices) {
     angular.element(document).ready(function () {
+        Office.initialize = function (reason) {
+            var BroadcastLink = Office.context.document.settings.get('BroadcastLink');
+            if (BroadcastLink != null) {
+                Redirect("Broadcast.html?BroadcastLink=" + encodeURIComponent(BroadcastLink));
+                return;
+            }
 
-        var BroadcastLink = Office.context.document.settings.get('BroadcastLink');
-        if (BroadcastLink != null) {
-            Redirect("Broadcast.html?BroadcastLink=" + encodeURIComponent(BroadcastLink));
-            return;
-        }
-
-        var User = getCurrentUser();
-        if (User == null)
-            Redirect("Login.html");
-        else
-            ValidateToken();
+            var User = getCurrentUser();
+            if (User == null)
+                Redirect("Login.html");
+            else
+                ValidateToken();
+        };
+       
 
     });
    
