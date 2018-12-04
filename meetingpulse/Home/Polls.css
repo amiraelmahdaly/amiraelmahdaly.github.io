@@ -1,0 +1,82 @@
+﻿body, html {
+    height: 100%;
+    overflow:hidden;
+}
+.mainCon {
+    height: 100%;
+    width: 600px;
+    position: relative;
+    padding: 0;
+    background-color: #3b4044;
+    color: white;
+}
+.header {
+    padding: 5px;
+    background-color: #3b4044;
+    color: white;
+    position: relative;
+    padding:0 15px ;
+}
+    .header span {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 10px;
+       
+    }
+        .header span a {
+            color: #c5c4d3;
+        }
+        .header span a:hover {
+            color: #c5c4d3;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        .header h1 {
+            margin-top: 10px;
+        }
+ul {
+    list-style: none;
+    padding-left: 0;
+    max-height:400px;
+    overflow:auto;
+}
+    ul li {
+        background-color: #191b1a;
+
+        margin-bottom: 5px;
+        position: relative;
+        padding: 15px;
+
+    }
+        ul li span {
+            word-break: break-all;
+            width: 80%;
+            display: block;
+        }
+        /*li h1 a {
+    color: black;
+    padding:0 30px 10px 30px;
+    border-bottom: 1px solid #bbbac6;
+}
+    li h1 a:hover {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+        border-bottom: 2px solid #828186;
+    }*/
+        .selectBtn {
+            background-color: #9df459;
+            color: black;
+            position: absolute;
+            right: 15px;
+            top:7px;
+        }
+h3 span {
+    text-decoration: underline;
+    cursor:pointer;
+}
+.unstyledLink, .unstyledLink:hover, .unstyledLink:visited {
+    color: white;
+    text-decoration: underline;
+}

@@ -1,0 +1,42 @@
+﻿body, html {
+    height:100%
+}
+.mainCon {
+    height: 100%;
+    width: 400px;
+    background-color: #c5c4d3;
+    position:relative;
+}
+.input-group-addon {
+    border-left: 0 solid transparent;
+    background: #fff;
+    border:0;
+}
+    .input-group-addon a {
+        color: #c7c8c8;
+    }
+    .input-group-addon a:hover {
+        color: #c7c8c8;
+        text-decoration:none;
+    }
+    #password {
+        border-right: 0;
+        box-shadow: none;
+        border: 0;
+    }
+.inner{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    left:15px;
+    right:15px;
+}
+#btnLogin {
+    background-color: #9df459;
+    color:black;
+
+}
+#error{
+    color:firebrick;
+    min-height:20px;
+}
